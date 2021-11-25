@@ -220,6 +220,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
@@ -380,7 +381,6 @@ GameObject:
   - component: {fileID: 2033907692}
   - component: {fileID: 2033907691}
   - component: {fileID: 2033907690}
-  - component: {fileID: 2033907689}
   - component: {fileID: 2033907688}
   m_Layer: 0
   m_Name: player
@@ -440,18 +440,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2033907689
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2033907687}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 643097f84824e6a44be928127801bb90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!50 &2033907690
 Rigidbody2D:
   serializedVersion: 4
