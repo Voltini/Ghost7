@@ -22,7 +22,7 @@ public class Rewind : MonoBehaviour
     int counter = 0;
     public int length;
     Rigidbody2D playerId;
-    float timeFactor = 2f;
+    float timeFactor = 1f;
 
     void Start() 
     {
