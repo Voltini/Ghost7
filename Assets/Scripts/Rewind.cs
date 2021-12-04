@@ -22,6 +22,7 @@ public class Rewind : MonoBehaviour
     int counter = 0;
     public int length;
     Rigidbody2D playerId;
+    float timeFactor = 2f;
 
     void Start() 
     {
@@ -33,7 +34,7 @@ public class Rewind : MonoBehaviour
 
     void Update() 
     {
-        time = Time.timeSinceLevelLoad - deathTime;
+        time = timeFactor *(Time.timeSinceLevelLoad - deathTime);
         line.positionCount = i+1;
         line.SetPosition(i, transform.position);
         i++;

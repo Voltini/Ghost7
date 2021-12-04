@@ -119,7 +119,7 @@ public class PlayerControl : MonoBehaviour
         cam = camera.GetComponent<CameraControl>();     //ça c'est juste pour pouvoir appeler des screenshake depuis le script du joueur
     }
 
-    void Death()
+    public void Death()
     {
         playerExplosion.transform.position = playerId.position;
         playerExplosion.Play();
