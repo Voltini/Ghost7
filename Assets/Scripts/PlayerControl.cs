@@ -105,6 +105,9 @@ public class PlayerControl : MonoBehaviour
         else {
             lastWall = null;        // si le joueur touche du sol la capacité de walljump se réinitialise
         }
+        if(other.gameObject.tag == "Lava"){
+            Death();
+        }
     }
 
     void OnCollisionExit2D(Collision2D other) {
