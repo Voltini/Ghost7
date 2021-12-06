@@ -23,6 +23,7 @@ public class PlayerControl : MonoBehaviour
     GameObject currentWall;
     bool isTouchingWall = false;
     CameraControl cam;
+    public bool playerDeath = false;
 
     public Rewind rewindPlayer;
     public LineRenderer line;
@@ -129,7 +130,7 @@ public class PlayerControl : MonoBehaviour
         cam.ActivateShake(0.2f,2f);
         rewindPlayer.gameObject.SetActive(true);
         cam.rewindTime = true;      //pour que la caméra switch de cible (temporaire mais c'est pratique pour regarder ce qu'il se passe)
-
+        playerDeath = true;
         gameObject.SetActive(false);    //décès du joueur
     }
 
