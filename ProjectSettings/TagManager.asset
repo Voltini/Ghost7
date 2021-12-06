@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Wall
   - Lava
+  - Ghost
   layers:
   - Default
   - TransparentFX
