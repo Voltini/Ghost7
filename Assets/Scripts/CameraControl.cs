@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CameraControl : MonoBehaviour
 {
@@ -13,32 +14,54 @@ public class CameraControl : MonoBehaviour
     float shakeMagitude;
     float camSize;
     PlayerControl playerId;
+    [SerializeField] float horizontalThreshold;
+    [SerializeField] float verticalThreshold;
+    Vector3 camPos;
+    public Rewind rewindPlayer;
+    public bool rewindTime = false;
 
     void Start() {
         cam = GetComponent<Camera>();
         shake = Vector3.zero;
         playerId = player.GetComponent<PlayerControl>();
         camSize = cam.orthographicSize;
+        this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -10);
+        playerId.GetCamera(cam);
+        camPos = this.transform.position;
     }
     // Update is called once per frame
     void Update()
     {
-        //PauseMenu pause = GameObject.FindObjectOfType<PauseMenu>();
-        //isPaused = pause.isGamePaused;
+        if (Input.GetKeyDown(KeyCode.R)) {      //restart level
+            Scene scene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(scene.name);
+        }
 
         if (isShaking) {
             Shake();
         }
 
-        if (player != null) {
-            playerPos = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
-            transform.position = playerPos + shake;
-            //Debug.Log(shake);
+        if (!rewindTime) {
+            playerPos = player.transform.position;
+        }
+        else {
+            playerPos = rewindPlayer.transform.position;
         }
 
-        if(Input.GetKeyDown(KeyCode.Space)) {
-            ActivateShake(1f, 0.001f);
+        if (camPos.x - playerPos.x >= horizontalThreshold) {
+            camPos = new Vector3(playerPos.x + horizontalThreshold,camPos.y, camPos.z); 
         }
+        else if (camPos.x - playerPos.x <= - horizontalThreshold) {
+            camPos = new Vector3(playerPos.x - horizontalThreshold,camPos.y, camPos.z); 
+        }
+        if (camPos.y - playerPos.y >= verticalThreshold) {
+            camPos = new Vector3(camPos.x,playerPos.y + verticalThreshold, camPos.z); 
+        }
+        else if (camPos.y - playerPos.y <= - verticalThreshold) {
+            camPos = new Vector3(camPos.x,playerPos.y - verticalThreshold, camPos.z); 
+        }
+        cam.transform.position = camPos + shake;
+
     }
 
     public void ActivateShake(float time, float magnitude)
@@ -57,7 +80,7 @@ public class CameraControl : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         isShaking = false;
-        shake = Vector3.zero;
+        shake = Vector2.zero;
     }
 
     void Shake()
