@@ -5552,7 +5552,6 @@ GameObject:
   - component: {fileID: 361333289}
   - component: {fileID: 361333288}
   - component: {fileID: 361333287}
-  - component: {fileID: 361333290}
   m_Layer: 0
   m_Name: Phantom
   m_TagString: Phantom
@@ -5579,7 +5578,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a60eabd37dcc1124c8ebd6eb67d69f90, type: 2}
+  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5623,7 +5622,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 20
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &361333287
 MonoBehaviour:
@@ -5634,12 +5633,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 361333284}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bfa2152c6b3926498b141985aa2bfbd, type: 3}
+  m_Script: {fileID: 11500000, guid: 5862a092f9dbd864884f697f10a05e99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 2033907692}
-  possibleCharacters: []
-  phantomPlaying: 0
 --- !u!61 &361333288
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5687,65 +5683,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &361333290
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 361333284}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67ce8c2ffe4820c4fa807de1f59822c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerExplosion: {fileID: 0}
-  runSpeed: 0
-  contactFilter:
-    useTriggers: 0
-    useLayerMask: 0
-    useDepth: 0
-    useOutsideDepth: 0
-    useNormalAngle: 0
-    useOutsideNormalAngle: 0
-    layerMask:
-      serializedVersion: 2
-      m_Bits: 0
-    minDepth: 0
-    maxDepth: 0
-    minNormalAngle: 0
-    maxNormalAngle: 0
-  contactWallRight:
-    useTriggers: 0
-    useLayerMask: 0
-    useDepth: 0
-    useOutsideDepth: 0
-    useNormalAngle: 0
-    useOutsideNormalAngle: 0
-    layerMask:
-      serializedVersion: 2
-      m_Bits: 0
-    minDepth: 0
-    maxDepth: 0
-    minNormalAngle: 0
-    maxNormalAngle: 0
-  contactWallLeft:
-    useTriggers: 0
-    useLayerMask: 0
-    useDepth: 0
-    useOutsideDepth: 0
-    useNormalAngle: 0
-    useOutsideNormalAngle: 0
-    layerMask:
-      serializedVersion: 2
-      m_Bits: 0
-    minDepth: 0
-    maxDepth: 0
-    minNormalAngle: 0
-    maxNormalAngle: 0
-  playerDeath: 0
-  rewindPlayer: {fileID: 0}
-  line: {fileID: 0}
 --- !u!1 &448764558
 GameObject:
   m_ObjectHideFlags: 0
@@ -7399,37 +7336,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
---- !u!114 &1287311373
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1327008994}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bfa2152c6b3926498b141985aa2bfbd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  character: {fileID: 0}
-  possibleCharacters:
-  - {fileID: 2033907692}
-  - {fileID: 361333286}
-  phantomPlaying: 0
---- !u!4 &1287311374
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1327008994}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.051111057, y: 1.7756482, z: -0.38218182}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 18
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1318906053
 GameObject:
   m_ObjectHideFlags: 0
@@ -7564,23 +7470,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1318906053}
   m_CullTransparentMesh: 1
---- !u!1 &1327008994
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1287311374}
-  - component: {fileID: 1287311373}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1801953781
 GameObject:
   m_ObjectHideFlags: 0
@@ -7800,7 +7689,7 @@ RectTransform:
   m_Children:
   - {fileID: 340228384}
   m_Father: {fileID: 0}
-  m_RootOrder: 21
+  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -7888,7 +7777,7 @@ Transform:
   m_LocalScale: {x: 100, y: 9, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1941313033
 BoxCollider2D:
@@ -7999,6 +7888,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67ce8c2ffe4820c4fa807de1f59822c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  phantomPlayer: {fileID: 361333284}
   playerExplosion: {fileID: 249387194}
   runSpeed: 1.7
   contactFilter:
