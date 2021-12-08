@@ -14,6 +14,7 @@ public class Exit : MonoBehaviour
             Debug.Log("win");
             pauseMenu.gameObject.SetActive(false);
             Win();
+            other.gameObject.SetActive(false);
         }
     }
 
