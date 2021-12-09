@@ -7,6 +7,7 @@ public class Arrow : MonoBehaviour
 
     Rigidbody2D arrowId;
     Collider arrowCollider;
+    ParticleSystem arrowImpact;
 
     // Start is called before the first frame update
     void Start()
@@ -14,6 +15,7 @@ public class Arrow : MonoBehaviour
         arrowId = GetComponent<Rigidbody2D>();
         arrowCollider = GetComponent<BoxCollider>();
         arrowId.gravityScale = 0;
+        arrowImpact = GameObject.FindGameObjectWithTag("ArrowImpact").GetComponent<ParticleSystem>();
     }
 
     // Update is called once per frame
@@ -24,8 +26,8 @@ public class Arrow : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        
-
+        arrowImpact = Instantiate(arrowImpact, transform.position, Quaternion.Euler(0f,0f, transform.eulerAngles.z - 22.5f));
+        arrowImpact.Play();
         if (other.gameObject.TryGetComponent(typeof(PlayerControl), out Component player))
         {
             other.gameObject.GetComponent<PlayerControl>().Death();  

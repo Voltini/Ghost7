@@ -8,6 +8,7 @@ TagManager:
   - Phantom
   - Lava
   - Ghost
+  - ArrowImpact
   layers:
   - Default
   - TransparentFX

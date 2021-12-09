@@ -8,21 +8,29 @@ using UnityEngine.SceneManagement;
 
 public class Boulder : MonoBehaviour
 {
-    Rigidbody2D boulderId;
     Collider boulderCollider;
+    bool isHaunted;
+    float movementx;
+    float movementy;
+    Rigidbody2D objectId;
+    float speed = 7;
+    public GameObject player;
+
 
     void Start()
     {
-        boulderId = GetComponent<Rigidbody2D>();
-        boulderCollider = GetComponent<Collider>();
-        boulderId.gravityScale = 10;
-        boulderId.mass = 20;
-
+        objectId = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
-
+        if (isHaunted) {
+            Move();
+            if (Input.GetKeyDown(KeyCode.Return)) {
+                player.SetActive(true);
+                isHaunted = false;
+            }
+        }
     }
 
     
@@ -31,11 +39,23 @@ public class Boulder : MonoBehaviour
         
         if (other.gameObject.TryGetComponent(typeof(PlayerControl), out Component player))
         {   
-            if (boulderId.velocity.magnitude > 5){
+            if (objectId.velocity.magnitude > 5){
                 other.gameObject.GetComponent<PlayerControl>().Death();
             }
            
            
         }
+    }
+
+    public void Haunt()
+    {
+        isHaunted = true;
+    }
+
+    void Move()
+    {
+        movementx = Input.GetAxis("Horizontal");
+        movementy = Input.GetAxis("Vertical");
+        objectId.velocity = new Vector2(speed * movementx, speed * movementy);
     }
 }
