@@ -5552,7 +5552,7 @@ GameObject:
   - component: {fileID: 361333288}
   - component: {fileID: 361333287}
   - component: {fileID: 361333289}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Phantom
   m_TagString: Phantom
   m_Icon: {fileID: 0}
