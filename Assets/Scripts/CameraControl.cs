@@ -28,6 +28,8 @@ public class CameraControl : MonoBehaviour
         this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -10);
         playerId.GetCamera(cam);
         camPos = this.transform.position;
+        horizontalThreshold = camSize*0.5f;
+        verticalThreshold = camSize*0.5f;
     }
     // Update is called once per frame
     void Update()

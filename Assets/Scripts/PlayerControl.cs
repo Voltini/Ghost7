@@ -107,6 +107,9 @@ public class PlayerControl : MonoBehaviour
         else {
             lastWall = null;        // si le joueur touche du sol la capacité de walljump se réinitialise
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.tag == "Lava"){
             Death();
         }
@@ -128,6 +131,7 @@ public class PlayerControl : MonoBehaviour
     {
         playerExplosion.transform.position = playerId.position;
         playerExplosion.Play();
+        this.
         cam.ActivateShake(0.2f,2f);
         phantomPlayer.SetActive(true);
         rewindPlayer.gameObject.SetActive(true);
