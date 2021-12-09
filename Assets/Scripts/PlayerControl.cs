@@ -44,76 +44,93 @@ public class PlayerControl : MonoBehaviour
     void Update()
     {
         playerPos = playerId.transform.position;
-        if (playerPos != previousPosition) {       
-            rewindPlayer.rewindPositions.Add(new Rewind.rewindData(Time.timeSinceLevelLoad,playerPos));
+        if (playerPos != previousPosition)
+        {
+            rewindPlayer.rewindPositions.Add(new Rewind.rewindData(Time.timeSinceLevelLoad, playerPos));
             //en gros on stocke les valeurs de position que lorsqu'elles sont différentes des précédentes et on utilise un time stamp 
             //pour s'assurer que le rewind a la meme vitesse que le joueur indépendamment du framerate
         }
         previousPosition = playerPos;
 
-        line.positionCount = i+1;
+        line.positionCount = i + 1;
         line.SetPosition(i, playerId.transform.position);
         i++;
 
-        if (Input.GetKeyDown(KeyCode.LeftShift)) {      //Courir
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {      //Courir
             speed = runSpeed;
         }
-        if (Input.GetKeyUp(KeyCode.LeftShift)) {        
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
             speed = 1f;
         }
-        if (Input.GetKeyDown(KeyCode.Z)) {      //D'ailleurs j'ai mis provisoirement R comme touche pour reload la scène
+        if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.UpArrow))
+        {      //D'ailleurs j'ai mis provisoirement R comme touche pour reload la scène
             Jump();
         }
-        if (Input.GetKeyDown(KeyCode.A)) {      //A pour mourir (pratique pour tester le rewind)
+        if (Input.GetKeyDown(KeyCode.A))
+        {      //A pour mourir (pratique pour tester le rewind)
             Death();
         }
 
         movementx = Input.GetAxis("Horizontal");
-        playerId.velocity = new Vector2(7*speed*movementx,playerId.velocity.y);
+        playerId.velocity = new Vector2(7 * speed * movementx, playerId.velocity.y);
 
-        if (isTouchingWall) {
-            if (playerId.velocity.y < 0 && currentWall != lastWall) {
+        if (isTouchingWall)
+        {
+            if (playerId.velocity.y < 0 && currentWall != lastWall)
+            {
                 playerId.gravityScale = wallSlideSpeed;
             }
-            else {
+            else
+            {
                 playerId.gravityScale = 1f;
             }
         }
-    }  
+    }
 
     void Jump()
     {
-        if (isGrounded) {
+        if (isGrounded)
+        {
             playerId.velocity = new Vector2(playerId.velocity.x, 7f);
         }
-        else if (isStickingToWallLeft || isStickingToWallRight) {
+        else if (isStickingToWallLeft || isStickingToWallRight)
+        {
             WallJump();
         }
     }
 
     void WallJump()
     {
-        if (currentWall != lastWall) {      //ça c'est pour éviter que le joueur puisse faire des wall jump infinement sur la meme mur et faire de l'escalade
+        if (currentWall != lastWall)
+        {      //ça c'est pour éviter que le joueur puisse faire des wall jump infinement sur la meme mur et faire de l'escalade
             playerId.velocity = new Vector2(playerId.velocity.x, 7f);
         }
         lastWall = currentWall;
     }
 
-    void OnCollisionEnter2D(Collision2D other) {
-        if (isStickingToWallLeft || isStickingToWallRight) {
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if (isStickingToWallLeft || isStickingToWallRight)
+        {
             currentWall = other.gameObject;
             isTouchingWall = true;
         }
-        else {
+        else
+        {
             lastWall = null;        // si le joueur touche du sol la capacité de walljump se réinitialise
         }
-        if(other.gameObject.tag == "Lava"){
+        if (other.gameObject.tag == "Lava")
+        {
             Death();
         }
     }
 
-    void OnCollisionExit2D(Collision2D other) {
-        if (isTouchingWall) {
+    void OnCollisionExit2D(Collision2D other)
+    {
+        if (isTouchingWall)
+        {
             playerId.gravityScale = 1f;
             isTouchingWall = false;
         }
@@ -128,7 +145,7 @@ public class PlayerControl : MonoBehaviour
     {
         playerExplosion.transform.position = playerId.position;
         playerExplosion.Play();
-        cam.ActivateShake(0.2f,2f);
+        cam.ActivateShake(0.2f, 2f);
         phantomPlayer.SetActive(true);
         rewindPlayer.gameObject.SetActive(true);
         cam.rewindTime = true;      //pour que la caméra switch de cible (temporaire mais c'est pratique pour regarder ce qu'il se passe)

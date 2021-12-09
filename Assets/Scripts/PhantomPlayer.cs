@@ -7,28 +7,53 @@ using UnityEngine.UI;
 public class PhantomPlayer : MonoBehaviour
 {
     float speed = 7f;
-    Rigidbody2D playerId;
-    Collider2D playerCollider;
-    Vector3 playerPos;
+    Rigidbody2D phantomId;
+    Collider2D phantomCollider;
+    Vector3 phantomPos;
     public float runSpeedx;
     CameraControl cam;
     float movementx = 0f;
     float movementy = 0f;
+    bool abilityToHaunt = false;
+    GameObject toHaunt;
 
     // Start is called before the first frame update
     void Start()
     {
-        playerId = GetComponent<Rigidbody2D>();
-        playerCollider = GetComponent<Collider2D>();
+        phantomId = GetComponent<Rigidbody2D>();
+        phantomCollider = GetComponent<Collider2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        playerPos = playerId.transform.position;
+        phantomPos = phantomId.transform.position;
         movementx = Input.GetAxis("Horizontal");
         movementy = Input.GetAxis("Vertical");
-        playerId.velocity = new Vector2(speed * movementx, speed * movementy);
+        phantomId.velocity = new Vector2(speed * movementx, speed * movementy);
+        if (abilityToHaunt && Input.GetKey(KeyCode.E))
+        {
+            toHaunt.transform.SetParent(transform);
+        }
+        else
+        {
+            toHaunt.transform.SetParent(p: null);
+        }
     }
 
+    private void OnCollisionStay2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Hauntable"))
+        {
+            abilityToHaunt = true;
+        }
+    }
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Hauntable"))
+        {
+            abilityToHaunt = false;
+            toHaunt = other.gameObject;
+        }
+    }
 }
