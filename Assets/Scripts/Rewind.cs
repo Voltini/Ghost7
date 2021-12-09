@@ -42,7 +42,7 @@ public class Rewind : MonoBehaviour
         i++;
         if (counter < length - 1)
         {
-            while (time >= rewindPositions[counter + 1].playerTime && counter < length - 2)
+            while (time >= rewindPositions[counter + 1].playerTime && (counter < length - 2))
             {
                 counter++;
                 //l'idée de la boucle while là c'est d'éviter une désynchro si le framerate pendant la phase avant le décès est plus élevé qu'après le décès
