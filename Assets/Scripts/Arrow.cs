@@ -12,22 +12,24 @@ public class Arrow : MonoBehaviour
     void Start()
     {
         arrowId = GetComponent<Rigidbody2D>();
-        arrowCollider = GetComponent<Collider>();
-        arrowId.gravityScale = 1;
-        arrowId.mass = 2;
-        transform.localScale = new Vector2(1.5f, 0.5f);
-    }
-
-    void awake(){
-        arrowId.gravityScale = 1;
-        arrowId.mass = 2;
-        transform.localScale = new Vector2(1.5f, 0.5f);
-        print("arrow spawned");
+        arrowCollider = GetComponent<BoxCollider>();
+        arrowId.gravityScale = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        
+
+        if (other.gameObject.TryGetComponent(typeof(PlayerControl), out Component player))
+        {
+            other.gameObject.GetComponent<PlayerControl>().Death();  
+        }
+        gameObject.SetActive(false);
     }
 }
