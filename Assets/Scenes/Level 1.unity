@@ -6244,7 +6244,8 @@ GameObject:
   - component: {fileID: 532311169}
   - component: {fileID: 532311168}
   - component: {fileID: 532311170}
-  m_Layer: 5
+  - component: {fileID: 532311171}
+  m_Layer: 9
   m_Name: rewindPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6266,6 +6267,9 @@ MonoBehaviour:
   deathTime: 0
   line: {fileID: 608599299}
   length: 0
+  player: {fileID: 2033907687}
+  phantom: {fileID: 361333284}
+  cam: {fileID: 519420033}
 --- !u!212 &532311169
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6338,6 +6342,32 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!61 &532311171
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 532311167}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 0.16, y: 0.16}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!4 &532311172
 Transform:
   m_ObjectHideFlags: 0
@@ -6614,8 +6644,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 269c6a410aa3d314b95b0ed61b3ed98d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 2033907687}
+  rewindPlayer: {fileID: 532311167}
   constraints: 4
+  freezeConstraints: -1
   cam: {fileID: 519420033}
 --- !u!4 &608768809
 Transform:
@@ -7957,8 +7988,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 269c6a410aa3d314b95b0ed61b3ed98d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  rewindPlayer: {fileID: 0}
   constraints: 0
+  freezeConstraints: 0
   cam: {fileID: 0}
 --- !u!61 &1616144575
 BoxCollider2D:
@@ -8594,6 +8626,7 @@ MonoBehaviour:
   rewindPlayer: {fileID: 532311168}
   line: {fileID: 239837786}
   phantomPlayer: {fileID: 361333284}
+  reactivatedTime: 0
 --- !u!50 &2033907690
 Rigidbody2D:
   serializedVersion: 4

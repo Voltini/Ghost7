@@ -14,8 +14,9 @@ public class Boulder : MonoBehaviour
     float movementy;
     Rigidbody2D objectId;
     float speed = 7;
-    public GameObject player;
+    public GameObject rewindPlayer;
     public RigidbodyConstraints2D constraints;
+    public RigidbodyConstraints2D freezeConstraints;
     public CameraControl cam;
 
 
@@ -28,9 +29,10 @@ public class Boulder : MonoBehaviour
     {
         if (isHaunted) {
             Move();
-            if (Input.GetKeyDown(KeyCode.Return)) {
-                player.SetActive(true);
+            if (Input.GetKeyDown(KeyCode.E)) {
                 isHaunted = false;
+                objectId.constraints = freezeConstraints;
+                cam.SwitchTarget(rewindPlayer);
             }
         }
     }
@@ -55,6 +57,7 @@ public class Boulder : MonoBehaviour
         objectId.gravityScale = 0f;
         objectId.constraints = constraints;
         cam.SwitchTarget(this.gameObject);
+        gameObject.layer = LayerMask.NameToLayer("Hauntable");
     }
 
     void Move()

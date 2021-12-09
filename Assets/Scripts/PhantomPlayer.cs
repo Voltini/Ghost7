@@ -13,8 +13,6 @@ public class PhantomPlayer : MonoBehaviour
     CameraControl cam;
     float movementx = 0f;
     float movementy = 0f;
-    bool abilityToHaunt = false;
-    GameObject toHaunt;
     int hauntableLayer;
     
 
@@ -23,7 +21,7 @@ public class PhantomPlayer : MonoBehaviour
     {
         phantomId = GetComponent<Rigidbody2D>();
         phantomCollider = GetComponent<Collider2D>();
-        hauntableLayer = LayerMask.GetMask("Hauntable");
+        hauntableLayer = LayerMask.GetMask("Hauntable", "Haunted");
     }
 
     // Update is called once per frame

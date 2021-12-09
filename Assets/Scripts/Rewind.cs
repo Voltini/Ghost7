@@ -25,11 +25,12 @@ public class Rewind : MonoBehaviour
     public int length;
     Rigidbody2D playerId;
     float timeFactor = 1f;
+    public GameObject player;
+    public GameObject phantom;
+    public CameraControl cam;
 
     void Start()
     {
-        deathTime = Time.timeSinceLevelLoad;
-        length = rewindPositions.Count;
         Debug.Log("nombre de points en mémoire : " + length);   //j'ai laisé ça provisoirement pour checker si ça risquait pas d'avoir un impact sur les performances
         playerId = GetComponent<Rigidbody2D>();
     }
@@ -51,6 +52,21 @@ public class Rewind : MonoBehaviour
             playerId.DOMove(rewindPositions[counter].playerPosition, Time.deltaTime);
             //DOMove c'est une fonction de DoTween qui est un asset (pas inclus de base dans Unity) qui permet d'avoir un déplacement lissé
         }
+        else {
+            player.transform.position = transform.position;
+            player.GetComponent<PlayerControl>().reactivatedTime = Time.timeSinceLevelLoad;
+            player.SetActive(true);
+            cam.SwitchTarget(player);
+            phantom.SetActive(false);
+            counter = 0;
+            rewindPositions = new List<rewindData>();
+            gameObject.SetActive(false);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        counter = length;
+        other.gameObject.layer = LayerMask.NameToLayer("Haunted");
     }
 
 }

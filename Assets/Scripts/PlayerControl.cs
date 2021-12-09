@@ -31,6 +31,7 @@ public class PlayerControl : MonoBehaviour
     Vector3 previousPosition = Vector3.positiveInfinity;
     Vector3 playerPos;
     public GameObject phantomPlayer;
+    public float reactivatedTime = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -38,6 +39,7 @@ public class PlayerControl : MonoBehaviour
         playerId = GetComponent<Rigidbody2D>();
         playerCollider = GetComponent<Collider2D>();
         rewindPlayer.rewindPositions = new List<Rewind.rewindData>();
+        cam.SwitchTarget(this.gameObject);
     }
 
     // Update is called once per frame
@@ -46,7 +48,7 @@ public class PlayerControl : MonoBehaviour
         playerPos = playerId.transform.position;
         if (playerPos != previousPosition)
         {
-            rewindPlayer.rewindPositions.Add(new Rewind.rewindData(Time.timeSinceLevelLoad, playerPos));
+            rewindPlayer.rewindPositions.Add(new Rewind.rewindData(Time.timeSinceLevelLoad - reactivatedTime, playerPos));
             //en gros on stocke les valeurs de position que lorsqu'elles sont différentes des précédentes et on utilise un time stamp 
             //pour s'assurer que le rewind a la meme vitesse que le joueur indépendamment du framerate
         }
@@ -150,7 +152,10 @@ public class PlayerControl : MonoBehaviour
         playerExplosion.transform.position = playerId.position;
         playerExplosion.Play();
         cam.ActivateShake(0.2f, 2f);
+        phantomPlayer.transform.position = transform.position;
         phantomPlayer.SetActive(true);
+        rewindPlayer.deathTime = Time.timeSinceLevelLoad;
+        rewindPlayer.length = rewindPlayer.rewindPositions.Count;
         rewindPlayer.gameObject.SetActive(true);
         cam.SwitchTarget(phantomPlayer);      //pour que la caméra switch de cible (temporaire mais c'est pratique pour regarder ce qu'il se passe)
         gameObject.SetActive(false);    //décès du joueur
