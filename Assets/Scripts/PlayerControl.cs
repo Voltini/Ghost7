@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class PlayerControl : MonoBehaviour
 {
-    public GameObject phantomPlayer;
     float speed = 1f;
     float movementx = 0f;
     Rigidbody2D playerId;
@@ -31,6 +30,7 @@ public class PlayerControl : MonoBehaviour
     int i = 0;
     Vector3 previousPosition = Vector3.positiveInfinity;
     Vector3 playerPos;
+    public GameObject phantomPlayer;
 
     // Start is called before the first frame update
     void Start()
@@ -129,9 +129,9 @@ public class PlayerControl : MonoBehaviour
         playerExplosion.transform.position = playerId.position;
         playerExplosion.Play();
         cam.ActivateShake(0.2f,2f);
+        phantomPlayer.SetActive(true);
         rewindPlayer.gameObject.SetActive(true);
         cam.rewindTime = true;      //pour que la caméra switch de cible (temporaire mais c'est pratique pour regarder ce qu'il se passe)
-        phantomPlayer.SetActive(true);
         gameObject.SetActive(false);    //décès du joueur
     }
 
