@@ -6,12 +6,14 @@ using UnityEngine.UI;
 
 public class PhantomPlayer : MonoBehaviour
 {
-    float speed = 1f;
+    float speed = 7f;
     Rigidbody2D playerId;
     Collider2D playerCollider;
     Vector3 playerPos;
-    public float runSpeed;
+    public float runSpeedx;
     CameraControl cam;
+    float movementx = 0f;
+    float movementy = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -24,18 +26,9 @@ public class PhantomPlayer : MonoBehaviour
     void Update()
     {
         playerPos = playerId.transform.position;
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {      //Courir
-            speed = runSpeed;
-        }
-        if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            speed = 1f;
-        }
+        movementx = Input.GetAxis("Horizontal");
+        movementy = Input.GetAxis("Vertical");
+        playerId.velocity = new Vector2(speed * movementx, speed * movementy);
     }
 
-    public void GetCamera(Camera camera)
-    {
-        cam = camera.GetComponent<CameraControl>();     //ça c'est juste pour pouvoir appeler des screenshake depuis le script du joueur
-    }
 }

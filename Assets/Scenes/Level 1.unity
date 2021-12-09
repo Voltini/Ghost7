@@ -5636,7 +5636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5862a092f9dbd864884f697f10a05e99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runSpeed: 0
+  runSpeedx: 0
 --- !u!61 &361333288
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6214,6 +6214,7 @@ MonoBehaviour:
   horizontalThreshold: 3
   verticalThreshold: 1
   rewindPlayer: {fileID: 532311168}
+  phantomPlayer: {fileID: 361333284}
   rewindTime: 0
 --- !u!1 &532311167
 GameObject:
