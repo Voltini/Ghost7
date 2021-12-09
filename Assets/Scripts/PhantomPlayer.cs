@@ -10,18 +10,19 @@ public class PhantomPlayer : MonoBehaviour
     Rigidbody2D phantomId;
     Collider2D phantomCollider;
     Vector3 phantomPos;
-    public float runSpeedx;
     CameraControl cam;
     float movementx = 0f;
     float movementy = 0f;
     bool abilityToHaunt = false;
     GameObject toHaunt;
+    LayerMask hauntableLayer;
 
     // Start is called before the first frame update
     void Start()
     {
         phantomId = GetComponent<Rigidbody2D>();
         phantomCollider = GetComponent<Collider2D>();
+        hauntableLayer = LayerMask.GetMask("Hauntable");
     }
 
     // Update is called once per frame
@@ -31,29 +32,13 @@ public class PhantomPlayer : MonoBehaviour
         movementx = Input.GetAxis("Horizontal");
         movementy = Input.GetAxis("Vertical");
         phantomId.velocity = new Vector2(speed * movementx, speed * movementy);
-        if (abilityToHaunt && Input.GetKey(KeyCode.E))
+        if (Input.GetKey(KeyCode.E))
         {
-            toHaunt.transform.SetParent(transform);
-        }
-        else
-        {
-            toHaunt.transform.SetParent(p: null);
-        }
-    }
-
-    private void OnCollisionStay2D(Collision2D other)
-    {
-        if (other.gameObject.CompareTag("Hauntable"))
-        {
-            abilityToHaunt = true;
-        }
-    }
-    private void OnCollisionExit2D(Collision2D other)
-    {
-        if (other.gameObject.CompareTag("Hauntable"))
-        {
-            abilityToHaunt = false;
-            toHaunt = other.gameObject;
+            RaycastHit2D hit = Physics2D.CircleCast(transform.position, 2f, Vector2.up, hauntableLayer);
+            if (hit.collider != null) {
+                hit.collider.gameObject.GetComponent<Boulder>().Haunt();
+                gameObject.SetActive(false);
+            }
         }
     }
 }
