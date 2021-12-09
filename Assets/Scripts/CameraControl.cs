@@ -18,9 +18,11 @@ public class CameraControl : MonoBehaviour
     [SerializeField] float verticalThreshold;
     Vector3 camPos;
     public Rewind rewindPlayer;
+    public GameObject phantomPlayer;
     public bool rewindTime = false;
 
-    void Start() {
+    void Start()
+    {
         cam = GetComponent<Camera>();
         shake = Vector3.zero;
         playerId = player.GetComponent<PlayerControl>();
@@ -34,33 +36,41 @@ public class CameraControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R)) {      //restart level
+        if (Input.GetKeyDown(KeyCode.R))
+        {      //restart level
             Scene scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
         }
 
-        if (isShaking) {
+        if (isShaking)
+        {
             Shake();
         }
 
-        if (!rewindTime) {
+        if (!rewindTime)
+        {
             playerPos = player.transform.position;
         }
-        else {
-            playerPos = rewindPlayer.transform.position;
+        else
+        {
+            playerPos = phantomPlayer.transform.position;
         }
 
-        if (camPos.x - playerPos.x >= horizontalThreshold) {
-            camPos = new Vector3(playerPos.x + horizontalThreshold,camPos.y, camPos.z); 
+        if (camPos.x - playerPos.x >= horizontalThreshold)
+        {
+            camPos = new Vector3(playerPos.x + horizontalThreshold, camPos.y, camPos.z);
         }
-        else if (camPos.x - playerPos.x <= - horizontalThreshold) {
-            camPos = new Vector3(playerPos.x - horizontalThreshold,camPos.y, camPos.z); 
+        else if (camPos.x - playerPos.x <= -horizontalThreshold)
+        {
+            camPos = new Vector3(playerPos.x - horizontalThreshold, camPos.y, camPos.z);
         }
-        if (camPos.y - playerPos.y >= verticalThreshold) {
-            camPos = new Vector3(camPos.x,playerPos.y + verticalThreshold, camPos.z); 
+        if (camPos.y - playerPos.y >= verticalThreshold)
+        {
+            camPos = new Vector3(camPos.x, playerPos.y + verticalThreshold, camPos.z);
         }
-        else if (camPos.y - playerPos.y <= - verticalThreshold) {
-            camPos = new Vector3(camPos.x,playerPos.y - verticalThreshold, camPos.z); 
+        else if (camPos.y - playerPos.y <= -verticalThreshold)
+        {
+            camPos = new Vector3(camPos.x, playerPos.y - verticalThreshold, camPos.z);
         }
         cam.transform.position = camPos + shake;
 
@@ -87,7 +97,7 @@ public class CameraControl : MonoBehaviour
 
     void Shake()
     {
-        shake = camSize*shakeMagitude * new Vector2(Random.Range(0f, 1f), Random.Range(0f, 1f))/50;
+        shake = camSize * shakeMagitude * new Vector2(Random.Range(0f, 1f), Random.Range(0f, 1f)) / 50;
     }
 
 }
