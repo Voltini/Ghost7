@@ -15,7 +15,8 @@ public class PhantomPlayer : MonoBehaviour
     float movementy = 0f;
     bool abilityToHaunt = false;
     GameObject toHaunt;
-    LayerMask hauntableLayer;
+    int hauntableLayer;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -34,8 +35,9 @@ public class PhantomPlayer : MonoBehaviour
         phantomId.velocity = new Vector2(speed * movementx, speed * movementy);
         if (Input.GetKey(KeyCode.E))
         {
-            RaycastHit2D hit = Physics2D.CircleCast(transform.position, 2f, Vector2.up, hauntableLayer);
-            if (hit.collider != null) {
+            RaycastHit2D hit = Physics2D.CircleCast(transform.position, 4f, Vector2.up, Mathf.Infinity,hauntableLayer);
+            if (hit) {
+                Debug.Log(hit.collider.tag);
                 hit.collider.gameObject.GetComponent<Boulder>().Haunt();
                 gameObject.SetActive(false);
             }

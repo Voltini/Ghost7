@@ -20,6 +20,7 @@ public class CameraControl : MonoBehaviour
     public Rewind rewindPlayer;
     public GameObject phantomPlayer;
     public bool rewindTime = false;
+    GameObject target;
 
     void Start()
     {
@@ -32,6 +33,7 @@ public class CameraControl : MonoBehaviour
         camPos = this.transform.position;
         horizontalThreshold = camSize*0.5f;
         verticalThreshold = camSize*0.5f;
+        target = player;
     }
     // Update is called once per frame
     void Update()
@@ -47,14 +49,7 @@ public class CameraControl : MonoBehaviour
             Shake();
         }
 
-        if (!rewindTime)
-        {
-            playerPos = player.transform.position;
-        }
-        else
-        {
-            playerPos = phantomPlayer.transform.position;
-        }
+            playerPos = target.transform.position;
 
         if (camPos.x - playerPos.x >= horizontalThreshold)
         {
@@ -98,6 +93,11 @@ public class CameraControl : MonoBehaviour
     void Shake()
     {
         shake = camSize * shakeMagitude * new Vector2(Random.Range(0f, 1f), Random.Range(0f, 1f)) / 50;
+    }
+
+    public void SwitchTarget(GameObject newTarget)
+    {
+        target = newTarget;
     }
 
 }

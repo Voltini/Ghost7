@@ -15,6 +15,8 @@ public class Boulder : MonoBehaviour
     Rigidbody2D objectId;
     float speed = 7;
     public GameObject player;
+    public RigidbodyConstraints2D constraints;
+    public CameraControl cam;
 
 
     void Start()
@@ -50,6 +52,9 @@ public class Boulder : MonoBehaviour
     public void Haunt()
     {
         isHaunted = true;
+        objectId.gravityScale = 0f;
+        objectId.constraints = constraints;
+        cam.SwitchTarget(this.gameObject);
     }
 
     void Move()

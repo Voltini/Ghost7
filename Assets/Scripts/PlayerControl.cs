@@ -152,7 +152,7 @@ public class PlayerControl : MonoBehaviour
         cam.ActivateShake(0.2f, 2f);
         phantomPlayer.SetActive(true);
         rewindPlayer.gameObject.SetActive(true);
-        cam.rewindTime = true;      //pour que la caméra switch de cible (temporaire mais c'est pratique pour regarder ce qu'il se passe)
+        cam.SwitchTarget(phantomPlayer);      //pour que la caméra switch de cible (temporaire mais c'est pratique pour regarder ce qu'il se passe)
         gameObject.SetActive(false);    //décès du joueur
     }
 
