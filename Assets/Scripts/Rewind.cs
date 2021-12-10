@@ -28,6 +28,7 @@ public class Rewind : MonoBehaviour
     public GameObject player;
     public GameObject phantom;
     public CameraControl cam;
+    public bool shouldLoop = false;
 
     void Start()
     {
@@ -37,13 +38,14 @@ public class Rewind : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(length - counter);
         time = timeFactor * (Time.timeSinceLevelLoad - deathTime);
         line.positionCount = i + 1;
         line.SetPosition(i, transform.position);
         i++;
         if (counter < length - 1)
         {
-            while (time >= rewindPositions[counter + 1].playerTime && (counter < length - 2))
+            while (time >= rewindPositions[counter + 1].playerTime && (counter < length - 1))
             {
                 counter++;
                 //l'idée de la boucle while là c'est d'éviter une désynchro si le framerate pendant la phase avant le décès est plus élevé qu'après le décès
@@ -53,20 +55,30 @@ public class Rewind : MonoBehaviour
             //DOMove c'est une fonction de DoTween qui est un asset (pas inclus de base dans Unity) qui permet d'avoir un déplacement lissé
         }
         else {
-            player.transform.position = transform.position;
-            player.GetComponent<PlayerControl>().reactivatedTime = Time.timeSinceLevelLoad;
-            player.SetActive(true);
-            cam.SwitchTarget(player);
-            phantom.SetActive(false);
-            counter = 0;
-            rewindPositions = new List<rewindData>();
-            gameObject.SetActive(false);
+            Debug.Log("et là :" + shouldLoop);
+            if (shouldLoop) {
+                Debug.Log("ok");
+                counter = 0;
+                deathTime = Time.timeSinceLevelLoad;
+                phantom.transform.position = transform.position;
+            }
+            else {
+                player.transform.position = transform.position;
+                player.GetComponent<PlayerControl>().reactivatedTime = Time.timeSinceLevelLoad;
+                player.SetActive(true);
+                cam.SwitchTarget(player);
+                phantom.SetActive(false);
+                counter = 0;
+                rewindPositions = new List<rewindData>();
+                gameObject.SetActive(false);
+            }
         }
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
         counter = length;
         other.gameObject.layer = LayerMask.NameToLayer("Haunted");
+        shouldLoop = false;
     }
 
     public void ResetRewind()
