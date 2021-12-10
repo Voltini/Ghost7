@@ -12,7 +12,7 @@ public class Lava : MonoBehaviour
     void Start()
     {
         lavaParticles = Instantiate(lavaParticles);
-        lavaParticles.transform.position = transform.position + new Vector3(0f, transform.localScale.y*0.5f, 0f);
+        lavaParticles.transform.position = transform.position + new Vector3(0f, transform.localScale.y*0.5f, 5f);
         var shape = lavaParticles.shape;
         shape.radius = transform.localScale.x * 0.5f;
         var em = lavaParticles.emission;

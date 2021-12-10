@@ -21,7 +21,7 @@ public class Rewind : MonoBehaviour
     public LineRenderer line;
     int i;
     public List<rewindData> rewindPositions;
-    int counter = 0;
+    public int counter = 0;
     public int length;
     Rigidbody2D playerId;
     float timeFactor = 1f;
@@ -67,6 +67,12 @@ public class Rewind : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) {
         counter = length;
         other.gameObject.layer = LayerMask.NameToLayer("Haunted");
+    }
+
+    public void ResetRewind()
+    {
+        deathTime = Time.timeSinceLevelLoad;
+        counter = 0;
     }
 
 }

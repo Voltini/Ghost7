@@ -14,7 +14,12 @@ public class PhantomPlayer : MonoBehaviour
     float movementx = 0f;
     float movementy = 0f;
     int hauntableLayer;
-    
+    bool isSucked = false;
+    Vector2 massCenter;
+    Vector2 distance;
+    public ParticleSystem phantomDeath;
+    [HideInInspector] public Vector2 startPos;
+    public Rewind rewindPlayer;
 
     // Start is called before the first frame update
     void Start()
@@ -30,19 +35,45 @@ public class PhantomPlayer : MonoBehaviour
         phantomPos = phantomId.transform.position;
         movementx = Input.GetAxis("Horizontal");
         movementy = Input.GetAxis("Vertical");
-        phantomId.velocity = new Vector2(speed * movementx, speed * movementy);
-        if (Input.GetKey(KeyCode.E))
-        {
-            RaycastHit2D hit = Physics2D.CircleCast(transform.position, 4f, Vector2.up, Mathf.Infinity,hauntableLayer);
-            if (hit) {
-                if (hit.collider.CompareTag("Dispenser")) {
-                    hit.collider.gameObject.GetComponent<Dispenser>().Haunt();
+        if (!isSucked) {
+            if (Input.GetKey(KeyCode.E)) {
+                RaycastHit2D hit = Physics2D.CircleCast(transform.position, 4f, Vector2.up, Mathf.Infinity,hauntableLayer);
+                if (hit) {
+                    if (hit.collider.CompareTag("Dispenser")) {
+                        hit.collider.gameObject.GetComponent<Dispenser>().Haunt();
+                    }
+                    else {
+                        hit.collider.gameObject.GetComponent<Boulder>().Haunt();
+                    }
+                    gameObject.SetActive(false);
                 }
-                else {
-                    hit.collider.gameObject.GetComponent<Boulder>().Haunt();
-                }
-                gameObject.SetActive(false);
+            }
+            phantomId.velocity = new Vector2(speed * movementx, speed * movementy);
+        }
+        else {
+            distance = massCenter - phantomId.position;
+            if (distance.magnitude > 0.5f) { 
+            phantomId.AddForce(1f*distance.normalized);
+            }
+            else {
+                Death();
             }
         }
+    }
+
+    void OnTriggerEnter2D(Collider2D other) {
+        if (other.CompareTag("HellGate")) {
+            phantomId.velocity = Vector2.zero;
+            isSucked = true;
+            massCenter = other.transform.position;
+        }
+    }
+    void Death()
+    {
+        isSucked = false;
+        phantomDeath.transform.position = transform.position;
+        phantomDeath.Play();
+        transform.position = startPos;
+        rewindPlayer.ResetRewind();
     }
 }

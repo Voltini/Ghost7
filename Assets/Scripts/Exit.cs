@@ -34,4 +34,5 @@ public class Exit : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         winScreen.SetActive(true);
     }
+    
 }

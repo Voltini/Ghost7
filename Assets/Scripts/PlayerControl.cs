@@ -154,6 +154,7 @@ public class PlayerControl : MonoBehaviour
         cam.ActivateShake(0.2f, 2f);
         phantomPlayer.transform.position = transform.position;
         phantomPlayer.SetActive(true);
+        phantomPlayer.GetComponent<PhantomPlayer>().startPos = transform.position;
         rewindPlayer.deathTime = Time.timeSinceLevelLoad;
         rewindPlayer.length = rewindPlayer.rewindPositions.Count;
         rewindPlayer.gameObject.SetActive(true);
