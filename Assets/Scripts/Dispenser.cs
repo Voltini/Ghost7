@@ -8,7 +8,9 @@ public class Dispenser : MonoBehaviour
     public float periode ;
     public Transform firepoint;
     public GameObject inventory;
-    // Start is called before the first frame update
+    bool isHaunted = false;
+    public CameraControl cam;
+    public GameObject player;
 
 
     void Start()
@@ -16,6 +18,20 @@ public class Dispenser : MonoBehaviour
         dispenserCollider = GetComponent<Collider>();
         StartCoroutine("Timer");
 
+    }
+
+    void Update() 
+    {
+        if (isHaunted) {
+            if (Input.GetKeyDown(KeyCode.E)) {
+                isHaunted = false;
+                cam.SwitchTarget(player);
+                player.SetActive(true);
+            }
+            else {
+                transform.rotation = Quaternion.Euler(0f, 0f, transform.eulerAngles.z - 0.5f * Input.GetAxis("Horizontal"));
+            }
+        }
     }
 
     public void Shoot(){
@@ -31,6 +47,11 @@ public class Dispenser : MonoBehaviour
         yield return new WaitForSeconds(periode);
         Shoot();
         StartCoroutine("Timer");
+    }
+
+    public void Haunt()
+    {
+        isHaunted = true;
     }
 
 }

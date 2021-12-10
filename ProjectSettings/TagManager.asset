@@ -10,6 +10,7 @@ TagManager:
   - Ghost
   - ArrowImpact
   - Hauntable
+  - Dispenser
   layers:
   - Default
   - TransparentFX

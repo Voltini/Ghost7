@@ -35,8 +35,12 @@ public class PhantomPlayer : MonoBehaviour
         {
             RaycastHit2D hit = Physics2D.CircleCast(transform.position, 4f, Vector2.up, Mathf.Infinity,hauntableLayer);
             if (hit) {
-                Debug.Log(hit.collider.tag);
-                hit.collider.gameObject.GetComponent<Boulder>().Haunt();
+                if (hit.collider.CompareTag("Dispenser")) {
+                    hit.collider.gameObject.GetComponent<Dispenser>().Haunt();
+                }
+                else {
+                    hit.collider.gameObject.GetComponent<Boulder>().Haunt();
+                }
                 gameObject.SetActive(false);
             }
         }
