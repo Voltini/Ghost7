@@ -38,7 +38,6 @@ public class Rewind : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(length - counter);
         time = timeFactor * (Time.timeSinceLevelLoad - deathTime);
         line.positionCount = i + 1;
         line.SetPosition(i, transform.position);
@@ -55,19 +54,24 @@ public class Rewind : MonoBehaviour
             //DOMove c'est une fonction de DoTween qui est un asset (pas inclus de base dans Unity) qui permet d'avoir un déplacement lissé
         }
         else {
-            Debug.Log("et là :" + shouldLoop);
             if (shouldLoop) {
                 Debug.Log("ok");
                 counter = 0;
                 deathTime = Time.timeSinceLevelLoad;
-                phantom.transform.position = transform.position;
+                if (!phantom.activeSelf) {}
             }
             else {
+                if (phantom.activeSelf) {
+                    phantom.SetActive(false);
+                }
+                else {
+                    Debug.Log("haunting canceled");
+                    cam.CancelHaunting();
+                }
                 player.transform.position = transform.position;
                 player.GetComponent<PlayerControl>().reactivatedTime = Time.timeSinceLevelLoad;
                 player.SetActive(true);
                 cam.SwitchTarget(player);
-                phantom.SetActive(false);
                 counter = 0;
                 rewindPositions = new List<rewindData>();
                 gameObject.SetActive(false);

@@ -98,6 +98,20 @@ public class CameraControl : MonoBehaviour
     public void SwitchTarget(GameObject newTarget)
     {
         target = newTarget;
+        Debug.Log(target.TryGetComponent<Dispenser>(out Dispenser dispenser));
+    }
+
+    public void CancelHaunting()
+    {
+        Debug.Log("camera");
+        if (target.TryGetComponent<Boulder>(out Boulder boulder)) {
+            Debug.Log("boulder");
+            boulder.StopHauting();
+        }
+        else if (target.TryGetComponent<Dispenser>(out Dispenser dispenser)) {
+            Debug.Log(true);
+            dispenser.StopHaunting();
+        }
     }
 
 }

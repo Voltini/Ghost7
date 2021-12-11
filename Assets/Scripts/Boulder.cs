@@ -30,9 +30,7 @@ public class Boulder : MonoBehaviour
         if (isHaunted) {
             Move();
             if (Input.GetKeyDown(KeyCode.E)) {
-                isHaunted = false;
-                objectId.constraints = freezeConstraints;
-                cam.SwitchTarget(rewindPlayer);
+                StopHauting();
             }
         }
     }
@@ -65,5 +63,12 @@ public class Boulder : MonoBehaviour
         movementx = Input.GetAxis("Horizontal");
         movementy = Input.GetAxis("Vertical");
         objectId.velocity = new Vector2(speed * movementx, speed * movementy);
+    }
+
+    public void StopHauting()
+    {
+        isHaunted = false;
+        objectId.constraints = freezeConstraints;
+        cam.SwitchTarget(rewindPlayer);
     }
 }

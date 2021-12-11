@@ -18,12 +18,6 @@ public class Arrow : MonoBehaviour
         arrowImpact = GameObject.FindGameObjectWithTag("ArrowImpact").GetComponent<ParticleSystem>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnCollisionEnter2D(Collision2D other)
     {
         arrowImpact = Instantiate(arrowImpact, transform.position, Quaternion.Euler(0f,0f, transform.eulerAngles.z - 22.5f));

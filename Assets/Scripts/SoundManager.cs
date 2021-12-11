@@ -18,7 +18,11 @@ public class SoundManager : MonoBehaviour
     List<clip> audioIds;
 
     [Header("Audio Clips")]
-    public AudioClip clip1;
+    public AudioClip jump;
+    public AudioClip playerDeath;
+    public AudioClip phantomDeath;
+    public AudioClip arrowShot;
+    public AudioClip arrowImpact;
     float volume;
 
     struct clip{
@@ -33,20 +37,10 @@ public class SoundManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)       //first iteration of loading this level
-		{
-			Instance = this;
-            MusicSource = GetComponent<AudioSource>();
-            musicQuantity = musics.Count;
-            musicQueue = musics;
-            CreateQueue();
-		}
-		else if (Instance != this)
-		{
-			Destroy(gameObject);
-		}
-        DontDestroyOnLoad(gameObject);
-        StopCoroutine("SfxTimer");
+        MusicSource = GetComponent<AudioSource>();
+        musicQuantity = musics.Count;
+        musicQueue = musics;
+        CreateQueue();
         audioIds = new List<clip>();
         audioIds.Clear();
         //ResumeTimeSpeed();
@@ -148,8 +142,13 @@ public class SoundManager : MonoBehaviour
         float randomPitch = Random.Range(LowPitchRange, HighPitchRange);
         switch (type)
         {
+            case "jump":
+            sfxClip = jump;
+            volume = 1f;
+            break;
+
             case "playerDeath":
-            sfxClip = clip1;
+            sfxClip = arrowImpact;
             volume = 0.7f;
             break;
         }

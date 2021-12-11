@@ -24,9 +24,7 @@ public class Dispenser : MonoBehaviour
     {
         if (isHaunted) {
             if (Input.GetKeyDown(KeyCode.E)) {
-                isHaunted = false;
-                cam.SwitchTarget(player);
-                player.SetActive(true);
+                StopHaunting();
             }
             else {
                 transform.rotation = Quaternion.Euler(0f, 0f, transform.eulerAngles.z - 0.5f * Input.GetAxis("Horizontal"));
@@ -37,9 +35,8 @@ public class Dispenser : MonoBehaviour
     public void Shoot(){
         GameObject newArrow = Instantiate(inventory, firepoint.position, transform.rotation) as GameObject;
         Rigidbody2D newArrowId = newArrow.GetComponent<Rigidbody2D>();
-        newArrowId.position = firepoint.position;
-        newArrowId.AddForce(800f * (firepoint.position - transform.position).normalized);
-        
+        //newArrowId.position = firepoint.position;
+        newArrowId.velocity = 25f * (firepoint.position - transform.position).normalized;
     }
 
     IEnumerator Timer()
@@ -52,6 +49,15 @@ public class Dispenser : MonoBehaviour
     public void Haunt()
     {
         isHaunted = true;
+        cam.SwitchTarget(this.gameObject);
+    }
+
+    public void StopHaunting()
+    {
+        Debug.Log("dispenser stopped");
+        isHaunted = false;
+        cam.SwitchTarget(player);
+        player.SetActive(true);
     }
 
 }
