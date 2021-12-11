@@ -32,6 +32,7 @@ public class PlayerControl : MonoBehaviour
     Vector3 playerPos;
     public GameObject phantomPlayer;
     public float reactivatedTime = 0f;
+    public SoundManager soundManager;
 
     // Start is called before the first frame update
     void Start()
@@ -95,7 +96,7 @@ public class PlayerControl : MonoBehaviour
     {
         if (isGrounded)
         {
-            playerId.velocity = new Vector2(playerId.velocity.x, 7f);
+            JumpAction();
         }
         else if (isStickingToWallLeft || isStickingToWallRight)
         {
@@ -107,7 +108,7 @@ public class PlayerControl : MonoBehaviour
     {
         if (currentWall != lastWall)
         {      //ça c'est pour éviter que le joueur puisse faire des wall jump infinement sur la meme mur et faire de l'escalade
-            playerId.velocity = new Vector2(playerId.velocity.x, 7f);
+            JumpAction();
         }
         lastWall = currentWall;
     }
@@ -150,6 +151,7 @@ public class PlayerControl : MonoBehaviour
 
     public void Death()
     {
+        soundManager.PlaySfx(transform, "playerDeath");
         playerExplosion.transform.position = playerId.position;
         playerExplosion.Play();
         cam.ActivateShake(0.2f, 2f);
@@ -161,6 +163,12 @@ public class PlayerControl : MonoBehaviour
         rewindPlayer.gameObject.SetActive(true);
         cam.SwitchTarget(phantomPlayer);      //pour que la caméra switch de cible (temporaire mais c'est pratique pour regarder ce qu'il se passe)
         gameObject.SetActive(false);    //décès du joueur
+    }
+
+    void JumpAction()
+    {
+        playerId.velocity = new Vector2(playerId.velocity.x, 7f);
+        soundManager.PlaySfx(transform,"jump");
     }
 
     //PS : les lignes c'est provisoire aussi, juste pour vérifier que le rewind fonctionne bien

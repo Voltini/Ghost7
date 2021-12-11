@@ -54,7 +54,6 @@ public class Dispenser : MonoBehaviour
 
     public void StopHaunting()
     {
-        Debug.Log("dispenser stopped");
         isHaunted = false;
         cam.SwitchTarget(player);
         player.SetActive(true);

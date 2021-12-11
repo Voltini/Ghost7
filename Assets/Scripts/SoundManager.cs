@@ -21,6 +21,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip jump;
     public AudioClip playerDeath;
     public AudioClip phantomDeath;
+    public AudioClip haunted;
     public AudioClip arrowShot;
     public AudioClip arrowImpact;
     float volume;
@@ -40,9 +41,8 @@ public class SoundManager : MonoBehaviour
         MusicSource = GetComponent<AudioSource>();
         musicQuantity = musics.Count;
         musicQueue = musics;
-        CreateQueue();
+        //CreateQueue();
         audioIds = new List<clip>();
-        audioIds.Clear();
         //ResumeTimeSpeed();
     }
 
@@ -148,8 +148,28 @@ public class SoundManager : MonoBehaviour
             break;
 
             case "playerDeath":
-            sfxClip = arrowImpact;
+            sfxClip = playerDeath;
             volume = 0.7f;
+            break;
+            
+            case "phantomDeath":
+            sfxClip = phantomDeath;
+            volume = 1f;
+            break;
+
+            case "haunted":
+            sfxClip = haunted;
+            volume = 1f;
+            break;
+
+            case "arrowImpact":
+            sfxClip = arrowImpact;
+            volume = 1f;
+            break;
+
+            case "arrowShot":
+            sfxClip = arrowShot;
+            volume = 1f;
             break;
         }
     

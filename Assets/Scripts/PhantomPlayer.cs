@@ -20,6 +20,7 @@ public class PhantomPlayer : MonoBehaviour
     public ParticleSystem phantomDeath;
     [HideInInspector] public Vector2 startPos;
     public Rewind rewindPlayer;
+    public SoundManager soundManager;
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +40,7 @@ public class PhantomPlayer : MonoBehaviour
             if (Input.GetKey(KeyCode.E)) {
                 RaycastHit2D hit = Physics2D.CircleCast(transform.position, 4f, Vector2.up, Mathf.Infinity,hauntableLayer);
                 if (hit) {
+                    soundManager.PlaySfx(transform, "haunted");
                     if (hit.collider.CompareTag("Dispenser")) {
                         hit.collider.gameObject.GetComponent<Dispenser>().Haunt();
                     }
@@ -70,6 +72,7 @@ public class PhantomPlayer : MonoBehaviour
     }
     void Death()
     {
+        soundManager.PlaySfx(transform, "phantomDeath");
         isSucked = false;
         phantomDeath.transform.position = transform.position;
         phantomDeath.Play();
