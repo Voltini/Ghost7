@@ -19,7 +19,7 @@ public class Rewind : MonoBehaviour
     }
     public float deathTime;
     public LineRenderer line;
-    int i;
+    int i = 0;
     public List<rewindData> rewindPositions;
     public int counter = 0;
     public int length;
@@ -34,15 +34,13 @@ public class Rewind : MonoBehaviour
     {
         Debug.Log("nombre de points en mémoire : " + length);   //j'ai laisé ça provisoirement pour checker si ça risquait pas d'avoir un impact sur les performances
         playerId = GetComponent<Rigidbody2D>();
+        line.positionCount = 0;
     }
 
     void Update()
     {
         time = timeFactor * (Time.timeSinceLevelLoad - deathTime);
-        line.positionCount = i + 1;
-        line.SetPosition(i, transform.position);
-        i++;
-        if (counter < length - 1)
+        if (counter < length - 2)
         {
             while (time >= rewindPositions[counter + 1].playerTime && (counter < length - 2))
             {
@@ -51,11 +49,13 @@ public class Rewind : MonoBehaviour
                 //ça parait pas super important mais ce sera peut-etre utile quand il y aura des animations
             }
             playerId.DOMove(rewindPositions[counter].playerPosition, Time.deltaTime);
+            line.positionCount ++;
+            line.SetPosition(line.positionCount-1, rewindPositions[counter].playerPosition);
             //DOMove c'est une fonction de DoTween qui est un asset (pas inclus de base dans Unity) qui permet d'avoir un déplacement lissé
         }
         else {
             if (shouldLoop) {
-                Debug.Log("ok");
+                line.positionCount = 0;
                 counter = 0;
                 deathTime = Time.timeSinceLevelLoad;
                 if (!phantom.activeSelf) {}
@@ -65,11 +65,12 @@ public class Rewind : MonoBehaviour
                     phantom.SetActive(false);
                 }
                 else {
-                    Debug.Log("haunting canceled");
                     cam.CancelHaunting();
                 }
+                line.positionCount = 0;
                 player.transform.position = transform.position;
                 player.GetComponent<PlayerControl>().reactivatedTime = Time.timeSinceLevelLoad;
+                player.GetComponent<PlayerControl>().i = 0;
                 player.SetActive(true);
                 cam.SwitchTarget(player);
                 counter = 0;

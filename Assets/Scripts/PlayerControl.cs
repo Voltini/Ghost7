@@ -27,7 +27,7 @@ public class PlayerControl : MonoBehaviour
 
     public Rewind rewindPlayer;
     public LineRenderer line;
-    int i = 0;
+    public int i = 0;
     Vector3 previousPosition = Vector3.positiveInfinity;
     Vector3 playerPos;
     public GameObject phantomPlayer;
