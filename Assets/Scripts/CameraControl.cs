@@ -98,6 +98,9 @@ public class CameraControl : MonoBehaviour
     public void SwitchTarget(GameObject newTarget)
     {
         target = newTarget;
+        if (target.TryGetComponent<Dispenser>(out Dispenser dispenser)) {
+            cam.transform.position = target.transform.position;
+        }
     }
 
     public void CancelHaunting()

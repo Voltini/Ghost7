@@ -12,6 +12,7 @@ TagManager:
   - Hauntable
   - Dispenser
   - HellGate
+  - Arrow
   layers:
   - Default
   - TransparentFX
@@ -24,8 +25,8 @@ TagManager:
   - Hauntable
   - Rewind
   - Haunted
-  - 
-  - 
+  - Rope
+  - Arrow
   - 
   - 
   - 

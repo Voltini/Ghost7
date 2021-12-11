@@ -30,6 +30,7 @@ public class Arrow : MonoBehaviour
         {
             other.gameObject.GetComponent<PlayerControl>().Death();  
         }
-        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
+    
 }
