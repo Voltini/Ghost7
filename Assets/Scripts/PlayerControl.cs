@@ -177,7 +177,6 @@ public class PlayerControl : MonoBehaviour
         }
         else if (other.gameObject.CompareTag("Ground")) {
             isJumping = true;
-            Debug.Log("exit platform");
             anim.SetBool("isJumping", true);
             anim.SetBool("isWalking", false);
             anim.SetBool("isIdle", false);
@@ -216,7 +215,6 @@ public class PlayerControl : MonoBehaviour
             isJumping = true;
             anim.SetBool("isWalking", false);
             anim.SetBool("isIdle", false);
-            Debug.Log("jump");
         }
         playerId.velocity = new Vector2(playerId.velocity.x, 7f);
         soundManager.PlaySfx(transform,"jump");

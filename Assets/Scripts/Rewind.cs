@@ -118,11 +118,10 @@ public class Rewind : MonoBehaviour
     }
     void UpdateAnimation()
     {
-        if (animationCounter < animationList.Count) {
+        if (animationCounter < animationList.Count - 1) {
             if (time >= animationList[animationCounter+1].playerTime) {
                 animationCounter ++;
                 anim.Play(animationList[animationCounter].animation);
-                Debug.Log(animationList[animationCounter].animation);
                 /*switch (animationList[animationCounter].animation) {
                     case "walk" :
                     anim.Play
