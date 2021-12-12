@@ -40,7 +40,9 @@ public class PlayerControl : MonoBehaviour
     public Animation jumpAnimation;
     public Animation wallSlideAnimation;
     Animator anim;
-    bool isJumping;
+    bool isJumping = false;
+    string previousState = " ";
+    string currentState;
 
 
     // Start is called before the first frame update
@@ -50,6 +52,7 @@ public class PlayerControl : MonoBehaviour
         playerCollider = GetComponent<Collider2D>();
         anim = GetComponent<Animator>();
         rewindPlayer.rewindPositions = new List<Rewind.rewindData>();
+        rewindPlayer.animationList = new List<Rewind.animationData>();
         cam.SwitchTarget(this.gameObject);
     }
 
@@ -65,10 +68,6 @@ public class PlayerControl : MonoBehaviour
             line.positionCount = i + 1;
             line.SetPosition(i, playerId.transform.position);
             i++;
-            anim.SetBool("isIdle", false);
-        }
-        else {
-            anim.SetBool("isIdle", true);
         }
         previousPosition = playerPos;
 
@@ -91,6 +90,12 @@ public class PlayerControl : MonoBehaviour
 
         movementx = Input.GetAxis("Horizontal");
         playerId.velocity = new Vector2(7 * speed * movementx, playerId.velocity.y);
+        if (movementx > 0) {
+            anim.SetBool("facing_right", true);
+        }
+        else if (movementx < 0) {
+            anim.SetBool("facing_right", false);
+        }
 
         if (isTouchingWall)
         {
@@ -134,20 +139,22 @@ public class PlayerControl : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (isStickingToWallLeft || isStickingToWallRight)
-        {
-            currentWall = other.gameObject;
-            isTouchingWall = true;
-            anim.SetBool("isWallSliding", true);
-            anim.SetBool("isJumping", false);
-        }
-        else
-        {
-            lastWall = null;        // si le joueur touche du sol la capacité de walljump se réinitialise
-            if (isGrounded) {
-                isJumping = false;
+        if (other.collider.CompareTag("Wall") || other.collider.CompareTag("Ground")) {
+            if (isStickingToWallLeft || isStickingToWallRight)
+            {
+                currentWall = other.gameObject;
+                isTouchingWall = true;
+                anim.SetBool("isWallSliding", true);
                 anim.SetBool("isJumping", false);
-                anim.SetBool("isWalking", true);
+            }
+            else
+            {
+                lastWall = null;        // si le joueur touche du sol la capacité de walljump se réinitialise
+                if (isGrounded) {
+                    isJumping = false;
+                    anim.SetBool("isJumping", false);
+                    anim.SetBool("isWalking", true);
+                }
             }
         }
     }
@@ -163,12 +170,17 @@ public class PlayerControl : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D other)
     {
-        if (isTouchingWall)
-        {
+        if (other.gameObject.CompareTag("Wall")) {
             playerId.gravityScale = 1f;
             isTouchingWall = false;
             anim.SetBool("isWallSliding", false);
+        }
+        else if (other.gameObject.CompareTag("Ground")) {
+            isJumping = true;
+            Debug.Log("exit platform");
             anim.SetBool("isJumping", true);
+            anim.SetBool("isWalking", false);
+            anim.SetBool("isIdle", false);
         }
     }
 
@@ -188,6 +200,7 @@ public class PlayerControl : MonoBehaviour
         phantomPlayer.GetComponent<PhantomPlayer>().startPos = transform.position;
         rewindPlayer.deathTime = Time.timeSinceLevelLoad;
         rewindPlayer.length = rewindPlayer.rewindPositions.Count;
+        rewindPlayer.animationCounter = 0;
         Vector3[] array = new Vector3[line.positionCount];
         line.GetPositions(array);
         rewindPlayer.listPositions = array.ToList();
@@ -203,6 +216,7 @@ public class PlayerControl : MonoBehaviour
             isJumping = true;
             anim.SetBool("isWalking", false);
             anim.SetBool("isIdle", false);
+            Debug.Log("jump");
         }
         playerId.velocity = new Vector2(playerId.velocity.x, 7f);
         soundManager.PlaySfx(transform,"jump");
@@ -214,6 +228,14 @@ public class PlayerControl : MonoBehaviour
         i = 0;
         reactivatedTime = Time.timeSinceLevelLoad;
         rewindPlayer.rewindPositions = new List<Rewind.rewindData>();
+    }
+
+    void LateUpdate() {
+        currentState = anim.GetCurrentAnimatorClipInfo(0)[0].clip.name;
+        if (currentState != previousState) {
+            rewindPlayer.animationList.Add(new Rewind.animationData(Time.timeSinceLevelLoad, currentState));
+            previousState = currentState;
+        }
     }
 
     //PS : les lignes c'est provisoire aussi, juste pour vérifier que le rewind fonctionne bien

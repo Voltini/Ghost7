@@ -21,9 +21,9 @@ public class Rewind : MonoBehaviour
     public struct animationData
     {
         public float playerTime;
-        public Animation animation;
+        public string animation;
 
-        public animationData(float playerTime, Animation animation)
+        public animationData(float playerTime, string animation)
         {
             this.playerTime = playerTime;
             this.animation = animation;
@@ -44,24 +44,37 @@ public class Rewind : MonoBehaviour
     public CameraControl cam;
     public bool shouldLoop = false;
     public List<Vector3> listPositions;
+    Animator anim;
 
 
     void Start()
     {
         Debug.Log("nombre de points en mémoire : " + length);   //j'ai laisé ça provisoirement pour checker si ça risquait pas d'avoir un impact sur les performances
         playerId = GetComponent<Rigidbody2D>();
-        //line.positionCount = 0;
+        anim = GetComponent<Animator>();
     }
 
     void Update()
     {
         time = timeFactor * (Time.timeSinceLevelLoad - deathTime);
-        if (animationCounter < animationList.Count) {
-            /*if (time >= animationList[animationCounter].playerTime) {
-                animationCounter ++;
-                animationList[animationCounter].animation.Play();
-            }*/
-        }
+        UpdatePosition();
+        UpdateAnimation();
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        counter = length;
+        other.gameObject.layer = LayerMask.NameToLayer("Haunted");
+        shouldLoop = false;
+    }
+
+    public void ResetRewind()
+    {
+        deathTime = Time.timeSinceLevelLoad;
+        counter = 0;
+    }
+
+    void UpdatePosition()
+    {
         if (counter < length - 2)
         {
             while (time >= rewindPositions[counter + 1].playerTime && (counter < length - 2))
@@ -103,17 +116,20 @@ public class Rewind : MonoBehaviour
             }
         }
     }
-
-    private void OnTriggerEnter2D(Collider2D other) {
-        counter = length;
-        other.gameObject.layer = LayerMask.NameToLayer("Haunted");
-        shouldLoop = false;
-    }
-
-    public void ResetRewind()
+    void UpdateAnimation()
     {
-        deathTime = Time.timeSinceLevelLoad;
-        counter = 0;
+        if (animationCounter < animationList.Count) {
+            if (time >= animationList[animationCounter+1].playerTime) {
+                animationCounter ++;
+                anim.Play(animationList[animationCounter].animation);
+                Debug.Log(animationList[animationCounter].animation);
+                /*switch (animationList[animationCounter].animation) {
+                    case "walk" :
+                    anim.Play
+                    break;
+                }*/
+            }
+        }
     }
 
 }

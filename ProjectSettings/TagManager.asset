@@ -13,6 +13,7 @@ TagManager:
   - Dispenser
   - HellGate
   - Arrow
+  - Ground
   layers:
   - Default
   - TransparentFX

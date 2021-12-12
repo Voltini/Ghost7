@@ -10100,7 +10100,7 @@ GameObject:
   - component: {fileID: 335157850}
   m_Layer: 0
   m_Name: Platform (2)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10775,7 +10775,7 @@ GameObject:
   - component: {fileID: 448764559}
   m_Layer: 0
   m_Name: Platform (1)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11307,6 +11307,7 @@ GameObject:
   - component: {fileID: 532311168}
   - component: {fileID: 532311170}
   - component: {fileID: 532311171}
+  - component: {fileID: 532311173}
   m_Layer: 9
   m_Name: rewindPlayer
   m_TagString: Untagged
@@ -11377,7 +11378,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 6dcaddd979115404e9d1f1a0530c872d, type: 3}
-  m_Color: {r: 0.9433962, g: 0.31505868, b: 0.31505868, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.6901961}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -11448,6 +11449,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &532311173
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 532311167}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 082cd38f27195644e9eff23978c818ad, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &535444898
 GameObject:
   m_ObjectHideFlags: 0
@@ -11461,7 +11481,7 @@ GameObject:
   - component: {fileID: 535444899}
   m_Layer: 0
   m_Name: Platform
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12256,7 +12276,7 @@ GameObject:
   - component: {fileID: 936424973}
   m_Layer: 0
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19214,7 +19234,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &1910498921
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -19663,8 +19683,8 @@ SpriteRenderer:
   m_SortingLayerID: -1721018571
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 6dcaddd979115404e9d1f1a0530c872d, type: 3}
-  m_Color: {r: 0.9433962, g: 0.31505868, b: 0.31505868, a: 1}
+  m_Sprite: {fileID: -7942540228394507617, guid: 874268866dfe41e4b9a4ea624acfb28e, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -19775,18 +19795,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.036153257}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 2, y: 2}
     newSize: {x: 0.16, y: 0.16}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 1.3071355}
   m_EdgeRadius: 0
 --- !u!4 &2033907692
 Transform:
@@ -19796,7 +19816,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2033907687}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.6088519, y: 0, z: -1}
+  m_LocalPosition: {x: -1.585, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
