@@ -17,11 +17,25 @@ public class Rewind : MonoBehaviour
             this.playerPosition = playerPosition;
         }
     }
+
+    public struct animationData
+    {
+        public float playerTime;
+        public Animation animation;
+
+        public animationData(float playerTime, Animation animation)
+        {
+            this.playerTime = playerTime;
+            this.animation = animation;
+        }
+    }
     public float deathTime;
     public LineRenderer line;
     int i = 0;
     public List<rewindData> rewindPositions;
+    public List<animationData> animationList;
     public int counter = 0;
+    public int animationCounter = 0;
     public int length;
     Rigidbody2D playerId;
     float timeFactor = 1f;
@@ -30,6 +44,7 @@ public class Rewind : MonoBehaviour
     public CameraControl cam;
     public bool shouldLoop = false;
     public List<Vector3> listPositions;
+
 
     void Start()
     {
@@ -41,6 +56,12 @@ public class Rewind : MonoBehaviour
     void Update()
     {
         time = timeFactor * (Time.timeSinceLevelLoad - deathTime);
+        if (animationCounter < animationList.Count) {
+            /*if (time >= animationList[animationCounter].playerTime) {
+                animationCounter ++;
+                animationList[animationCounter].animation.Play();
+            }*/
+        }
         if (counter < length - 2)
         {
             while (time >= rewindPositions[counter + 1].playerTime && (counter < length - 2))
@@ -48,13 +69,12 @@ public class Rewind : MonoBehaviour
                 counter++;
                 //l'idée de la boucle while là c'est d'éviter une désynchro si le framerate pendant la phase avant le décès est plus élevé qu'après le décès
                 //ça parait pas super important mais ce sera peut-etre utile quand il y aura des animations
-                playerId.DOMove(rewindPositions[counter].playerPosition, Time.deltaTime);
                 //line.SetPosition(line.positionCount-1, rewindPositions[counter].playerPosition);
                 listPositions.RemoveAt(0);
                 line.SetPositions(listPositions.ToArray());
                 line.positionCount --;
-                Debug.Log(line.positionCount);
             }
+            playerId.DOMove(rewindPositions[counter].playerPosition, Time.deltaTime);
             //DOMove c'est une fonction de DoTween qui est un asset (pas inclus de base dans Unity) qui permet d'avoir un déplacement lissé
         }
         else {

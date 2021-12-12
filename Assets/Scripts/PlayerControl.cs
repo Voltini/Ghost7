@@ -35,11 +35,20 @@ public class PlayerControl : MonoBehaviour
     public float reactivatedTime = 0f;
     public SoundManager soundManager;
 
+    public Animation idleAnimation;
+    public Animation walkAnimation;
+    public Animation jumpAnimation;
+    public Animation wallSlideAnimation;
+    Animator anim;
+    bool isJumping;
+
+
     // Start is called before the first frame update
     void Start()
     {
         playerId = GetComponent<Rigidbody2D>();
         playerCollider = GetComponent<Collider2D>();
+        anim = GetComponent<Animator>();
         rewindPlayer.rewindPositions = new List<Rewind.rewindData>();
         cam.SwitchTarget(this.gameObject);
     }
@@ -56,6 +65,10 @@ public class PlayerControl : MonoBehaviour
             line.positionCount = i + 1;
             line.SetPosition(i, playerId.transform.position);
             i++;
+            anim.SetBool("isIdle", false);
+        }
+        else {
+            anim.SetBool("isIdle", true);
         }
         previousPosition = playerPos;
 
@@ -90,6 +103,12 @@ public class PlayerControl : MonoBehaviour
                 playerId.gravityScale = 1f;
             }
         }
+
+        if (!isJumping) {
+            if (Mathf.Abs(movementx) >= 0.1f) {anim.SetBool("isWalking", true); anim.SetBool("isIdle", false);}
+            else if (Mathf.Abs(movementx) < 0.1f) {anim.SetBool("isWalking", false); anim.SetBool("isIdle", true);}
+        }
+
     }
 
     void Jump()
@@ -119,10 +138,17 @@ public class PlayerControl : MonoBehaviour
         {
             currentWall = other.gameObject;
             isTouchingWall = true;
+            anim.SetBool("isWallSliding", true);
+            anim.SetBool("isJumping", false);
         }
         else
         {
             lastWall = null;        // si le joueur touche du sol la capacité de walljump se réinitialise
+            if (isGrounded) {
+                isJumping = false;
+                anim.SetBool("isJumping", false);
+                anim.SetBool("isWalking", true);
+            }
         }
     }
 
@@ -141,6 +167,8 @@ public class PlayerControl : MonoBehaviour
         {
             playerId.gravityScale = 1f;
             isTouchingWall = false;
+            anim.SetBool("isWallSliding", false);
+            anim.SetBool("isJumping", true);
         }
     }
 
@@ -171,8 +199,14 @@ public class PlayerControl : MonoBehaviour
 
     void JumpAction()
     {
+        if (!isJumping) {
+            isJumping = true;
+            anim.SetBool("isWalking", false);
+            anim.SetBool("isIdle", false);
+        }
         playerId.velocity = new Vector2(playerId.velocity.x, 7f);
         soundManager.PlaySfx(transform,"jump");
+        anim.SetBool("isJumping", true);
     }
 
     public void Checkpoint()

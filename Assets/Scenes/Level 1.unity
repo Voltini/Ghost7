@@ -11329,6 +11329,7 @@ MonoBehaviour:
   deathTime: 0
   line: {fileID: 239837786}
   counter: 0
+  animationCounter: 0
   length: 0
   player: {fileID: 2033907687}
   phantom: {fileID: 361333284}
@@ -19614,6 +19615,7 @@ GameObject:
   - component: {fileID: 2033907688}
   - component: {fileID: 2033907689}
   - component: {fileID: 2033907693}
+  - component: {fileID: 2033907694}
   m_Layer: 0
   m_Name: player
   m_TagString: Player
@@ -19735,6 +19737,10 @@ MonoBehaviour:
   phantomPlayer: {fileID: 361333284}
   reactivatedTime: 0
   soundManager: {fileID: 1774577485}
+  idleAnimation: {fileID: 0}
+  walkAnimation: {fileID: 0}
+  jumpAnimation: {fileID: 0}
+  wallSlideAnimation: {fileID: 0}
 --- !u!50 &2033907690
 Rigidbody2D:
   serializedVersion: 4
@@ -19822,6 +19828,25 @@ MonoBehaviour:
   m_ShapePathHash: 0
   m_Mesh: {fileID: 1695423492}
   m_InstanceId: -89106
+--- !u!95 &2033907694
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033907687}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 082cd38f27195644e9eff23978c818ad, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2048670033
 GameObject:
   m_ObjectHideFlags: 0
