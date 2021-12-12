@@ -83,8 +83,8 @@ public class Rewind : MonoBehaviour
                 //l'idée de la boucle while là c'est d'éviter une désynchro si le framerate pendant la phase avant le décès est plus élevé qu'après le décès
                 //ça parait pas super important mais ce sera peut-etre utile quand il y aura des animations
                 //line.SetPosition(line.positionCount-1, rewindPositions[counter].playerPosition);
-                listPositions.RemoveAt(0);
-                line.SetPositions(listPositions.ToArray());
+                //listPositions.RemoveAt(0);
+                line.SetPositions(listPositions.GetRange(counter -1, line.positionCount - 1) .ToArray());
                 line.positionCount --;
             }
             playerId.DOMove(rewindPositions[counter].playerPosition, Time.deltaTime);
@@ -92,8 +92,10 @@ public class Rewind : MonoBehaviour
         }
         else {
             if (shouldLoop) {
-                line.positionCount = 0;
+                line.positionCount = 0;     //ça c'est juste pour réinitialiser la liste sinon il reste des points pendant une frame et c'est bizarre
+                line.positionCount = length;
                 counter = 0;
+                animationCounter = 0;
                 deathTime = Time.timeSinceLevelLoad;
                 if (!phantom.activeSelf) {}
             }
@@ -112,6 +114,7 @@ public class Rewind : MonoBehaviour
                 cam.SwitchTarget(player);
                 counter = 0;
                 rewindPositions = new List<rewindData>();
+                animationList = new List<animationData>();
                 gameObject.SetActive(false);
             }
         }

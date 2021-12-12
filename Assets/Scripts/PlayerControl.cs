@@ -157,6 +157,15 @@ public class PlayerControl : MonoBehaviour
                 }
             }
         }
+        else {
+            lastWall = null;        // si le joueur touche du sol la capacité de walljump se réinitialise
+            if (isGrounded) {
+                isJumping = false;
+                anim.SetBool("isJumping", false);
+                anim.SetBool("isWalking", true); 
+            }
+        }
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -170,13 +179,11 @@ public class PlayerControl : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Wall")) {
+        if (other.gameObject.CompareTag("Wall") || other.gameObject.CompareTag("Ground")) {
             playerId.gravityScale = 1f;
             isTouchingWall = false;
-            anim.SetBool("isWallSliding", false);
-        }
-        else if (other.gameObject.CompareTag("Ground")) {
             isJumping = true;
+            anim.SetBool("isWallSliding", false);
             anim.SetBool("isJumping", true);
             anim.SetBool("isWalking", false);
             anim.SetBool("isIdle", false);
@@ -231,7 +238,7 @@ public class PlayerControl : MonoBehaviour
     void LateUpdate() {
         currentState = anim.GetCurrentAnimatorClipInfo(0)[0].clip.name;
         if (currentState != previousState) {
-            rewindPlayer.animationList.Add(new Rewind.animationData(Time.timeSinceLevelLoad, currentState));
+            rewindPlayer.animationList.Add(new Rewind.animationData(Time.timeSinceLevelLoad - reactivatedTime, currentState));
             previousState = currentState;
         }
     }

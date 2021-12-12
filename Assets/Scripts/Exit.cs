@@ -31,7 +31,7 @@ public class Exit : MonoBehaviour
     }
 
     IEnumerator Waiter(){
-        yield return new WaitForSeconds(0.5f);
+        yield return null;//new WaitForSeconds(0.5f);
         winScreen.SetActive(true);
     }
     

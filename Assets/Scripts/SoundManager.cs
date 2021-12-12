@@ -12,8 +12,8 @@ public class SoundManager : MonoBehaviour
     int musicQuantity;
     public static SoundManager Instance = null;
     //private bool isTimeStopped = false;
-    float LowPitchRange = 0.95f;
-    float HighPitchRange = 1.05f;
+    float LowPitchRange = 0.9f;
+    float HighPitchRange = 1.1f;
     AudioClip sfxClip;
     List<clip> audioIds;
 
