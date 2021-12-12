@@ -29,12 +29,13 @@ public class Rewind : MonoBehaviour
     public GameObject phantom;
     public CameraControl cam;
     public bool shouldLoop = false;
+    public List<Vector3> listPositions;
 
     void Start()
     {
         Debug.Log("nombre de points en mémoire : " + length);   //j'ai laisé ça provisoirement pour checker si ça risquait pas d'avoir un impact sur les performances
         playerId = GetComponent<Rigidbody2D>();
-        line.positionCount = 0;
+        //line.positionCount = 0;
     }
 
     void Update()
@@ -47,10 +48,13 @@ public class Rewind : MonoBehaviour
                 counter++;
                 //l'idée de la boucle while là c'est d'éviter une désynchro si le framerate pendant la phase avant le décès est plus élevé qu'après le décès
                 //ça parait pas super important mais ce sera peut-etre utile quand il y aura des animations
+                playerId.DOMove(rewindPositions[counter].playerPosition, Time.deltaTime);
+                //line.SetPosition(line.positionCount-1, rewindPositions[counter].playerPosition);
+                listPositions.RemoveAt(0);
+                line.SetPositions(listPositions.ToArray());
+                line.positionCount --;
+                Debug.Log(line.positionCount);
             }
-            playerId.DOMove(rewindPositions[counter].playerPosition, Time.deltaTime);
-            line.positionCount ++;
-            line.SetPosition(line.positionCount-1, rewindPositions[counter].playerPosition);
             //DOMove c'est une fonction de DoTween qui est un asset (pas inclus de base dans Unity) qui permet d'avoir un déplacement lissé
         }
         else {

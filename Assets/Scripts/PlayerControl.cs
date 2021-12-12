@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -159,7 +160,11 @@ public class PlayerControl : MonoBehaviour
         phantomPlayer.GetComponent<PhantomPlayer>().startPos = transform.position;
         rewindPlayer.deathTime = Time.timeSinceLevelLoad;
         rewindPlayer.length = rewindPlayer.rewindPositions.Count;
+        Vector3[] array = new Vector3[line.positionCount];
+        line.GetPositions(array);
+        rewindPlayer.listPositions = array.ToList();
         rewindPlayer.gameObject.SetActive(true);
+        rewindPlayer.line.positionCount = line.positionCount;
         cam.SwitchTarget(phantomPlayer);      //pour que la caméra switch de cible (temporaire mais c'est pratique pour regarder ce qu'il se passe)
         gameObject.SetActive(false);    //décès du joueur
     }
