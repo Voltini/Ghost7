@@ -18,6 +18,7 @@ public class Boulder : MonoBehaviour
     public RigidbodyConstraints2D constraints;
     public RigidbodyConstraints2D freezeConstraints;
     public CameraControl cam;
+    float velocity;
 
 
     void Start()
@@ -33,19 +34,19 @@ public class Boulder : MonoBehaviour
                 StopHauting();
             }
         }
+        else {
+            velocity = objectId.velocity.sqrMagnitude;
+        }
     }
 
     
     private void OnCollisionEnter2D(Collision2D other)
     {
-        
         if (other.gameObject.TryGetComponent(typeof(PlayerControl), out Component player))
         {   
-            if (objectId.velocity.magnitude > 5){
+            if (velocity > 10){
                 other.gameObject.GetComponent<PlayerControl>().Death();
             }
-           
-           
         }
     }
 

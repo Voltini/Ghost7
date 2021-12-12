@@ -52,12 +52,11 @@ public class PlayerControl : MonoBehaviour
             rewindPlayer.rewindPositions.Add(new Rewind.rewindData(Time.timeSinceLevelLoad - reactivatedTime, playerPos));
             //en gros on stocke les valeurs de position que lorsqu'elles sont différentes des précédentes et on utilise un time stamp 
             //pour s'assurer que le rewind a la meme vitesse que le joueur indépendamment du framerate
+            line.positionCount = i + 1;
+            line.SetPosition(i, playerId.transform.position);
+            i++;
         }
         previousPosition = playerPos;
-
-        line.positionCount = i + 1;
-        line.SetPosition(i, playerId.transform.position);
-        i++;
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {      //Courir
@@ -169,6 +168,13 @@ public class PlayerControl : MonoBehaviour
     {
         playerId.velocity = new Vector2(playerId.velocity.x, 7f);
         soundManager.PlaySfx(transform,"jump");
+    }
+
+    public void Checkpoint()
+    {
+        i = 0;
+        reactivatedTime = Time.timeSinceLevelLoad;
+        rewindPlayer.rewindPositions = new List<Rewind.rewindData>();
     }
 
     //PS : les lignes c'est provisoire aussi, juste pour vérifier que le rewind fonctionne bien
