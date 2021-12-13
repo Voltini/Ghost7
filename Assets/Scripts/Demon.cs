@@ -41,12 +41,13 @@ public class Demon : MonoBehaviour
     public void Show()
     {
         sprite.enabled = true;
-        Debug.Log("show");
     }
 
     public void Hide()
     {
-        sprite.enabled = false;
+        if (sprite != null) {
+            sprite.enabled = false;
+        }
     }
 
     IEnumerator CircularMotion()

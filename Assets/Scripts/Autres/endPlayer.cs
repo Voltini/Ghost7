@@ -1,11 +1,12 @@
-﻿using JetBrains.Annotations;
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
-public class PlayerControl : MonoBehaviour
+public class endPlayer : MonoBehaviour
 {
     float speed = 1f;
     float movementx = 0f;
@@ -38,6 +39,11 @@ public class PlayerControl : MonoBehaviour
     bool isJumping = false;
     string previousState = " ";
     string currentState;
+    public bool isSucked;
+    Vector2 massCenter;
+    Vector2 distance;
+    public Image blackscreen;
+    bool stop = false;
 
 
     // Start is called before the first frame update
@@ -54,59 +60,72 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        playerPos = playerId.transform.position;
-        if (playerPos != previousPosition)
-        {
-            rewindPlayer.rewindPositions.Add(new Rewind.rewindData(Time.timeSinceLevelLoad - reactivatedTime, playerPos));
-            //en gros on stocke les valeurs de position que lorsqu'elles sont différentes des précédentes et on utilise un time stamp 
-            //pour s'assurer que le rewind a la meme vitesse que le joueur indépendamment du framerate
-            line.positionCount = i + 1;
-            line.SetPosition(i, playerId.transform.position);
-            i++;
-        }
-        previousPosition = playerPos;
-
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {      //Courir
-            speed = runSpeed;
-        }
-        if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            speed = 1f;
-        }
-        if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.UpArrow))
-        {      //D'ailleurs j'ai mis provisoirement R comme touche pour reload la scène
-            Jump();
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {      //A pour mourir (pratique pour tester le rewind)
-            Death();
-        }
-
-        movementx = Input.GetAxis("Horizontal");
-        playerId.velocity = new Vector2(7 * speed * movementx, playerId.velocity.y);
-        if (movementx > 0) {
-            anim.SetBool("facing_right", true);
-        }
-        else if (movementx < 0) {
-            anim.SetBool("facing_right", false);
-        }
-
-        if (isTouchingWall)
-        {
-            if (playerId.velocity.y < 0 && currentWall != lastWall)
+        if (!isSucked) {
+            playerPos = playerId.transform.position;
+            if (playerPos != previousPosition)
             {
-                playerId.gravityScale = wallSlideSpeed;
+                rewindPlayer.rewindPositions.Add(new Rewind.rewindData(Time.timeSinceLevelLoad - reactivatedTime, playerPos));
+                //en gros on stocke les valeurs de position que lorsqu'elles sont différentes des précédentes et on utilise un time stamp 
+                //pour s'assurer que le rewind a la meme vitesse que le joueur indépendamment du framerate
+                line.positionCount = i + 1;
+                line.SetPosition(i, playerId.transform.position);
+                i++;
             }
-            else
+            previousPosition = playerPos;
+
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {      //Courir
+                speed = runSpeed;
+            }
+            if (Input.GetKeyUp(KeyCode.LeftShift))
             {
-                playerId.gravityScale = 1f;
+                speed = 1f;
+            }
+            if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.UpArrow))
+            {      //D'ailleurs j'ai mis provisoirement R comme touche pour reload la scène
+                Jump();
+            }
+            if (Input.GetKeyDown(KeyCode.A))
+            {      //A pour mourir (pratique pour tester le rewind)
+                Death();
+            }
+
+            movementx = Input.GetAxis("Horizontal");
+            playerId.velocity = new Vector2(7 * speed * movementx, playerId.velocity.y);
+            if (movementx > 0) {
+                anim.SetBool("facing_right", true);
+            }
+            else if (movementx < 0) {
+                anim.SetBool("facing_right", false);
+            }
+
+            if (isTouchingWall)
+            {
+                if (playerId.velocity.y < 0 && currentWall != lastWall)
+                {
+                    playerId.gravityScale = wallSlideSpeed;
+                }
+                else
+                {
+                    playerId.gravityScale = 1f;
+                }
+            }
+
+            if (!isJumping) {
+                if (Mathf.Abs(movementx) >= 0.1f) {anim.SetBool("isWalking", true); anim.SetBool("isIdle", false);}
+                else if (Mathf.Abs(movementx) < 0.1f) {anim.SetBool("isWalking", false); anim.SetBool("isIdle", true);}
             }
         }
 
-        if (!isJumping) {
-            if (Mathf.Abs(movementx) >= 0.1f) {anim.SetBool("isWalking", true); anim.SetBool("isIdle", false);}
-            else if (Mathf.Abs(movementx) < 0.1f) {anim.SetBool("isWalking", false); anim.SetBool("isIdle", true);}
+        else {
+            distance = massCenter - playerId.position;
+            if (distance.magnitude > 0.5f) { 
+            playerId.AddForce(10f*distance.normalized);
+            }
+            else if (!stop) {
+                End();
+                stop = true;
+            }
         }
 
     }
@@ -169,6 +188,13 @@ public class PlayerControl : MonoBehaviour
         {
             rewindPlayer.shouldLoop = true;
             Death();
+        }
+
+        else if (other.CompareTag("HellGate")) {
+            playerId.velocity = Vector2.zero;
+            isSucked = true;
+            massCenter = other.transform.position;
+            playerId.gravityScale = 0f;
         }
     }
 
@@ -238,5 +264,26 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-    //PS : les lignes c'est provisoire aussi, juste pour vérifier que le rewind fonctionne bien
+    void End()
+    {
+        Debug.Log("the end");
+        StartCoroutine("FadeOut");
+        
+    }
+
+    IEnumerator FadeOut()
+    {
+        var image = blackscreen.GetComponent<Image>();
+        for (int i = 0; i <= 100; i++) {
+            image.color = Color.Lerp(new Color(0,0,0, 0), Color.white, 0.01f*i);
+            yield return new WaitForSeconds(0.001f);
+        }
+        yield return new WaitForSeconds(3f);
+        for (int i = 0; i <= 100; i++) {
+            image.color = Color.Lerp(Color.white,Color.black, 0.01f*i);
+            yield return new WaitForSeconds(0.0025f);
+        }
+        SceneManager.LoadScene("Credits");
+
+    }
 }

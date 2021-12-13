@@ -71,6 +71,9 @@ public class Rewind : MonoBehaviour
     {
         deathTime = Time.timeSinceLevelLoad;
         counter = 0;
+        animationCounter = 0;
+        line.positionCount = 0;
+        line.positionCount = length;
     }
 
     void UpdatePosition()

@@ -123,6 +123,81 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &35605065
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 35605068}
+  - component: {fileID: 35605067}
+  - component: {fileID: 35605066}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &35605066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 35605065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 7482667652216324306, guid: 6dcaddd979115404e9d1f1a0530c872d, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &35605067
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 35605065}
+  m_CullTransparentMesh: 1
+--- !u!224 &35605068
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 35605065}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1923260233}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 5000, y: 5000}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &129593206
 GameObject:
   m_ObjectHideFlags: 0
@@ -6307,10 +6382,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 2033907687}
   horizontalThreshold: 3
-  verticalThreshold: 1
+  verticalThreshold: 3
   rewindPlayer: {fileID: 532311168}
   phantomPlayer: {fileID: 361333284}
   rewindTime: 0
+  blackscreen: {fileID: 35605066}
 --- !u!1 &532311167
 GameObject:
   m_ObjectHideFlags: 0
@@ -6346,11 +6422,13 @@ MonoBehaviour:
   deathTime: 0
   line: {fileID: 608599299}
   counter: 0
+  animationCounter: 0
   length: 0
   player: {fileID: 2033907687}
   phantom: {fileID: 361333284}
   cam: {fileID: 519420033}
   shouldLoop: 0
+  listPositions: []
 --- !u!212 &532311169
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -17580,7 +17658,8 @@ MonoBehaviour:
   isGamePaused: 0
   pauseMenuUI: {fileID: 340228381}
   soundManager: {fileID: 0}
-  player: {fileID: 2033907689}
+  player: {fileID: 0}
+  blackscreen: {fileID: 0}
 --- !u!114 &1923260230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17654,6 +17733,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 340228384}
+  - {fileID: 35605068}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -17681,7 +17761,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1941313031
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -17890,6 +17970,7 @@ GameObject:
   - component: {fileID: 2033907690}
   - component: {fileID: 2033907688}
   - component: {fileID: 2033907689}
+  - component: {fileID: 2033907693}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -17938,7 +18019,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 6dcaddd979115404e9d1f1a0530c872d, type: 3}
-  m_Color: {r: 0.9433962, g: 0.31505868, b: 0.31505868, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -17957,11 +18038,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2033907687}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67ce8c2ffe4820c4fa807de1f59822c2, type: 3}
+  m_Script: {fileID: 11500000, guid: a7c1f92000d85074880fb3899add87d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerExplosion: {fileID: 249387194}
-  runSpeed: 1.7
+  runSpeed: 7
   contactFilter:
     useTriggers: 0
     useLayerMask: 0
@@ -17971,7 +18052,7 @@ MonoBehaviour:
     useOutsideNormalAngle: 0
     layerMask:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 0
     minDepth: 0
     maxDepth: 0
     minNormalAngle: 70
@@ -17985,7 +18066,7 @@ MonoBehaviour:
     useOutsideNormalAngle: 0
     layerMask:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 0
     minDepth: 0
     maxDepth: 0
     minNormalAngle: 160
@@ -17999,7 +18080,7 @@ MonoBehaviour:
     useOutsideNormalAngle: 0
     layerMask:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 0
     minDepth: 0
     maxDepth: 0
     minNormalAngle: -20
@@ -18007,9 +18088,12 @@ MonoBehaviour:
   playerDeath: 0
   rewindPlayer: {fileID: 532311168}
   line: {fileID: 239837786}
+  i: 0
   phantomPlayer: {fileID: 361333284}
   reactivatedTime: 0
   soundManager: {fileID: 1774577485}
+  isSucked: 0
+  blackscreen: {fileID: 35605066}
 --- !u!50 &2033907690
 Rigidbody2D:
   serializedVersion: 4
@@ -18071,6 +18155,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &2033907693
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033907687}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 082cd38f27195644e9eff23978c818ad, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2048670033
 GameObject:
   m_ObjectHideFlags: 0

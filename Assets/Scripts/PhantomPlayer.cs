@@ -25,6 +25,7 @@ public class PhantomPlayer : MonoBehaviour
     HellGate[] hellGates;
     bool demonsDefined = false;
     bool BHdefined = false;
+    bool isHaunting = false;
 
     // Start is called before the first frame update
     void Start()
@@ -52,8 +53,10 @@ public class PhantomPlayer : MonoBehaviour
     }
 
     void OnDisable() {
-        foreach(Demon demon in demons) {
-            demon.Hide();
+        if (!isHaunting) {
+            foreach(Demon demon in demons) {
+                demon.Hide();
+            }
         }
     }
 
@@ -74,6 +77,7 @@ public class PhantomPlayer : MonoBehaviour
                     else {
                         hit.collider.gameObject.GetComponent<Boulder>().Haunt();
                     }
+                    isHaunting = true;
                     gameObject.SetActive(false);
                 }
             }

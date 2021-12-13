@@ -19,11 +19,14 @@ public class Boulder : MonoBehaviour
     public RigidbodyConstraints2D freezeConstraints;
     public CameraControl cam;
     float velocity;
+    Vector2 initPos;
+    public PhantomPlayer phantom;
 
 
     void Start()
     {
         objectId = GetComponent<Rigidbody2D>();
+        initPos = transform.position;
     }
 
     void Update()
@@ -40,7 +43,7 @@ public class Boulder : MonoBehaviour
     }
 
     
-    private void OnCollisionEnter2D(Collision2D other)
+    void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.TryGetComponent(typeof(PlayerControl), out Component player))
         {   
@@ -48,6 +51,26 @@ public class Boulder : MonoBehaviour
                 other.gameObject.GetComponent<PlayerControl>().Death();
             }
         }
+    }
+
+    void OnTriggerEnter2D(Collider2D other) {
+        if (other.CompareTag("HellGate")) {
+            phantom.GetComponent<Rigidbody2D>().position = (Vector2)transform.position;
+            phantom.gameObject.SetActive(true);
+            cam.SwitchTarget(phantom.gameObject);
+            transform.position = initPos;
+            isHaunted = false;
+            objectId.constraints = freezeConstraints;
+        }
+        else if (other.CompareTag("Demon")) {
+            phantom.GetComponent<Rigidbody2D>().position = (Vector2)transform.position;
+            phantom.gameObject.SetActive(true);
+            cam.SwitchTarget(phantom.gameObject);
+            transform.position = initPos;
+            isHaunted = false;
+            objectId.constraints = freezeConstraints;
+        }
+        
     }
 
     public void Haunt()
@@ -71,5 +94,6 @@ public class Boulder : MonoBehaviour
         isHaunted = false;
         objectId.constraints = freezeConstraints;
         cam.SwitchTarget(rewindPlayer);
+        initPos = transform.position;
     }
 }

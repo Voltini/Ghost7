@@ -14,7 +14,6 @@ public class CameraControl : MonoBehaviour
     Vector3 shake;
     float shakeMagitude;
     float camSize;
-    PlayerControl playerId;
     [SerializeField] float horizontalThreshold;
     [SerializeField] float verticalThreshold;
     Vector3 camPos;
@@ -23,15 +22,17 @@ public class CameraControl : MonoBehaviour
     public bool rewindTime = false;
     GameObject target;
     public Image blackscreen;
+    public mode gameMode;
+    public enum mode {Normal, Ending};
 
     void Start()
     {
         cam = GetComponent<Camera>();
         shake = Vector3.zero;
-        playerId = player.GetComponent<PlayerControl>();
+        if (gameMode is mode.Normal) {player.GetComponent<PlayerControl>().GetCamera(cam);}
+        else {player.GetComponent<endPlayer>().GetCamera(cam);}
         camSize = cam.orthographicSize;
         this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -10);
-        playerId.GetCamera(cam);
         camPos = this.transform.position;
         horizontalThreshold = camSize*0.5f;
         verticalThreshold = camSize*0.5f;
