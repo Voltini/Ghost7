@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class CameraControl : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class CameraControl : MonoBehaviour
     public GameObject phantomPlayer;
     public bool rewindTime = false;
     GameObject target;
+    public Image blackscreen;
 
     void Start()
     {
@@ -34,6 +36,7 @@ public class CameraControl : MonoBehaviour
         horizontalThreshold = camSize*0.5f;
         verticalThreshold = camSize*0.5f;
         target = player;
+        StartCoroutine("FadeIn");
     }
     // Update is called once per frame
     void Update()
@@ -111,6 +114,15 @@ public class CameraControl : MonoBehaviour
         else if (target.TryGetComponent<Dispenser>(out Dispenser dispenser)) {
             Debug.Log(true);
             dispenser.StopHaunting();
+        }
+    }
+
+    IEnumerator FadeIn()
+    {
+        var image = blackscreen.GetComponent<Image>();
+        for (int i = 0; i <= 100; i++) {
+            image.color = Color.Lerp(Color.black, new Color(0,0,0, 0), 0.01f*i);
+            yield return new WaitForSeconds(0.001f);
         }
     }
 

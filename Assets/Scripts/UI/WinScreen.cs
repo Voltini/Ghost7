@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class WinScreen : MonoBehaviour
 {
@@ -10,20 +11,30 @@ public class WinScreen : MonoBehaviour
     public SoundManager soundManager;
     float prevTimeScale;
     int nbLevels = 5;
+    public Image blackscreen;
 
     public void LoadMenu()
     {
-        SceneManager.LoadScene("Main Menu");
+        StartCoroutine("LoadMenuC");
     }
 
     public void Quit()
     {
-        Application.Quit();
-        Debug.Log("Quit !");
+        StartCoroutine("QuitC");
     }
 
     public void NextLevel()
     {
+        StartCoroutine("NextLevelC");        
+    }
+
+    IEnumerator NextLevelC()
+    {
+        var image = blackscreen.GetComponent<Image>();
+        for (int i = 0; i <= 100; i++) {
+            image.color = Color.Lerp(new Color(0,0,0, 0), Color.black, 0.01f*i);
+            yield return new WaitForSeconds(0.001f);
+        }
         Scene scene = SceneManager.GetActiveScene();
         string[] strScene = scene.name.Split(' ');
         int currentLevelNumber = int.Parse(strScene[1]);
@@ -31,5 +42,26 @@ public class WinScreen : MonoBehaviour
         if (nextLevelNumber <= nbLevels) {
             SceneManager.LoadScene("Level " + nextLevelNumber);
         }
+    }
+
+    IEnumerator LoadMenuC()
+    {
+    var image = blackscreen.GetComponent<Image>();
+    for (int i = 0; i <= 100; i++) {
+        image.color = Color.Lerp(new Color(0,0,0, 0), Color.black, 0.01f*i);
+        yield return new WaitForSeconds(0.001f);
+    }
+    SceneManager.LoadScene("Main Menu");
+    }
+
+    IEnumerator QuitC()
+    {
+        var image = blackscreen.GetComponent<Image>();
+        for (int i = 0; i <= 100; i++) {
+            image.color = Color.Lerp(new Color(0,0,0, 0), Color.black, 0.01f*i);
+            yield return new WaitForSeconds(0.001f);
+        }
+        Application.Quit();
+        Debug.Log("Quit !");
     }
 }
