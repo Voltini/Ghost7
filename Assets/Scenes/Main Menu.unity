@@ -3798,6 +3798,7 @@ MonoBehaviour:
   - {fileID: 2055007857}
   - {fileID: 1673226531}
   lockedColor: {r: 0, g: 0, b: 0, a: 1}
+  blackscreen: {fileID: 994334651}
 --- !u!1 &2023665241
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class PauseMenu : MonoBehaviour
     public SoundManager soundManager;
     float prevTimeScale;
     public PlayerControl player;
+    public Image blackscreen;
 
     void Update()
     {
@@ -45,18 +47,26 @@ public class PauseMenu : MonoBehaviour
 
     public void LoadMenu()
     {
-        Resume();
-        SceneManager.LoadScene("Main Menu");
+        StartCoroutine("LoadMenuC");
     }
 
     public void Quit()
     {
-        Application.Quit();
-        Debug.Log("Quit !");
+        StartCoroutine("QuitC");
     }
 
     public void NextLevel()
     {
+        StartCoroutine("NextLevelC");        
+    }
+
+    IEnumerator NextLevelC()
+    {
+        var image = blackscreen.GetComponent<Image>();
+        for (int i = 0; i <= 100; i++) {
+            image.color = Color.Lerp(new Color(0,0,0, 0), Color.black, 0.01f*i);
+            yield return new WaitForSeconds(0.001f);
+        }
         Scene scene = SceneManager.GetActiveScene();
         string[] strScene = scene.name.Split(' ');
         int currentLevelNumber = int.Parse(strScene[1]);
@@ -68,4 +78,28 @@ public class PauseMenu : MonoBehaviour
             SceneManager.LoadScene("Level " + nextLevelNumber);
         }
     }
+
+    IEnumerator LoadMenuC()
+    {
+        Resume();
+        var image = blackscreen.GetComponent<Image>();
+        for (int i = 0; i <= 100; i++) {
+            image.color = Color.Lerp(new Color(0,0,0, 0), Color.black, 0.01f*i);
+            yield return new WaitForSeconds(0.001f);
+        }
+        SceneManager.LoadScene("Main Menu");
+    }
+
+    IEnumerator QuitC()
+    {
+        Resume();
+        var image = blackscreen.GetComponent<Image>();
+        for (int i = 0; i <= 100; i++) {
+            image.color = Color.Lerp(new Color(0,0,0, 0), Color.black, 0.01f*i);
+            yield return new WaitForSeconds(0.001f);
+        }
+        Application.Quit();
+        Debug.Log("Quit !");
+    }
+    
 }
