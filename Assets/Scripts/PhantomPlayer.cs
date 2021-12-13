@@ -22,7 +22,9 @@ public class PhantomPlayer : MonoBehaviour
     public Rewind rewindPlayer;
     public SoundManager soundManager;
     Demon[] demons;
+    HellGate[] hellGates;
     bool demonsDefined = false;
+    bool BHdefined = false;
 
     // Start is called before the first frame update
     void Start()
@@ -37,8 +39,15 @@ public class PhantomPlayer : MonoBehaviour
             demons = FindObjectsOfType<Demon>();
             demonsDefined = true;
         }
+        if (!BHdefined) {
+            hellGates = FindObjectsOfType<HellGate>();
+            BHdefined = true;
+        }
         foreach(Demon demon in demons) {
             demon.Show();
+        }
+        foreach(HellGate hellGate in hellGates) {
+            hellGate.Show();
         }
     }
 
