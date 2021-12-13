@@ -10,13 +10,13 @@ public class MainMenu : MonoBehaviour
 
     public void Play()
     {
-        /*int nextLevel = PlayerPrefs.GetInt("levelReached") + 1;
-        if (nextLevel != 0) { //1
-            SceneManager.LoadScene("Level " + nextLevel);
+        int currentLevel = PlayerPrefs.GetInt("levelReached");
+        if (currentLevel != 0) { //1
+            SceneManager.LoadScene("Level " + currentLevel);
         }
         else {
             SceneManager.LoadScene("Intro Cutscene");
-        }*/
+        }
         SceneManager.LoadScene("Level 1");
     }
 

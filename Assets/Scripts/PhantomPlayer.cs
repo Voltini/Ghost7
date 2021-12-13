@@ -21,6 +21,8 @@ public class PhantomPlayer : MonoBehaviour
     [HideInInspector] public Vector2 startPos;
     public Rewind rewindPlayer;
     public SoundManager soundManager;
+    Demon[] demons;
+    bool demonsDefined = false;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +30,22 @@ public class PhantomPlayer : MonoBehaviour
         phantomId = GetComponent<Rigidbody2D>();
         phantomCollider = GetComponent<Collider2D>();
         hauntableLayer = LayerMask.GetMask("Hauntable", "Haunted");
+    }
+
+    void OnEnable() {
+        if (!demonsDefined) {
+            demons = FindObjectsOfType<Demon>();
+            demonsDefined = true;
+        }
+        foreach(Demon demon in demons) {
+            demon.Show();
+        }
+    }
+
+    void OnDisable() {
+        foreach(Demon demon in demons) {
+            demon.Hide();
+        }
     }
 
     // Update is called once per frame
@@ -51,6 +69,9 @@ public class PhantomPlayer : MonoBehaviour
                 }
             }
             phantomId.velocity = new Vector2(speed * movementx, speed * movementy);
+            if (((Vector2)transform.position - startPos).sqrMagnitude > 2500 ) {        //pour éviter que le phantome se balade trop loin
+                Death();
+            }
         }
         else {
             distance = massCenter - phantomId.position;
@@ -68,6 +89,9 @@ public class PhantomPlayer : MonoBehaviour
             phantomId.velocity = Vector2.zero;
             isSucked = true;
             massCenter = other.transform.position;
+        }
+        else if (other.CompareTag("Demon")) {
+            Death();
         }
     }
     void Death()

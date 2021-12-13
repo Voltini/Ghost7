@@ -24,7 +24,7 @@ public class Exit : MonoBehaviour
         Scene scene = SceneManager.GetActiveScene();
         string[] strScene = scene.name.Split(' ');
         int levelNumber = int.Parse(strScene[1]);
-        if (levelNumber > LevelReached) {
+        if (levelNumber == LevelReached) {
             PlayerPrefs.SetInt("levelReached", levelNumber + 1);
         }
         StartCoroutine(Waiter());
