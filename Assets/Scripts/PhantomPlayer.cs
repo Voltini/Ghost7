@@ -54,10 +54,18 @@ public class PhantomPlayer : MonoBehaviour
 
     void OnDisable() {
         if (!isHaunting) {
-            foreach(Demon demon in demons) {
+            HideAll();
+        }
+    }
+
+    public void HideAll()
+    {
+        foreach(Demon demon in demons) {
                 demon.Hide();
             }
-        }
+            foreach(HellGate hellGate in hellGates) {
+            hellGate.Hide();
+            }
     }
 
     // Update is called once per frame

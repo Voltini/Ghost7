@@ -11,6 +11,7 @@ public class Dispenser : MonoBehaviour
     bool isHaunted = false;
     public CameraControl cam;
     public GameObject player;
+    public PhantomPlayer phantom;
 
 
     void Start()
@@ -57,6 +58,7 @@ public class Dispenser : MonoBehaviour
         isHaunted = false;
         cam.SwitchTarget(player);
         player.SetActive(true);
+        phantom.HideAll();
     }
 
 }

@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Exit : MonoBehaviour
 {
     public GameObject winScreen;
     public GameObject pauseMenu;
+    public Image blackscreen;
+    int nbLevels = 5;
 
     void OnTriggerEnter2D(Collider2D other) 
     {
@@ -31,8 +34,18 @@ public class Exit : MonoBehaviour
     }
 
     IEnumerator Waiter(){
-        yield return null;//new WaitForSeconds(0.5f);
-        winScreen.SetActive(true);
+        var image = blackscreen.GetComponent<Image>();
+        for (int i = 0; i <= 100; i++) {
+            image.color = Color.Lerp(new Color(0,0,0, 0), Color.black, 0.01f*i);
+            yield return new WaitForSeconds(0.001f);
+        }
+        Scene scene = SceneManager.GetActiveScene();
+        string[] strScene = scene.name.Split(' ');
+        int currentLevelNumber = int.Parse(strScene[1]);
+        int nextLevelNumber = currentLevelNumber + 1;
+        if (nextLevelNumber <= nbLevels) {
+            SceneManager.LoadScene("Level " + nextLevelNumber);
+        }
     }
     
 }

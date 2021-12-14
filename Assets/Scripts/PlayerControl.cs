@@ -38,6 +38,9 @@ public class PlayerControl : MonoBehaviour
     bool isJumping = false;
     string previousState = " ";
     string currentState;
+    bool lastWallRight;
+    bool leftRightWall;
+    Boulder[] boulders;
 
 
     // Start is called before the first frame update
@@ -49,6 +52,7 @@ public class PlayerControl : MonoBehaviour
         rewindPlayer.rewindPositions = new List<Rewind.rewindData>();
         rewindPlayer.animationList = new List<Rewind.animationData>();
         cam.SwitchTarget(this.gameObject);
+        boulders = FindObjectsOfType<Boulder>();
     }
 
     // Update is called once per frame
@@ -94,13 +98,15 @@ public class PlayerControl : MonoBehaviour
 
         if (isTouchingWall)
         {
-            if (playerId.velocity.y < 0 && currentWall != lastWall)
+            if (playerId.velocity.y < 0 && (currentWall != lastWall) && ((isStickingToWallLeft && !lastWallRight) || (isStickingToWallRight && lastWallRight)))
             {
                 playerId.gravityScale = wallSlideSpeed;
+                anim.SetBool("isWallSliding", true);
             }
             else
             {
                 playerId.gravityScale = 1f;
+                anim.SetBool("isWallSliding", false);
             }
         }
 
@@ -117,7 +123,7 @@ public class PlayerControl : MonoBehaviour
         {
             JumpAction();
         }
-        else if (isStickingToWallLeft || isStickingToWallRight)
+        else if (isTouchingWall)
         {
             WallJump();
         }
@@ -125,10 +131,19 @@ public class PlayerControl : MonoBehaviour
 
     void WallJump()
     {
-        if (currentWall != lastWall)
+        if ((currentWall != lastWall) || ((isStickingToWallRight && !leftRightWall) || (isStickingToWallLeft && leftRightWall)))
         {      //ça c'est pour éviter que le joueur puisse faire des wall jump infinement sur la meme mur et faire de l'escalade
             JumpAction();
+            if (lastWallRight) leftRightWall = true;
+            else leftRightWall = false;
         }
+        Debug.Log((currentWall != lastWall) + "_______________________________________________________________________");
+        Debug.Log(isStickingToWallRight && !lastWallRight);
+        Debug.Log(isStickingToWallLeft && lastWallRight);
+        Debug.Log("Décomposition :");
+        Debug.Log("sticking to left wall : " + isStickingToWallLeft);
+        Debug.Log("sticking to right wall : " + isStickingToWallRight);
+        Debug.Log("orientation of last wall (right ?) : " + leftRightWall); 
         lastWall = currentWall;
     }
 
@@ -141,6 +156,13 @@ public class PlayerControl : MonoBehaviour
                 isTouchingWall = true;
                 anim.SetBool("isWallSliding", true);
                 anim.SetBool("isJumping", false);
+                anim.SetBool("isWaling", false);
+                if (isStickingToWallRight) {
+                    lastWallRight = true;
+            }
+                else {
+                    lastWallRight = false;
+                }
             }
             else
             {
@@ -176,12 +198,16 @@ public class PlayerControl : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Wall") || other.gameObject.CompareTag("Ground")) {
             playerId.gravityScale = 1f;
-            isTouchingWall = false;
             isJumping = true;
             anim.SetBool("isWallSliding", false);
             anim.SetBool("isJumping", true);
             anim.SetBool("isWalking", false);
             anim.SetBool("isIdle", false);
+            if (isTouchingWall && (!isStickingToWallRight && !isStickingToWallLeft)) {
+                isTouchingWall = false;
+                if (lastWallRight) leftRightWall = true;
+                else leftRightWall = false;
+            }
         }
     }
 
@@ -208,6 +234,9 @@ public class PlayerControl : MonoBehaviour
         rewindPlayer.gameObject.SetActive(true);
         rewindPlayer.line.positionCount = line.positionCount;
         cam.SwitchTarget(phantomPlayer);      //pour que la caméra switch de cible (temporaire mais c'est pratique pour regarder ce qu'il se passe)
+        foreach(Boulder boulder in boulders) {
+            boulder.OnPlayerDeath();
+        }
         gameObject.SetActive(false);    //décès du joueur
     }
 
