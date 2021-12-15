@@ -75,9 +75,40 @@ public class PhantomPlayer : MonoBehaviour
         phantomPos = phantomId.transform.position;
         movementx = Input.GetAxis("Horizontal");
         movementy = Input.GetAxis("Vertical");
+        
         if (movementx > 0) {
-
+            anim.SetBool("facing_right", true);
         }
+        else if (movementx < 0) {
+            anim.SetBool("facing_right", false);
+        }
+
+        if (movementx == 0f && movementy == 0f) {
+            anim.SetBool("idle", true);
+            anim.SetBool("going_up", false);
+            anim.SetBool("going_down", false);
+            anim.SetBool("going_horizontal", false);
+        }
+        else {
+            anim.SetBool("idle", false);
+            if (movementy > 0.1f) {
+                anim.SetBool("going_up", true);
+                anim.SetBool("going_down", false);
+                anim.SetBool("going_horizontal", false);
+            }
+            else if (movementy < -0.1f) {
+                anim.SetBool("going_up", false);
+                anim.SetBool("going_down", true);
+                anim.SetBool("going_horizontal", false);
+            }
+            else {
+                anim.SetBool("going_up", false);
+                anim.SetBool("going_down", false);
+                anim.SetBool("going_horizontal", true);
+            }
+        }
+        
+
         if (!isSucked) {
             if (Input.GetKey(KeyCode.E)) {
                 RaycastHit2D hit = Physics2D.CircleCast(transform.position, 4f, Vector2.up, Mathf.Infinity,hauntableLayer);

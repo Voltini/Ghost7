@@ -15,6 +15,7 @@ public class Dispenser : MonoBehaviour
     [HideInInspector] public bool wasHaunted = false;
     float lastFiredTime;
     float timeElapsed;  //time to wait before shooting
+    bool hasShot;
     
 
 
@@ -70,6 +71,7 @@ public class Dispenser : MonoBehaviour
     public void SaveState()
     {
         timeElapsed = Time.timeSinceLevelLoad - lastFiredTime; 
+        hasShot = Time.timeSinceLevelLoad > 3f;
     }
 
     public void RestoreState()
@@ -82,7 +84,7 @@ public class Dispenser : MonoBehaviour
     {
         Debug.Log(time);
         yield return new WaitForSeconds(time);
-        if (timeElapsed > 0.5f) {
+        if (hasShot) {
         Shoot();
         }
         StartCoroutine("Timer");

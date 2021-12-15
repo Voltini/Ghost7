@@ -41,6 +41,7 @@ public class PlayerControl : MonoBehaviour
     [HideInInspector] public Boulder[] boulders;
     bool bouldersDefined = false;
     [HideInInspector] public Dispenser[] dispensers;
+    [HideInInspector] public float deathTime;
 
 
     // Start is called before the first frame update

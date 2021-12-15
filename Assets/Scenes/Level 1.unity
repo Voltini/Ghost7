@@ -11145,7 +11145,7 @@ GameObject:
   - component: {fileID: 361333288}
   - component: {fileID: 361333289}
   - component: {fileID: 361333287}
-  - component: {fileID: 361333291}
+  - component: {fileID: 361333290}
   m_Layer: 7
   m_Name: Phantom
   m_TagString: Phantom
@@ -11172,7 +11172,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -11193,12 +11193,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.74509805}
+  m_Sprite: {fileID: 8927008136575673806, guid: 2d08fcda91d3a22478e68eab0171007b, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.5686275}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2, y: 2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -11237,7 +11237,7 @@ MonoBehaviour:
   ShowOnPhantomMode: {fileID: 1961396655}
   postProcessing: {fileID: 331007423}
   playerProfile: {fileID: 11400000, guid: a3827d06e92abaa47a049bc93a7b3e00, type: 2}
-  phantomProfile: {fileID: 11400000, guid: 45ff2bc2e7260ae4a8ccec9a5d36d4c1, type: 2}
+  phantomProfile: {fileID: 11400000, guid: a3827d06e92abaa47a049bc93a7b3e00, type: 2}
 --- !u!61 &361333288
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11255,8 +11255,8 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
+    oldSize: {x: 2, y: 2}
+    newSize: {x: 2, y: 2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -11285,22 +11285,25 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!58 &361333291
-CircleCollider2D:
+--- !u!95 &361333290
+Animator:
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 361333284}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 1.2695878
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9b5f36788fec0a54f8e1df466081b97e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &373635110
 GameObject:
   m_ObjectHideFlags: 0
@@ -25638,6 +25641,7 @@ MonoBehaviour:
   soundManager: {fileID: 1774577485}
   boulders: []
   dispensers: []
+  deathTime: 0
 --- !u!50 &2033907690
 Rigidbody2D:
   serializedVersion: 4

@@ -119,7 +119,7 @@ public class Boulder : MonoBehaviour
         objectId.constraints = freezeConstraints;
         cam.SwitchTarget(rewindPlayer.gameObject);
         initPos = transform.position;
-        phantom.GetComponent<PhantomPlayer>().HideAll();
+        //phantom.GetComponent<PhantomPlayer>().HideAll();
     }
 
     public void SaveState() //pour sauvegarder l'état de la boule quand le joueur reprend possession du player
