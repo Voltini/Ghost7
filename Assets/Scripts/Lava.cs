@@ -7,7 +7,6 @@ public class Lava : MonoBehaviour
 
     public ParticleSystem lavaParticles;
     float density = 2;
-    float surfaceDistance = 0.13f;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,11 +17,5 @@ public class Lava : MonoBehaviour
         var em = lavaParticles.emission;
         em.rateOverTime = transform.localScale.x * density;
         lavaParticles.Play();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

@@ -18,14 +18,14 @@ public class PhantomPlayer : MonoBehaviour
     Vector2 massCenter;
     Vector2 distance;
     public ParticleSystem phantomDeath;
-    [HideInInspector] public Vector2 startPos;
+    [HideInInspector] public Vector3 startPos;
     public Rewind rewindPlayer;
     public SoundManager soundManager;
     Demon[] demons;
-    HellGate[] hellGates;
     bool demonsDefined = false;
     bool BHdefined = false;
     bool isHaunting = false;
+    public GameObject ShowOnPhantomMode;
 
     // Start is called before the first frame update
     void Start()
@@ -40,15 +40,9 @@ public class PhantomPlayer : MonoBehaviour
             demons = FindObjectsOfType<Demon>();
             demonsDefined = true;
         }
-        if (!BHdefined) {
-            hellGates = FindObjectsOfType<HellGate>();
-            BHdefined = true;
-        }
+        ShowOnPhantomMode.SetActive(true);
         foreach(Demon demon in demons) {
             demon.Show();
-        }
-        foreach(HellGate hellGate in hellGates) {
-            hellGate.Show();
         }
     }
 
@@ -60,12 +54,11 @@ public class PhantomPlayer : MonoBehaviour
 
     public void HideAll()
     {
+        ShowOnPhantomMode.SetActive(false);
         foreach(Demon demon in demons) {
-                demon.Hide();
-            }
-            foreach(HellGate hellGate in hellGates) {
-            hellGate.Hide();
-            }
+            demon.Hide();
+        }
+
     }
 
     // Update is called once per frame
@@ -90,7 +83,7 @@ public class PhantomPlayer : MonoBehaviour
                 }
             }
             phantomId.velocity = new Vector2(speed * movementx, speed * movementy);
-            if (((Vector2)transform.position - startPos).sqrMagnitude > 2500 ) {        //pour éviter que le phantome se balade trop loin
+            if ((transform.position - startPos).sqrMagnitude > 2500 ) {        //pour éviter que le phantome se balade trop loin
                 Death();
             }
         }

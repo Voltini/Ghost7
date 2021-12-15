@@ -31,7 +31,6 @@ public class Rewind : MonoBehaviour
     }
     public float deathTime;
     public LineRenderer line;
-    int i = 0;
     public List<rewindData> rewindPositions;
     public List<animationData> animationList;
     public int counter = 0;

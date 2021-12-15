@@ -15,6 +15,7 @@ TagManager:
   - Arrow
   - Ground
   - Demon
+  - Rewind
   layers:
   - Default
   - TransparentFX

@@ -55,7 +55,7 @@ public class Demon : MonoBehaviour
         while (true) {
             angle += speed * Time.deltaTime; 
             var offset = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle)) * radius;
-            rb.position = center + offset;
+            rb.DOMove(center + offset, Time.deltaTime);
             yield return new WaitForEndOfFrame();
         }
     }

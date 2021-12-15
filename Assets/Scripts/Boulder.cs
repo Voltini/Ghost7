@@ -73,6 +73,12 @@ public class Boulder : MonoBehaviour
                 objectId.constraints = freezeConstraints;
             }
         }
+        else if (!wasHaunted) {
+            if (other.CompareTag("Rewind")) {
+                other.GetComponent<Rewind>().ResetRewind();
+                transform.position = initPos;
+            }
+        }
         
     }
 
@@ -108,4 +114,5 @@ public class Boulder : MonoBehaviour
             transform.position = initPos;
         }
     }
+    
 }

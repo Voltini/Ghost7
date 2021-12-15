@@ -156,7 +156,7 @@ public class PlayerControl : MonoBehaviour
                 isTouchingWall = true;
                 anim.SetBool("isWallSliding", true);
                 anim.SetBool("isJumping", false);
-                anim.SetBool("isWaling", false);
+                anim.SetBool("isWalking", false);
                 if (isStickingToWallRight) {
                     lastWallRight = true;
             }
