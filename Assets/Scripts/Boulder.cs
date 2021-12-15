@@ -22,12 +22,21 @@ public class Boulder : MonoBehaviour
     Vector2 initPos;
     public PhantomPlayer phantom;
     bool wasHaunted = false;
+    float radiusOpposite;
+    bool rolling;
 
 
     void Start()
     {
         objectId = GetComponent<Rigidbody2D>();
         initPos = transform.position;
+        if (TryGetComponent<CircleCollider2D>(out CircleCollider2D component)) {
+            radiusOpposite = 1f/GetComponent<CircleCollider2D>().radius;
+        }
+        else {
+            radiusOpposite = 0f;
+        }
+        
     }
 
     void Update()
@@ -38,19 +47,28 @@ public class Boulder : MonoBehaviour
                 StopHauting();
             }
         }
-        else {
-            velocity = objectId.velocity.sqrMagnitude;
+        else if (!wasHaunted) {
+            velocity = objectId.velocity.magnitude;
+            if (rolling) objectId.angularVelocity = - velocity * radiusOpposite*7f;
         }
     }
 
     
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.TryGetComponent(typeof(PlayerControl), out Component player))
+        if (other.gameObject.TryGetComponent<PlayerControl>(out PlayerControl player))
         {   
-            if (velocity > 10){
-                other.gameObject.GetComponent<PlayerControl>().Death();
+            if (velocity > 1){
+                player.Death();
             }
+        }
+        else if (other.gameObject.CompareTag("Platform")) {
+            rolling = true;
+        }
+    }
+    void OnCollisionExit2D(Collision2D other) {
+        if (other.gameObject.CompareTag("Platform")) {
+            rolling = false;
         }
     }
 
@@ -112,6 +130,7 @@ public class Boulder : MonoBehaviour
     {
         if (!wasHaunted) {
             transform.position = initPos;
+            objectId.velocity = Vector2.zero;
         }
     }
     

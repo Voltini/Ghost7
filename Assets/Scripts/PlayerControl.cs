@@ -137,19 +137,12 @@ public class PlayerControl : MonoBehaviour
             if (lastWallRight) leftRightWall = true;
             else leftRightWall = false;
         }
-        Debug.Log((currentWall != lastWall) + "_______________________________________________________________________");
-        Debug.Log(isStickingToWallRight && !lastWallRight);
-        Debug.Log(isStickingToWallLeft && lastWallRight);
-        Debug.Log("Décomposition :");
-        Debug.Log("sticking to left wall : " + isStickingToWallLeft);
-        Debug.Log("sticking to right wall : " + isStickingToWallRight);
-        Debug.Log("orientation of last wall (right ?) : " + leftRightWall); 
         lastWall = currentWall;
     }
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.collider.CompareTag("Wall") || other.collider.CompareTag("Ground")) {
+        if (other.collider.CompareTag("Platform")) {
             if (isStickingToWallLeft || isStickingToWallRight)
             {
                 currentWall = other.gameObject;
@@ -196,7 +189,7 @@ public class PlayerControl : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Wall") || other.gameObject.CompareTag("Ground")) {
+        if (other.gameObject.CompareTag("Platform")) {
             playerId.gravityScale = 1f;
             isJumping = true;
             anim.SetBool("isWallSliding", false);

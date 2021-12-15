@@ -24,12 +24,12 @@ public class PhantomPlayer : MonoBehaviour
     public SoundManager soundManager;
     Demon[] demons;
     bool demonsDefined = false;
-    bool BHdefined = false;
     bool isHaunting = false;
     public GameObject ShowOnPhantomMode;
     public Volume postProcessing;
     public VolumeProfile playerProfile;
     public VolumeProfile phantomPofile;
+    Animator anim;
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +37,7 @@ public class PhantomPlayer : MonoBehaviour
         phantomId = GetComponent<Rigidbody2D>();
         phantomCollider = GetComponent<Collider2D>();
         hauntableLayer = LayerMask.GetMask("Hauntable", "Haunted");
+        anim = GetComponent<Animator>();
     }
 
     void OnEnable() {
@@ -73,6 +74,9 @@ public class PhantomPlayer : MonoBehaviour
         phantomPos = phantomId.transform.position;
         movementx = Input.GetAxis("Horizontal");
         movementy = Input.GetAxis("Vertical");
+        if (movementx > 0) {
+
+        }
         if (!isSucked) {
             if (Input.GetKey(KeyCode.E)) {
                 RaycastHit2D hit = Physics2D.CircleCast(transform.position, 4f, Vector2.up, Mathf.Infinity,hauntableLayer);
