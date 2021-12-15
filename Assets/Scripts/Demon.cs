@@ -19,6 +19,10 @@ public class Demon : MonoBehaviour
     public float radius;
     float angle;
     Vector2 center;
+    bool facing_right;
+    bool prev_facing_right;
+    Animator anim;
+    Vector2 offset;
 
 
     public enum mode {Line, Circle};
@@ -28,16 +32,14 @@ public class Demon : MonoBehaviour
     {
         sprite = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
         if (pathMode is mode.Line) {
-            rb.DOMove(rb.position + length * direction.normalized, length/speed, false).SetLoops(-1, LoopType.Yoyo);
+            StartCoroutine("LinearMotion");
         }
         else {
-            angle = initialAngle;
-            center = rb.position + radius * new Vector2(Mathf.Cos(180 + initialAngle), Mathf.Sin(180 + initialAngle));
             StartCoroutine("CircularMotion");
         }
     }
-
     public void Show()
     {
         sprite.enabled = true;
@@ -52,11 +54,32 @@ public class Demon : MonoBehaviour
 
     IEnumerator CircularMotion()
     {
+        angle = (Mathf.PI/180f) * initialAngle;
+        center = rb.position + radius * new Vector2(Mathf.Cos(180 + initialAngle), Mathf.Sin(180 + initialAngle));
         while (true) {
-            angle += speed * Time.deltaTime; 
-            var offset = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle)) * radius;
+            angle += (speed * Time.deltaTime) % (2*Mathf.PI); 
+            Debug.Log(angle);
+            offset = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle)) * radius;
             rb.DOMove(center + offset, Time.deltaTime);
+            facing_right = offset.y > 0;
+            if (facing_right != prev_facing_right) {
+                anim.SetBool("facing_right", facing_right);
+                prev_facing_right = facing_right;
+            }
             yield return new WaitForEndOfFrame();
+        }
+    }
+
+    IEnumerator LinearMotion()
+    {
+        float time = length/speed;
+        while (true) {
+            rb.DOMove(rb.position + length * direction.normalized, time, false).SetEase(Ease.Linear);       //motion to the right
+            yield return new WaitForSeconds(time);
+            anim.SetBool("facing_right", true);
+            rb.DOMove(rb.position - length * direction.normalized, time, false).SetEase(Ease.Linear);       //motion to the left
+            yield return new WaitForSeconds(time);
+            anim.SetBool("facing_right", false);
         }
     }
 }

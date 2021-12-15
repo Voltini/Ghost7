@@ -160,7 +160,7 @@ MonoBehaviour:
     m_Value: {fileID: 10305, guid: 0000000000000000f000000000000000, type: 0}
   dirtIntensity:
     m_OverrideState: 1
-    m_Value: 10
+    m_Value: 5
     min: 0
 --- !u!114 &6071973670793340384
 MonoBehaviour:

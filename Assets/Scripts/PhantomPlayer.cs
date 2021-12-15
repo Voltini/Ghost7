@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering;
 
 public class PhantomPlayer : MonoBehaviour
 {
@@ -26,6 +27,9 @@ public class PhantomPlayer : MonoBehaviour
     bool BHdefined = false;
     bool isHaunting = false;
     public GameObject ShowOnPhantomMode;
+    public Volume postProcessing;
+    public VolumeProfile playerProfile;
+    public VolumeProfile phantomPofile;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +40,7 @@ public class PhantomPlayer : MonoBehaviour
     }
 
     void OnEnable() {
+        postProcessing.profile = phantomPofile;
         if (!demonsDefined) {
             demons = FindObjectsOfType<Demon>();
             demonsDefined = true;
@@ -47,6 +52,7 @@ public class PhantomPlayer : MonoBehaviour
     }
 
     void OnDisable() {
+        postProcessing.profile = playerProfile;
         if (!isHaunting) {
             HideAll();
         }
