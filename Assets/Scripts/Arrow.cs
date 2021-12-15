@@ -9,6 +9,8 @@ public class Arrow : MonoBehaviour
     Collider arrowCollider;
     ParticleSystem arrowImpact;
     SoundManager soundManager;
+    [HideInInspector] public Dispenser dispenser;
+    Rewind rewindPlayer;
 
     // Start is called before the first frame update
     void Start()
@@ -26,11 +28,23 @@ public class Arrow : MonoBehaviour
         soundManager.PlaySfx(transform, "arrowImpact");
         arrowImpact = Instantiate(arrowImpact, transform.position, Quaternion.Euler(0f,0f, transform.eulerAngles.z - 22.5f));
         arrowImpact.Play();
-        if (other.gameObject.TryGetComponent(typeof(PlayerControl), out Component player))
+        if (other.gameObject.TryGetComponent<PlayerControl>(out PlayerControl player))
         {
-            other.gameObject.GetComponent<PlayerControl>().Death();  
+            player.Death(); 
+            player.rewindPlayer.dispenserCulprit = dispenser;
+            player.rewindPlayer.shouldLoop = true;
+            player.rewindPlayer.killedByArrow = true; 
+            player.rewindPlayer.ResetRewind();
         }
         Destroy(gameObject);
+    }
+
+    void OnTriggerEnter2D(Collider2D other) {
+        if (other.CompareTag("Rewind")) {
+            rewindPlayer = other.GetComponent<Rewind>();
+            rewindPlayer.ResetRewind();
+            Destroy(gameObject);
+        }
     }
     
 }

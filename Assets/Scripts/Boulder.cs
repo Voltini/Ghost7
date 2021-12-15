@@ -14,16 +14,17 @@ public class Boulder : MonoBehaviour
     float movementy;
     Rigidbody2D objectId;
     float speed = 7;
-    public GameObject rewindPlayer;
+    public Rewind rewindPlayer;
     public RigidbodyConstraints2D constraints;
     public RigidbodyConstraints2D freezeConstraints;
     public CameraControl cam;
     float velocity;
     Vector2 initPos;
     public PhantomPlayer phantom;
-    bool wasHaunted = false;
+    [HideInInspector] public bool wasHaunted = false;
     float radiusOpposite;
     bool rolling;
+    Vector2 checkpointVelocity;
 
 
     void Start()
@@ -60,6 +61,8 @@ public class Boulder : MonoBehaviour
         {   
             if (velocity > 1){
                 player.Death();
+                rewindPlayer.killedByBoulder = true;
+                rewindPlayer.culprit = this;
             }
         }
         else if (other.gameObject.CompareTag("Platform")) {
@@ -90,14 +93,7 @@ public class Boulder : MonoBehaviour
                 isHaunted = false;
                 objectId.constraints = freezeConstraints;
             }
-        }
-        else if (!wasHaunted) {
-            if (other.CompareTag("Rewind")) {
-                other.GetComponent<Rewind>().ResetRewind();
-                transform.position = initPos;
-            }
-        }
-        
+        }        
     }
 
     public void Haunt()
@@ -121,9 +117,17 @@ public class Boulder : MonoBehaviour
     {
         isHaunted = false;
         objectId.constraints = freezeConstraints;
-        cam.SwitchTarget(rewindPlayer);
+        cam.SwitchTarget(rewindPlayer.gameObject);
         initPos = transform.position;
         phantom.GetComponent<PhantomPlayer>().HideAll();
+    }
+
+    public void SaveState() //pour sauvegarder l'état de la boule quand le joueur reprend possession du player
+    {
+        if (!wasHaunted) {
+            initPos = transform.position;
+            checkpointVelocity = objectId.velocity;
+        }
     }
 
     public void OnPlayerDeath()
@@ -131,6 +135,7 @@ public class Boulder : MonoBehaviour
         if (!wasHaunted) {
             transform.position = initPos;
             objectId.velocity = Vector2.zero;
+            Debug.Log("position reset");
         }
     }
     

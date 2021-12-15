@@ -29,28 +29,36 @@ public class Rewind : MonoBehaviour
             this.animation = animation;
         }
     }
-    public float deathTime;
+    [HideInInspector] public float deathTime;
     public LineRenderer line;
     public List<rewindData> rewindPositions;
     public List<animationData> animationList;
-    public int counter = 0;
-    public int animationCounter = 0;
-    public int length;
+    [HideInInspector] public int counter = 0;
+    [HideInInspector] public int animationCounter = 0;
+    [HideInInspector] public int length;
     Rigidbody2D playerId;
     float timeFactor = 1f;
-    public GameObject player;
+    public PlayerControl player;
     public GameObject phantom;
     public CameraControl cam;
-    public bool shouldLoop = false;
-    public List<Vector3> listPositions;
+    [HideInInspector] public bool shouldLoop = false;
+    [HideInInspector] public List<Vector3> listPositions;
     Animator anim;
+    [HideInInspector] public bool killedByBoulder = false;
+    [HideInInspector] public Boulder culprit;
+    [HideInInspector] public bool killedByArrow = false;
+    [HideInInspector] public Dispenser dispenserCulprit;
+    Dispenser[] dispensers;
+    bool dispensersDefined = false;
+    GameObject[] arrows;
+    PlayerControl playerControl;
 
 
     void Start()
     {
         Debug.Log("nombre de points en mémoire : " + length);   //j'ai laisé ça provisoirement pour checker si ça risquait pas d'avoir un impact sur les performances
         playerId = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
+        anim = GetComponent<Animator>();  
     }
 
     void Update()
@@ -73,13 +81,14 @@ public class Rewind : MonoBehaviour
         animationCounter = 0;
         line.positionCount = 0;
         line.positionCount = length;
+        StartCoroutine("TimelineSetBack");
     }
 
     void UpdatePosition()
     {
-        if (counter < length - 2)
+        if (counter < length - 1)
         {
-            while (time >= rewindPositions[counter + 1].playerTime && (counter < length - 2))
+            while (time >= rewindPositions[counter + 1].playerTime && (counter < length - 1))
             {
                 counter++;
                 //l'idée de la boucle while là c'est d'éviter une désynchro si le framerate pendant la phase avant le décès est plus élevé qu'après le décès
@@ -93,31 +102,32 @@ public class Rewind : MonoBehaviour
             //DOMove c'est une fonction de DoTween qui est un asset (pas inclus de base dans Unity) qui permet d'avoir un déplacement lissé
         }
         else {
-            if (shouldLoop) {
-                line.positionCount = 0;     //ça c'est juste pour réinitialiser la liste sinon il reste des points pendant une frame et c'est bizarre
-                line.positionCount = length;
-                counter = 0;
-                animationCounter = 0;
-                deathTime = Time.timeSinceLevelLoad;
-                if (!phantom.activeSelf) {}
-            }
-            else {
-                if (phantom.activeSelf) {
-                    phantom.SetActive(false);
+            if (killedByBoulder) {
+                if (!culprit.wasHaunted) {
+                    shouldLoop = true;
+                    culprit.OnPlayerDeath();
                 }
                 else {
-                    cam.CancelHaunting();
+                    shouldLoop = false;
+                    killedByBoulder = false;
                 }
-                line.positionCount = 0;
-                player.transform.position = transform.position;
-                player.GetComponent<PlayerControl>().reactivatedTime = Time.timeSinceLevelLoad;
-                player.GetComponent<PlayerControl>().i = 0;
-                player.SetActive(true);
-                cam.SwitchTarget(player);
-                counter = 0;
-                rewindPositions = new List<rewindData>();
-                animationList = new List<animationData>();
-                gameObject.SetActive(false);
+            }
+            else if (killedByArrow) {
+                Debug.Log("killed by arrow");
+                if (!dispenserCulprit.wasHaunted) {
+                    shouldLoop = true;
+                    Debug.Log("was haunted");
+                }
+                else {
+                    shouldLoop = false;
+                    killedByBoulder = false;
+                }
+            }
+            if (shouldLoop) {
+                ResetRewind();
+            }
+            else {
+                StopRewind();
             }
         }
     }
@@ -127,13 +137,44 @@ public class Rewind : MonoBehaviour
             if (time >= animationList[animationCounter+1].playerTime) {
                 animationCounter ++;
                 anim.Play(animationList[animationCounter].animation);
-                /*switch (animationList[animationCounter].animation) {
-                    case "walk" :
-                    anim.Play
-                    break;
-                }*/
             }
         }
+    }
+
+    void StopRewind()
+    {
+        Debug.Log("rewind stopped");
+        if (phantom.activeSelf) {
+            phantom.SetActive(false);
+        }
+        else {
+            cam.CancelHaunting();
+        }
+        line.positionCount = 0;
+        player.transform.position = transform.position;
+        player.GetComponent<PlayerControl>().reactivatedTime = Time.timeSinceLevelLoad;
+        player.GetComponent<PlayerControl>().i = 0;
+        player.gameObject.SetActive(true);
+        cam.SwitchTarget(player.gameObject);
+        counter = 0;
+        rewindPositions = new List<rewindData>();
+        animationList = new List<animationData>();
+        gameObject.SetActive(false);
+    }
+
+    IEnumerator TimelineSetBack()
+    {
+        arrows = GameObject.FindGameObjectsWithTag("Arrow"); 
+        foreach(GameObject arrow in arrows) {
+            Destroy(arrow);
+        }
+        foreach (Boulder boulder in player.boulders) {
+            boulder.OnPlayerDeath();
+        }
+        foreach (Dispenser dispenser in player.dispensers) {
+            dispenser.RestoreState();
+        }
+        yield return null;
     }
 
 }

@@ -28,7 +28,7 @@ public class PhantomPlayer : MonoBehaviour
     public GameObject ShowOnPhantomMode;
     public Volume postProcessing;
     public VolumeProfile playerProfile;
-    public VolumeProfile phantomPofile;
+    public VolumeProfile phantomProfile;
     Animator anim;
 
     // Start is called before the first frame update
@@ -41,7 +41,8 @@ public class PhantomPlayer : MonoBehaviour
     }
 
     void OnEnable() {
-        postProcessing.profile = phantomPofile;
+        Debug.Log("enabled");
+        postProcessing.profile = phantomProfile;
         if (!demonsDefined) {
             demons = FindObjectsOfType<Demon>();
             demonsDefined = true;
@@ -125,6 +126,6 @@ public class PhantomPlayer : MonoBehaviour
         phantomDeath.transform.position = transform.position;
         phantomDeath.Play();
         transform.position = startPos;
-        rewindPlayer.ResetRewind();
+        //rewindPlayer.ResetRewind();
     }
 }
