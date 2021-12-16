@@ -9,8 +9,6 @@ public class PhantomPlayer : MonoBehaviour
 {
     float speed = 7f;
     Rigidbody2D phantomId;
-    Collider2D phantomCollider;
-    Vector3 phantomPos;
     CameraControl cam;
     float movementx = 0f;
     float movementy = 0f;
@@ -35,7 +33,6 @@ public class PhantomPlayer : MonoBehaviour
     void Start()
     {
         phantomId = GetComponent<Rigidbody2D>();
-        phantomCollider = GetComponent<Collider2D>();
         hauntableLayer = LayerMask.GetMask("Hauntable", "Haunted");
         anim = GetComponent<Animator>();
     }
@@ -72,7 +69,6 @@ public class PhantomPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        phantomPos = phantomId.transform.position;
         movementx = Input.GetAxis("Horizontal");
         movementy = Input.GetAxis("Vertical");
         
@@ -110,7 +106,7 @@ public class PhantomPlayer : MonoBehaviour
         
 
         if (!isSucked) {
-            if (Input.GetKey(KeyCode.E)) {
+            if (Input.GetKeyDown(KeyCode.E)) {
                 RaycastHit2D hit = Physics2D.CircleCast(transform.position, 4f, Vector2.up, 0f,hauntableLayer);
                 if (hit) {
                     soundManager.PlaySfx(transform, "haunted");

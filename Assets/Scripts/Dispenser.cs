@@ -7,9 +7,8 @@ public class Dispenser : MonoBehaviour
     public float periode ;
     public Transform firepoint;
     public GameObject inventory;
-    bool isHaunted = false;
+    public bool isHaunted = false;
     public CameraControl cam;
-    public GameObject player;
     public PhantomPlayer phantom;
     [HideInInspector] public bool wasHaunted = false;
     float lastFiredTime;
@@ -60,9 +59,9 @@ public class Dispenser : MonoBehaviour
     public void StopHaunting()
     {
         isHaunted = false;
-        cam.SwitchTarget(player);
-        player.SetActive(true);
-        phantom.HideAll();
+        cam.SwitchTarget(phantom.gameObject);
+        phantom.GetComponent<Rigidbody2D>().position = transform.position;
+        phantom.gameObject.SetActive(true);
     }
 
     public void SaveState()
@@ -73,8 +72,10 @@ public class Dispenser : MonoBehaviour
 
     public void RestoreState()
     {
-        StopAllCoroutines();
-        StartCoroutine("RestartShooting",timeElapsed);
+        if (!isHaunted) {
+            StopAllCoroutines();
+            StartCoroutine("RestartShooting",timeElapsed);
+        }
     }
 
     IEnumerator RestartShooting(float time)

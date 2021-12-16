@@ -231,6 +231,7 @@ public class PlayerControl : MonoBehaviour
         if (other.gameObject.tag == "Lava")
         {
             rewindPlayer.shouldLoop = true;
+            rewindPlayer.deathBylava = true;
             Death();
         }
     }

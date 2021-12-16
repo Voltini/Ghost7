@@ -10,9 +10,6 @@ public class Arrow : MonoBehaviour
     ParticleSystem arrowImpact;
     SoundManager soundManager;
     [HideInInspector] public Dispenser dispenser;
-    Rewind rewindPlayer;
-    float distanceTraveled;
-    float periode = 3f;
 
     // Start is called before the first frame update
     void Start()
@@ -33,9 +30,6 @@ public class Arrow : MonoBehaviour
         if (other.gameObject.TryGetComponent<PlayerControl>(out PlayerControl player))
         {
             player.Death(); 
-            player.rewindPlayer.dispenserCulprit = dispenser;
-            //player.rewindPlayer.shouldLoop = true;
-            distanceTraveled = arrowId.velocity.magnitude * (Time.timeSinceLevelLoad % periode);
         }
         else {
             Destroy(gameObject);

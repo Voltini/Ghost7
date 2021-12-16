@@ -54,6 +54,7 @@ public class Rewind : MonoBehaviour
     PlayerControl playerControl;
     public GameObject arrowPrefab;
     public List<PlayerControl.arrowData> arrowList;
+    [HideInInspector] public bool deathBylava;
 
 
     void Start()
@@ -76,14 +77,17 @@ public class Rewind : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("Arrow")) {
-            Debug.Log("arrow");
+            deathBylava = false;
             RewindDeath();
         }
         if (other.TryGetComponent<Boulder>(out Boulder boulder)) {
+            deathBylava = false;
             if (!boulder.wasHaunted) {
-                counter = length;
                 other.gameObject.layer = LayerMask.NameToLayer("Haunted");
                 RewindDeath();
+            }
+            else {
+                StopRewind();
             }
         }
     }
@@ -113,7 +117,7 @@ public class Rewind : MonoBehaviour
     {
         if (counter < length - 1)
         {
-            while (time >= rewindPositions[counter].playerTime && (counter < length))
+            while (time >= rewindPositions[counter].playerTime && (counter < length -1))
             {
                 //l'idée de la boucle while là c'est d'éviter une désynchro si le framerate pendant la phase avant le décès est plus élevé qu'après le décès
                 //ça parait pas super important mais ce sera peut-etre utile quand il y aura des animations
@@ -127,7 +131,12 @@ public class Rewind : MonoBehaviour
             //DOMove c'est une fonction de DoTween qui est un asset (pas inclus de base dans Unity) qui permet d'avoir un déplacement lissé
         }
         else {
-            StartCoroutine("WaitAndStop");
+            if (deathBylava) {
+                ResetRewind();
+            }
+            else {
+                StartCoroutine("WaitAndStop");
+            }
         }
     }
     void UpdateAnimation()
@@ -142,8 +151,8 @@ public class Rewind : MonoBehaviour
 
     void StopRewind()
     {
-        Debug.Log("rewind stopped");
         if (phantom.activeSelf) {
+            phantom.GetComponent<PhantomPlayer>().HideAll();
             phantom.SetActive(false);
         }
         else {
@@ -165,6 +174,7 @@ public class Rewind : MonoBehaviour
     {
         arrows = GameObject.FindGameObjectsWithTag("Arrow"); 
         foreach(GameObject arrow in arrows) {
+            if (!arrow.GetComponent<Arrow>().dispenser.isHaunted)
             Destroy(arrow);
         }
         foreach (Boulder boulder in player.boulders) {

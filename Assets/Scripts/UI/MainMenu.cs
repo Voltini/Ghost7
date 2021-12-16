@@ -43,7 +43,7 @@ public class MainMenu : MonoBehaviour
             image.color = Color.Lerp(new Color(0, 0, 0, 0), Color.black, 0.01f * i);
             yield return new WaitForSeconds(0.001f);
         }
-        int currentLevel = PlayerPrefs.GetInt("levelReached");
+        int currentLevel = PlayerPrefs.GetInt("levelReached",0);
         if (currentLevel != 0)
         {
             SceneManager.LoadScene("Level " + currentLevel);

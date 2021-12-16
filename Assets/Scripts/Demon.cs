@@ -41,11 +41,13 @@ public class Demon : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         if (pathMode is mode.Line) {
+            anim.SetBool("idle", false);
             deltax = Mathf.Abs(direction.x);
             deltay = Mathf.Abs(direction.y);
             if (deltax >= deltay) {
                 facing_direction = "facing_right";
-                if (deltax >= 0) {
+                anim.SetBool("horizontal_movement", true);
+                if (direction.x >= 0) {
                     initialBool = true;
                 }
                 else {
@@ -54,7 +56,8 @@ public class Demon : MonoBehaviour
             }
             else {
                 facing_direction = "facing_up";
-                if (deltay >= 0) {
+                anim.SetBool("horizontal_movement", false);
+                if (direction.y >= 0) {
                     initialBool = true;
                 }
                 else {
@@ -64,10 +67,11 @@ public class Demon : MonoBehaviour
             StartCoroutine("LinearMotion");
         }
         else if (pathMode is mode.Circle) {
+            anim.SetBool("idle", false);
             StartCoroutine("CircularMotion");
         }
         else {
-            anim.SetBool("static", true);
+            anim.SetBool("idle", true);
         }
     }
     public void Show()
