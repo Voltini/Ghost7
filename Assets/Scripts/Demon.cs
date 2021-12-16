@@ -84,13 +84,11 @@ public class Demon : MonoBehaviour
         angle = (Mathf.PI/180f) * initialAngle;
         center = rb.position + radius * new Vector2(Mathf.Cos(180 + initialAngle), Mathf.Sin(180 + initialAngle));
         while (true) {
-            Debug.Log("_____________________________________________________________________________________________________");
             angle += (speed * Time.deltaTime); 
             offset = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle)) * radius;
             deltax = Mathf.Abs(offset.x);
             deltay = Mathf.Abs(offset.y);
             rb.DOMove(center + offset, Time.deltaTime);     //on peut pas faire directement un mouvement circulaire du coup micro-mouvements tangents au cercle 
-            Debug.Log(anim.GetBool("horizontal_movement"));
             if (deltay < deltax){
                 anim.SetBool("horizontal_movement", false);
                 if (offset.x > 0) {
