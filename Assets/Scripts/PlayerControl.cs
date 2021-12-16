@@ -236,6 +236,7 @@ public class PlayerControl : MonoBehaviour
     public void Death()
     {
         RegisterPosition();
+        RegisterPosition();
         soundManager.PlaySfx(transform, "playerDeath");
         playerExplosion.transform.position = playerId.position;
         playerExplosion.Play();

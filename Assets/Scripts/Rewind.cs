@@ -69,9 +69,24 @@ public class Rewind : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        counter = length;
-        other.gameObject.layer = LayerMask.NameToLayer("Haunted");
-        shouldLoop = false;
+        if (other.CompareTag("Arrow")) {
+            RewindDeath();
+        }
+        if (other.TryGetComponent<Boulder>(out Boulder boulder)) {
+            if (!boulder.wasHaunted) {
+                counter = length;
+                other.gameObject.layer = LayerMask.NameToLayer("Haunted");
+                shouldLoop = false;
+            }
+        }
+    }
+
+    public void RewindDeath()
+    {
+        rewindPositions = rewindPositions.GetRange(0, counter+1);
+        animationList = animationList.GetRange(0,animationCounter+1);
+        length = counter;
+        ResetRewind();
     }
 
     public void ResetRewind()
@@ -86,9 +101,9 @@ public class Rewind : MonoBehaviour
 
     void UpdatePosition()
     {
-        if (counter < length - 1)
+        if (counter < length - 2)
         {
-            while (time >= rewindPositions[counter + 1].playerTime && (counter < length - 1))
+            while (time >= rewindPositions[counter + 1].playerTime && (counter < length - 2))
             {
                 counter++;
                 //l'idée de la boucle while là c'est d'éviter une désynchro si le framerate pendant la phase avant le décès est plus élevé qu'après le décès
@@ -115,7 +130,7 @@ public class Rewind : MonoBehaviour
             else if (killedByArrow) {
                 Debug.Log("killed by arrow");
                 if (!dispenserCulprit.wasHaunted) {
-                    shouldLoop = true;
+                    //shouldLoop = true;
                     Debug.Log("was haunted");
                 }
                 else {

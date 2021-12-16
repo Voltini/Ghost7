@@ -25692,7 +25692,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2017305818}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 19.055105, y: -6.6948123, z: -8}
+  m_LocalPosition: {x: 19.055105, y: -6.6948123, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1262221057362208880}
@@ -31536,6 +31536,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 373635111}
     m_Modifications:
+    - target: {fileID: 7499787960249993988, guid: 27dbd24bd48b2854a881dee69bed4eee, type: 3}
+      propertyPath: arrowShot
+      value: 
+      objectReference: {fileID: 8300000, guid: 5c49bccdae30df6469b9f2bf025dfe77, type: 3}
+    - target: {fileID: 7499787960249993988, guid: 27dbd24bd48b2854a881dee69bed4eee, type: 3}
+      propertyPath: arrowImpact
+      value: 
+      objectReference: {fileID: 8300000, guid: bf98fbe36ec45e4439bf69b1d3bde23c, type: 3}
+    - target: {fileID: 7499787960249993988, guid: 27dbd24bd48b2854a881dee69bed4eee, type: 3}
+      propertyPath: playerDeath
+      value: 
+      objectReference: {fileID: 8300000, guid: e20ba4646f8560d40899214a61805b49, type: 3}
+    - target: {fileID: 7499787960249993988, guid: 27dbd24bd48b2854a881dee69bed4eee, type: 3}
+      propertyPath: phantomDeath
+      value: 
+      objectReference: {fileID: 8300000, guid: 9907b71a1f0acf840b889a541baf8125, type: 3}
     - target: {fileID: 7499787960249993989, guid: 27dbd24bd48b2854a881dee69bed4eee, type: 3}
       propertyPath: m_Name
       value: SoundManager
@@ -31647,7 +31663,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7538969508678016566, guid: 8428342f11d6eea458fb200f016f8e52, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7538969508678016567, guid: 8428342f11d6eea458fb200f016f8e52, type: 3}
       propertyPath: m_RootOrder
@@ -31868,6 +31884,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Box
       objectReference: {fileID: 0}
+    - target: {fileID: 8545760780532800334, guid: 4118624ba08c3ab41bc151af053f32ad, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 519420033}
+    - target: {fileID: 8545760780532800334, guid: 4118624ba08c3ab41bc151af053f32ad, type: 3}
+      propertyPath: phantom
+      value: 
+      objectReference: {fileID: 361333287}
+    - target: {fileID: 8545760780532800334, guid: 4118624ba08c3ab41bc151af053f32ad, type: 3}
+      propertyPath: rewindPlayer
+      value: 
+      objectReference: {fileID: 532311168}
     - target: {fileID: 8545760781206807255, guid: 4118624ba08c3ab41bc151af053f32ad, type: 3}
       propertyPath: m_RootOrder
       value: 2
