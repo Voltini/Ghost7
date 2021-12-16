@@ -84,6 +84,7 @@ public class PlayerControl : MonoBehaviour
         foreach(GameObject arrow in arrows) {
             arrowList.Add(new arrowData(arrow.transform.position, arrow.GetComponent<Rigidbody2D>().velocity));
         }
+        rewindPlayer.arrowList = arrowList;
     }
     }
 
@@ -99,6 +100,12 @@ public class PlayerControl : MonoBehaviour
         foreach (Dispenser dispenser in dispensers) {
             dispenser.SaveState();
         }
+        arrows = GameObject.FindGameObjectsWithTag("Arrow").ToList();
+        arrowList = new List<arrowData>();
+        foreach(GameObject arrow in arrows) {
+            arrowList.Add(new arrowData(arrow.transform.position, arrow.GetComponent<Rigidbody2D>().velocity));
+        }
+        rewindPlayer.arrowList = arrowList;
     }
 
     // Update is called once per frame

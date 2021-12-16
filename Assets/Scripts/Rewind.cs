@@ -53,6 +53,7 @@ public class Rewind : MonoBehaviour
     GameObject[] arrows;
     PlayerControl playerControl;
     public GameObject arrowPrefab;
+    public List<PlayerControl.arrowData> arrowList;
 
 
     void Start()
@@ -75,13 +76,14 @@ public class Rewind : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("Arrow")) {
+            Debug.Log("arrow");
             RewindDeath();
         }
         if (other.TryGetComponent<Boulder>(out Boulder boulder)) {
             if (!boulder.wasHaunted) {
                 counter = length;
                 other.gameObject.layer = LayerMask.NameToLayer("Haunted");
-                shouldLoop = false;
+                RewindDeath();
             }
         }
     }
@@ -90,9 +92,9 @@ public class Rewind : MonoBehaviour
     {
         StopCoroutine("WaitAndStop");
         Debug.Log("coroutine canceled");
-        rewindPositions = rewindPositions.GetRange(0, counter + 1);
-        animationList = animationList.GetRange(0,animationCounter+1);
-        length = counter;
+        rewindPositions = rewindPositions.GetRange(0, counter);
+        //animationList = animationList.GetRange(0,animationCounter+1);
+        length = counter + 1;
         Debug.Log(length);
         ResetRewind();
     }
@@ -120,7 +122,6 @@ public class Rewind : MonoBehaviour
                 line.positionCount --;
                 line.SetPositions(listPositions.GetRange(counter, line.positionCount) .ToArray());
                 counter++;
-                Debug.Log(line.positionCount);
             }
             playerId.DOMove(rewindPositions[counter].playerPosition, Time.deltaTime);
             //DOMove c'est une fonction de DoTween qui est un asset (pas inclus de base dans Unity) qui permet d'avoir un déplacement lissé
@@ -172,16 +173,18 @@ public class Rewind : MonoBehaviour
         foreach (Dispenser dispenser in player.dispensers) {
             dispenser.RestoreState();
         }
-        foreach (PlayerControl.arrowData arrowData in player.arrowList) {
+        //if (arrowList.Count > 0) {
+        foreach (PlayerControl.arrowData arrowData in arrowList) {
             GameObject newArrow = Instantiate(arrowPrefab, arrowData.position, Quaternion.LookRotation(Vector3.forward, arrowData.direction)) as GameObject;
             Rigidbody2D newArrowId = newArrow.GetComponent<Rigidbody2D>();
             newArrowId.velocity = arrowData.direction;
         }
+        //}
         yield return null;
     }
 
     IEnumerator WaitAndStop() {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.1f);
         StopRewind();
     }
 }

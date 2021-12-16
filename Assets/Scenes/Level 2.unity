@@ -5636,7 +5636,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5862a092f9dbd864884f697f10a05e99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runSpeed: 0
+  phantomDeath: {fileID: 0}
+  startPos: {x: 0, y: 0, z: 0}
+  rewindPlayer: {fileID: 0}
+  soundManager: {fileID: 0}
+  ShowOnPhantomMode: {fileID: 0}
+  postProcessing: {fileID: 0}
+  playerProfile: {fileID: 0}
+  phantomProfile: {fileID: 0}
 --- !u!61 &361333288
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6214,7 +6221,10 @@ MonoBehaviour:
   horizontalThreshold: 3
   verticalThreshold: 1
   rewindPlayer: {fileID: 532311168}
+  phantomPlayer: {fileID: 0}
   rewindTime: 0
+  blackscreen: {fileID: 0}
+  gameMode: 0
 --- !u!1 &532311167
 GameObject:
   m_ObjectHideFlags: 0
@@ -6248,7 +6258,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathTime: 0
   line: {fileID: 608599299}
+  counter: 0
+  animationCounter: 0
   length: 0
+  player: {fileID: 0}
+  phantom: {fileID: 0}
+  cam: {fileID: 0}
+  shouldLoop: 0
+  listPositions: []
+  killedByBoulder: 0
+  culprit: {fileID: 0}
+  killedByArrow: 0
+  dispenserCulprit: {fileID: 0}
+  arrowPrefab: {fileID: 0}
 --- !u!212 &532311169
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7616,6 +7638,7 @@ MonoBehaviour:
   pauseMenuUI: {fileID: 340228381}
   soundManager: {fileID: 0}
   player: {fileID: 2033907689}
+  blackscreen: {fileID: 0}
 --- !u!114 &1923260230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7933,10 +7956,15 @@ MonoBehaviour:
     maxDepth: 0
     minNormalAngle: -20
     maxNormalAngle: 20
-  playerDeath: 0
   rewindPlayer: {fileID: 532311168}
   line: {fileID: 239837786}
+  i: 0
   phantomPlayer: {fileID: 361333284}
+  reactivatedTime: 0
+  soundManager: {fileID: 0}
+  boulders: []
+  dispensers: []
+  deathTime: 0
 --- !u!50 &2033907690
 Rigidbody2D:
   serializedVersion: 4
