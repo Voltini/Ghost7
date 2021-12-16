@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering;
 
 public class PhantomPlayer : MonoBehaviour
 {
@@ -18,14 +19,17 @@ public class PhantomPlayer : MonoBehaviour
     Vector2 massCenter;
     Vector2 distance;
     public ParticleSystem phantomDeath;
-    [HideInInspector] public Vector2 startPos;
+    [HideInInspector] public Vector3 startPos;
     public Rewind rewindPlayer;
     public SoundManager soundManager;
     Demon[] demons;
-    HellGate[] hellGates;
     bool demonsDefined = false;
-    bool BHdefined = false;
     bool isHaunting = false;
+    public GameObject ShowOnPhantomMode;
+    public Volume postProcessing;
+    public VolumeProfile playerProfile;
+    public VolumeProfile phantomProfile;
+    Animator anim;
 
     // Start is called before the first frame update
     void Start()
@@ -33,26 +37,24 @@ public class PhantomPlayer : MonoBehaviour
         phantomId = GetComponent<Rigidbody2D>();
         phantomCollider = GetComponent<Collider2D>();
         hauntableLayer = LayerMask.GetMask("Hauntable", "Haunted");
+        anim = GetComponent<Animator>();
     }
 
     void OnEnable() {
+        Debug.Log("enabled");
+        postProcessing.profile = phantomProfile;
         if (!demonsDefined) {
             demons = FindObjectsOfType<Demon>();
             demonsDefined = true;
         }
-        if (!BHdefined) {
-            hellGates = FindObjectsOfType<HellGate>();
-            BHdefined = true;
-        }
+        ShowOnPhantomMode.SetActive(true);
         foreach(Demon demon in demons) {
             demon.Show();
-        }
-        foreach(HellGate hellGate in hellGates) {
-            hellGate.Show();
         }
     }
 
     void OnDisable() {
+        postProcessing.profile = playerProfile;
         if (!isHaunting) {
             HideAll();
         }
@@ -60,12 +62,11 @@ public class PhantomPlayer : MonoBehaviour
 
     public void HideAll()
     {
+        ShowOnPhantomMode.SetActive(false);
         foreach(Demon demon in demons) {
-                demon.Hide();
-            }
-            foreach(HellGate hellGate in hellGates) {
-            hellGate.Hide();
-            }
+            demon.Hide();
+        }
+
     }
 
     // Update is called once per frame
@@ -74,6 +75,40 @@ public class PhantomPlayer : MonoBehaviour
         phantomPos = phantomId.transform.position;
         movementx = Input.GetAxis("Horizontal");
         movementy = Input.GetAxis("Vertical");
+        
+        if (movementx > 0) {
+            anim.SetBool("facing_right", true);
+        }
+        else if (movementx < 0) {
+            anim.SetBool("facing_right", false);
+        }
+
+        if (movementx == 0f && movementy == 0f) {
+            anim.SetBool("idle", true);
+            anim.SetBool("going_up", false);
+            anim.SetBool("going_down", false);
+            anim.SetBool("going_horizontal", false);
+        }
+        else {
+            anim.SetBool("idle", false);
+            if (movementy > 0.1f) {
+                anim.SetBool("going_up", true);
+                anim.SetBool("going_down", false);
+                anim.SetBool("going_horizontal", false);
+            }
+            else if (movementy < -0.1f) {
+                anim.SetBool("going_up", false);
+                anim.SetBool("going_down", true);
+                anim.SetBool("going_horizontal", false);
+            }
+            else {
+                anim.SetBool("going_up", false);
+                anim.SetBool("going_down", false);
+                anim.SetBool("going_horizontal", true);
+            }
+        }
+        
+
         if (!isSucked) {
             if (Input.GetKey(KeyCode.E)) {
                 RaycastHit2D hit = Physics2D.CircleCast(transform.position, 4f, Vector2.up, Mathf.Infinity,hauntableLayer);
@@ -90,7 +125,7 @@ public class PhantomPlayer : MonoBehaviour
                 }
             }
             phantomId.velocity = new Vector2(speed * movementx, speed * movementy);
-            if (((Vector2)transform.position - startPos).sqrMagnitude > 2500 ) {        //pour éviter que le phantome se balade trop loin
+            if ((transform.position - startPos).sqrMagnitude > 2500 ) {        //pour éviter que le phantome se balade trop loin
                 Death();
             }
         }
@@ -122,6 +157,6 @@ public class PhantomPlayer : MonoBehaviour
         phantomDeath.transform.position = transform.position;
         phantomDeath.Play();
         transform.position = startPos;
-        rewindPlayer.ResetRewind();
+        //rewindPlayer.ResetRewind();
     }
 }

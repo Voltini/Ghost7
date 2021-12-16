@@ -24,15 +24,13 @@ public class PlayerControl : MonoBehaviour
     GameObject currentWall;
     bool isTouchingWall = false;
     CameraControl cam;
-    public bool playerDeath = false;
-
     public Rewind rewindPlayer;
     public LineRenderer line;
-    public int i = 0;
+    [HideInInspector] public int i = 0;
     Vector3 previousPosition = Vector3.positiveInfinity;
     Vector3 playerPos;
     public GameObject phantomPlayer;
-    public float reactivatedTime = 0f;
+    [HideInInspector] public float reactivatedTime = 0f;
     public SoundManager soundManager;
     Animator anim;
     bool isJumping = false;
@@ -40,7 +38,10 @@ public class PlayerControl : MonoBehaviour
     string currentState;
     bool lastWallRight;
     bool leftRightWall;
-    Boulder[] boulders;
+    [HideInInspector] public Boulder[] boulders;
+    bool bouldersDefined = false;
+    [HideInInspector] public Dispenser[] dispensers;
+    [HideInInspector] public float deathTime;
 
 
     // Start is called before the first frame update
@@ -52,7 +53,35 @@ public class PlayerControl : MonoBehaviour
         rewindPlayer.rewindPositions = new List<Rewind.rewindData>();
         rewindPlayer.animationList = new List<Rewind.animationData>();
         cam.SwitchTarget(this.gameObject);
+    }
+
+    private void OnEnable() {
+        if (!bouldersDefined)  {
+            StartCoroutine("WaitAndGet");
+        }
+        else {
+            
+        foreach (Boulder boulder in boulders) {
+            boulder.SaveState();
+        }
+        foreach (Dispenser dispenser in dispensers) {
+            dispenser.SaveState();
+        }
+        }
+    }
+
+    IEnumerator WaitAndGet()
+    {
+        yield return new WaitForEndOfFrame();
         boulders = FindObjectsOfType<Boulder>();
+        dispensers = FindObjectsOfType<Dispenser>();
+        bouldersDefined = true;
+        foreach (Boulder boulder in boulders) {
+            boulder.SaveState();
+        }
+        foreach (Dispenser dispenser in dispensers) {
+            dispenser.SaveState();
+        }
     }
 
     // Update is called once per frame
@@ -61,12 +90,7 @@ public class PlayerControl : MonoBehaviour
         playerPos = playerId.transform.position;
         if (playerPos != previousPosition)
         {
-            rewindPlayer.rewindPositions.Add(new Rewind.rewindData(Time.timeSinceLevelLoad - reactivatedTime, playerPos));
-            //en gros on stocke les valeurs de position que lorsqu'elles sont différentes des précédentes et on utilise un time stamp 
-            //pour s'assurer que le rewind a la meme vitesse que le joueur indépendamment du framerate
-            line.positionCount = i + 1;
-            line.SetPosition(i, playerId.transform.position);
-            i++;
+            RegisterPosition();
         }
         previousPosition = playerPos;
 
@@ -137,26 +161,19 @@ public class PlayerControl : MonoBehaviour
             if (lastWallRight) leftRightWall = true;
             else leftRightWall = false;
         }
-        Debug.Log((currentWall != lastWall) + "_______________________________________________________________________");
-        Debug.Log(isStickingToWallRight && !lastWallRight);
-        Debug.Log(isStickingToWallLeft && lastWallRight);
-        Debug.Log("Décomposition :");
-        Debug.Log("sticking to left wall : " + isStickingToWallLeft);
-        Debug.Log("sticking to right wall : " + isStickingToWallRight);
-        Debug.Log("orientation of last wall (right ?) : " + leftRightWall); 
         lastWall = currentWall;
     }
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.collider.CompareTag("Wall") || other.collider.CompareTag("Ground")) {
+        if (other.collider.CompareTag("Platform")) {
             if (isStickingToWallLeft || isStickingToWallRight)
             {
                 currentWall = other.gameObject;
                 isTouchingWall = true;
                 anim.SetBool("isWallSliding", true);
                 anim.SetBool("isJumping", false);
-                anim.SetBool("isWaling", false);
+                anim.SetBool("isWalking", false);
                 if (isStickingToWallRight) {
                     lastWallRight = true;
             }
@@ -196,7 +213,7 @@ public class PlayerControl : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Wall") || other.gameObject.CompareTag("Ground")) {
+        if (other.gameObject.CompareTag("Platform")) {
             playerId.gravityScale = 1f;
             isJumping = true;
             anim.SetBool("isWallSliding", false);
@@ -218,6 +235,7 @@ public class PlayerControl : MonoBehaviour
 
     public void Death()
     {
+        RegisterPosition();
         soundManager.PlaySfx(transform, "playerDeath");
         playerExplosion.transform.position = playerId.position;
         playerExplosion.Play();
@@ -236,6 +254,9 @@ public class PlayerControl : MonoBehaviour
         cam.SwitchTarget(phantomPlayer);      //pour que la caméra switch de cible (temporaire mais c'est pratique pour regarder ce qu'il se passe)
         foreach(Boulder boulder in boulders) {
             boulder.OnPlayerDeath();
+        }
+        foreach (Dispenser dispenser in dispensers) {
+            dispenser.RestoreState();
         }
         gameObject.SetActive(false);    //décès du joueur
     }
@@ -265,6 +286,16 @@ public class PlayerControl : MonoBehaviour
             rewindPlayer.animationList.Add(new Rewind.animationData(Time.timeSinceLevelLoad - reactivatedTime, currentState));
             previousState = currentState;
         }
+    }
+
+    void RegisterPosition() 
+    {
+        rewindPlayer.rewindPositions.Add(new Rewind.rewindData(Time.timeSinceLevelLoad - reactivatedTime, playerPos));
+        //en gros on stocke les valeurs de position que lorsqu'elles sont différentes des précédentes et on utilise un time stamp 
+        //pour s'assurer que le rewind a la meme vitesse que le joueur indépendamment du framerate
+        line.positionCount = i + 1;
+        line.SetPosition(i, playerId.transform.position);
+        i++;
     }
 
     //PS : les lignes c'est provisoire aussi, juste pour vérifier que le rewind fonctionne bien

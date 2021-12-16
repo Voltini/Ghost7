@@ -12,6 +12,11 @@ public class Dispenser : MonoBehaviour
     public CameraControl cam;
     public GameObject player;
     public PhantomPlayer phantom;
+    [HideInInspector] public bool wasHaunted = false;
+    float lastFiredTime;
+    float timeElapsed;  //time to wait before shooting
+    bool hasShot;
+    
 
 
     void Start()
@@ -36,8 +41,9 @@ public class Dispenser : MonoBehaviour
     public void Shoot(){
         GameObject newArrow = Instantiate(inventory, firepoint.position, transform.rotation) as GameObject;
         Rigidbody2D newArrowId = newArrow.GetComponent<Rigidbody2D>();
-        //newArrowId.position = firepoint.position;
         newArrowId.velocity = 25f * (firepoint.position - transform.position).normalized;
+        newArrow.GetComponent<Arrow>().dispenser = this;
+        lastFiredTime = Time.timeSinceLevelLoad;
     }
 
     IEnumerator Timer()
@@ -50,6 +56,7 @@ public class Dispenser : MonoBehaviour
     public void Haunt()
     {
         isHaunted = true;
+        wasHaunted = true;
         cam.SwitchTarget(this.gameObject);
     }
 
@@ -59,6 +66,27 @@ public class Dispenser : MonoBehaviour
         cam.SwitchTarget(player);
         player.SetActive(true);
         phantom.HideAll();
+    }
+
+    public void SaveState()
+    {
+        timeElapsed = Time.timeSinceLevelLoad - lastFiredTime; 
+        hasShot = Time.timeSinceLevelLoad > 3f;
+    }
+
+    public void RestoreState()
+    {
+        StopAllCoroutines();
+        StartCoroutine("RestartShooting",timeElapsed);
+    }
+
+    IEnumerator RestartShooting(float time)
+    {
+        yield return new WaitForSeconds(time);
+        if (hasShot) {
+        Shoot();
+        }
+        StartCoroutine("Timer");
     }
 
 }

@@ -4,7 +4,6 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Wall
   - Phantom
   - Lava
   - Ghost
@@ -13,8 +12,9 @@ TagManager:
   - Dispenser
   - HellGate
   - Arrow
-  - Ground
   - Demon
+  - Rewind
+  - Platform
   layers:
   - Default
   - TransparentFX
