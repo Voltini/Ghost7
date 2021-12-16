@@ -82,7 +82,6 @@ public class Dispenser : MonoBehaviour
 
     IEnumerator RestartShooting(float time)
     {
-        Debug.Log(time);
         yield return new WaitForSeconds(time);
         if (hasShot) {
         Shoot();

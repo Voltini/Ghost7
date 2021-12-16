@@ -11,6 +11,8 @@ public class Arrow : MonoBehaviour
     SoundManager soundManager;
     [HideInInspector] public Dispenser dispenser;
     Rewind rewindPlayer;
+    float distanceTraveled;
+    float periode = 3f;
 
     // Start is called before the first frame update
     void Start()
@@ -35,8 +37,11 @@ public class Arrow : MonoBehaviour
             player.rewindPlayer.shouldLoop = true;
             player.rewindPlayer.killedByArrow = true; 
             player.rewindPlayer.ResetRewind();
+            distanceTraveled = arrowId.velocity.magnitude * (Time.timeSinceLevelLoad % periode);
         }
-        Destroy(gameObject);
+        else {
+            Destroy(gameObject);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other) {
