@@ -52,6 +52,7 @@ public class Rewind : MonoBehaviour
     bool dispensersDefined = false;
     GameObject[] arrows;
     PlayerControl playerControl;
+    public GameObject arrowPrefab;
 
 
     void Start()
@@ -66,6 +67,10 @@ public class Rewind : MonoBehaviour
         time = timeFactor * (Time.timeSinceLevelLoad - deathTime);
         UpdatePosition();
         UpdateAnimation();
+    }
+
+    void OnEnable() {
+        StartCoroutine("TimelineSetBack");
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
@@ -83,9 +88,12 @@ public class Rewind : MonoBehaviour
 
     public void RewindDeath()
     {
-        rewindPositions = rewindPositions.GetRange(0, counter+1);
+        StopCoroutine("WaitAndStop");
+        Debug.Log("coroutine canceled");
+        rewindPositions = rewindPositions.GetRange(0, counter + 1);
         animationList = animationList.GetRange(0,animationCounter+1);
         length = counter;
+        Debug.Log(length);
         ResetRewind();
     }
 
@@ -101,49 +109,24 @@ public class Rewind : MonoBehaviour
 
     void UpdatePosition()
     {
-        if (counter < length - 2)
+        if (counter < length - 1)
         {
-            while (time >= rewindPositions[counter + 1].playerTime && (counter < length - 2))
+            while (time >= rewindPositions[counter].playerTime && (counter < length))
             {
-                counter++;
                 //l'idée de la boucle while là c'est d'éviter une désynchro si le framerate pendant la phase avant le décès est plus élevé qu'après le décès
                 //ça parait pas super important mais ce sera peut-etre utile quand il y aura des animations
                 //line.SetPosition(line.positionCount-1, rewindPositions[counter].playerPosition);
                 //listPositions.RemoveAt(0);
-                line.SetPositions(listPositions.GetRange(counter -1, line.positionCount - 1) .ToArray());
                 line.positionCount --;
+                line.SetPositions(listPositions.GetRange(counter, line.positionCount) .ToArray());
+                counter++;
+                Debug.Log(line.positionCount);
             }
             playerId.DOMove(rewindPositions[counter].playerPosition, Time.deltaTime);
             //DOMove c'est une fonction de DoTween qui est un asset (pas inclus de base dans Unity) qui permet d'avoir un déplacement lissé
         }
         else {
-            if (killedByBoulder) {
-                if (!culprit.wasHaunted) {
-                    shouldLoop = true;
-                    culprit.OnPlayerDeath();
-                }
-                else {
-                    shouldLoop = false;
-                    killedByBoulder = false;
-                }
-            }
-            else if (killedByArrow) {
-                Debug.Log("killed by arrow");
-                if (!dispenserCulprit.wasHaunted) {
-                    //shouldLoop = true;
-                    Debug.Log("was haunted");
-                }
-                else {
-                    shouldLoop = false;
-                    killedByBoulder = false;
-                }
-            }
-            if (shouldLoop) {
-                ResetRewind();
-            }
-            else {
-                StopRewind();
-            }
+            StartCoroutine("WaitAndStop");
         }
     }
     void UpdateAnimation()
@@ -189,7 +172,16 @@ public class Rewind : MonoBehaviour
         foreach (Dispenser dispenser in player.dispensers) {
             dispenser.RestoreState();
         }
+        foreach (PlayerControl.arrowData arrowData in player.arrowList) {
+            GameObject newArrow = Instantiate(arrowPrefab, arrowData.position, Quaternion.LookRotation(Vector3.forward, arrowData.direction)) as GameObject;
+            Rigidbody2D newArrowId = newArrow.GetComponent<Rigidbody2D>();
+            newArrowId.velocity = arrowData.direction;
+        }
         yield return null;
     }
 
+    IEnumerator WaitAndStop() {
+        yield return new WaitForSeconds(0.5f);
+        StopRewind();
+    }
 }

@@ -34,20 +34,10 @@ public class Arrow : MonoBehaviour
         {
             player.Death(); 
             player.rewindPlayer.dispenserCulprit = dispenser;
-            player.rewindPlayer.shouldLoop = true;
-            player.rewindPlayer.killedByArrow = true; 
-            player.rewindPlayer.ResetRewind();
+            //player.rewindPlayer.shouldLoop = true;
             distanceTraveled = arrowId.velocity.magnitude * (Time.timeSinceLevelLoad % periode);
         }
         else {
-            Destroy(gameObject);
-        }
-    }
-
-    void OnTriggerEnter2D(Collider2D other) {
-        if (other.CompareTag("Rewind")) {
-            rewindPlayer = other.GetComponent<Rewind>();
-            rewindPlayer.ResetRewind();
             Destroy(gameObject);
         }
     }

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Dispenser : MonoBehaviour
 {
-    Collider dispenserCollider;
     public float periode ;
     public Transform firepoint;
     public GameObject inventory;
@@ -21,9 +20,7 @@ public class Dispenser : MonoBehaviour
 
     void Start()
     {
-        dispenserCollider = GetComponent<Collider>();
         StartCoroutine("Timer");
-
     }
 
     void Update() 
@@ -71,7 +68,7 @@ public class Dispenser : MonoBehaviour
     public void SaveState()
     {
         timeElapsed = Time.timeSinceLevelLoad - lastFiredTime; 
-        hasShot = Time.timeSinceLevelLoad > 3f;
+        hasShot = Time.timeSinceLevelLoad > periode;
     }
 
     public void RestoreState()
@@ -84,7 +81,7 @@ public class Dispenser : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         if (hasShot) {
-        Shoot();
+            Shoot();
         }
         StartCoroutine("Timer");
     }

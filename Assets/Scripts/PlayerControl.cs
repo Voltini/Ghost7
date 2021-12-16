@@ -42,6 +42,19 @@ public class PlayerControl : MonoBehaviour
     bool bouldersDefined = false;
     [HideInInspector] public Dispenser[] dispensers;
     [HideInInspector] public float deathTime;
+    public struct arrowData
+    {
+        public Vector3 position;
+        public Vector3 direction;
+
+        public arrowData(Vector3 position, Vector3 direction)
+        {
+            this.position = position;
+            this.direction = direction;
+        }
+    }
+    public List<arrowData> arrowList;
+    List<GameObject> arrows;
 
 
     // Start is called before the first frame update
@@ -59,15 +72,19 @@ public class PlayerControl : MonoBehaviour
         if (!bouldersDefined)  {
             StartCoroutine("WaitAndGet");
         }
-        else {
-            
-        foreach (Boulder boulder in boulders) {
-            boulder.SaveState();
+        else {    
+            foreach (Boulder boulder in boulders) {
+                boulder.SaveState();
+            }
+            foreach (Dispenser dispenser in dispensers) {
+                dispenser.SaveState();
+            }     
+        arrows = GameObject.FindGameObjectsWithTag("Arrow").ToList();
+        arrowList = new List<arrowData>();
+        foreach(GameObject arrow in arrows) {
+            arrowList.Add(new arrowData(arrow.transform.position, arrow.GetComponent<Rigidbody2D>().velocity));
         }
-        foreach (Dispenser dispenser in dispensers) {
-            dispenser.SaveState();
-        }
-        }
+    }
     }
 
     IEnumerator WaitAndGet()

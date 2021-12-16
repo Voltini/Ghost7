@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    [HideInInspector] public AudioSource MusicSource;
+    AudioSource MusicSource;
     public List<AudioClip> musics;
     AudioClip lastPlayed;
     List<AudioClip> musicQueue;
-    //int queueIndex = 0;
+    int queueIndex = 0;
     int musicQuantity;
     public static SoundManager Instance = null;
-    //private bool isTimeStopped = false;
+    private bool isTimeStopped = false;
     float LowPitchRange = 0.9f;
     float HighPitchRange = 1.1f;
     AudioClip sfxClip;
@@ -41,25 +41,24 @@ public class SoundManager : MonoBehaviour
         MusicSource = GetComponent<AudioSource>();
         musicQuantity = musics.Count;
         musicQueue = musics;
-        //CreateQueue();
+        CreateQueue();
         audioIds = new List<clip>();
-        //ResumeTimeSpeed();
     }
 
 
     
-    // private void Update() 
-    // {
-    //     if(!MusicSource.isPlaying && !isTimeStopped) {        //no music
-    //         if (queueIndex + 1 == musicQuantity) {
-    //             CreateQueue();
-    //             queueIndex = 0;
-    //         }
-    //         PlayMusic(musicQueue[queueIndex]);
-    //         queueIndex ++;
-
-    //     }
-    // }
+    private void Update() 
+    {
+        if(!MusicSource.isPlaying && !isTimeStopped) {        //no music
+            if (queueIndex + 1 == musicQuantity) {
+                CreateQueue();
+                queueIndex = 0;
+            }
+            PlayMusic(musicQueue[queueIndex]);
+            queueIndex ++;
+        }
+    }
+    
 
     void PlayMusic(AudioClip music)
     {
@@ -78,38 +77,10 @@ public class SoundManager : MonoBehaviour
     private void Shuffle()
     {
         for (int i = 0; i < musics.Count; i++) {
-         AudioClip temp = musicQueue[i];
-         int randomIndex = Random.Range(i, musicQueue.Count);
-         musicQueue[i] = musicQueue[randomIndex];
-         musicQueue[randomIndex] = temp;
-        }
-    }
-
-    public void SlowTimeSpeed()
-    {
-        MusicSource.pitch = 0.9f;
-        if (audioIds.Count > 0) {
-            foreach (clip audioId in audioIds) {
-                if (audioId.audio != null) {
-                    if (audioId.audio.GetComponent<AudioSource>() != null) {
-                        audioId.audio.GetComponent<AudioSource>().pitch -= 0.3f;
-                    }
-                }
-            }
-        }
-    }
-
-    public void ResumeTimeSpeed()
-    {
-        MusicSource.pitch = 1f;
-        if (audioIds.Count > 0) {
-            foreach (clip audioId in audioIds) {
-                if (audioId.audio != null) {
-                    if (audioId.audio.GetComponent<AudioSource>() != null) {
-                        audioId.audio.GetComponent<AudioSource>().pitch += 0.3f;
-                    }
-                }
-            }
+            AudioClip temp = musicQueue[i];
+            int randomIndex = Random.Range(i, musicQueue.Count);
+            musicQueue[i] = musicQueue[randomIndex];
+            musicQueue[randomIndex] = temp;
         }
     }
 
@@ -150,11 +121,13 @@ public class SoundManager : MonoBehaviour
             case "playerDeath":
             sfxClip = playerDeath;
             volume = 0.7f;
+            StartCoroutine("VolumeDown", sfxClip.length);
             break;
             
             case "phantomDeath":
             sfxClip = phantomDeath;
             volume = 1f;
+            StartCoroutine("VolumeDown", sfxClip.length);
             break;
 
             case "haunted":
@@ -225,6 +198,13 @@ public class SoundManager : MonoBehaviour
         }
         audioIds.Remove(audioId);
         Destroy(audioId.audio);
+    }
+
+    IEnumerator VolumeDown(float time)
+    {
+        MusicSource.volume = 0.2f;
+        yield return new WaitForSeconds(time);
+        MusicSource.volume = 1f;
     }
 
 }

@@ -111,7 +111,7 @@ public class PhantomPlayer : MonoBehaviour
 
         if (!isSucked) {
             if (Input.GetKey(KeyCode.E)) {
-                RaycastHit2D hit = Physics2D.CircleCast(transform.position, 4f, Vector2.up, Mathf.Infinity,hauntableLayer);
+                RaycastHit2D hit = Physics2D.CircleCast(transform.position, 4f, Vector2.up, 0f,hauntableLayer);
                 if (hit) {
                     soundManager.PlaySfx(transform, "haunted");
                     if (hit.collider.CompareTag("Dispenser")) {

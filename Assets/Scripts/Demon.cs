@@ -32,7 +32,7 @@ public class Demon : MonoBehaviour
     
 
 
-    public enum mode {Line, Circle};
+    public enum mode {Line, Circle, Static};
 
     // Start is called before the first frame update
     void Start()
@@ -63,8 +63,11 @@ public class Demon : MonoBehaviour
             }
             StartCoroutine("LinearMotion");
         }
-        else {
+        else if (pathMode is mode.Circle) {
             StartCoroutine("CircularMotion");
+        }
+        else {
+            anim.SetBool("static", true);
         }
     }
     public void Show()
