@@ -37,7 +37,6 @@ public class Dispenser : MonoBehaviour
     }
 
     public void Shoot(){
-        Debug.Log(time);
         GameObject newArrow = Instantiate(inventory, firepoint.position, transform.rotation) as GameObject;
         Rigidbody2D newArrowId = newArrow.GetComponent<Rigidbody2D>();
         newArrowId.velocity = 25f * (firepoint.position - transform.position).normalized;

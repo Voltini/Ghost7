@@ -39,24 +39,8 @@ public class SoundManager : MonoBehaviour
     private void Awake()
     {
         MusicSource = GetComponent<AudioSource>();
-        musicQuantity = musics.Count;
-        musicQueue = musics;
-        CreateQueue();
         audioIds = new List<clip>();
-    }
-
-
-    
-    private void Update() 
-    {
-        if(!MusicSource.isPlaying && !isTimeStopped) {        //no music
-            if (queueIndex + 1 == musicQuantity) {
-                CreateQueue();
-                queueIndex = 0;
-            }
-            PlayMusic(musicQueue[queueIndex]);
-            queueIndex ++;
-        }
+        PlayMusic(musics[0]);
     }
     
 
@@ -64,24 +48,6 @@ public class SoundManager : MonoBehaviour
     {
        MusicSource.clip = music;
        MusicSource.Play();
-       lastPlayed = music;
-    }
-
-    void CreateQueue()
-    {
-        do {
-            Shuffle();
-        } while (musicQueue[0] == lastPlayed);
-    }
-
-    private void Shuffle()
-    {
-        for (int i = 0; i < musics.Count; i++) {
-            AudioClip temp = musicQueue[i];
-            int randomIndex = Random.Range(i, musicQueue.Count);
-            musicQueue[i] = musicQueue[randomIndex];
-            musicQueue[randomIndex] = temp;
-        }
     }
 
     public void StopTime()

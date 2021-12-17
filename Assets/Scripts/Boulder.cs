@@ -60,12 +60,12 @@ public class Boulder : MonoBehaviour
         if (other.gameObject.TryGetComponent<PlayerControl>(out PlayerControl player))
         {   
             if (velocity > 2){
-                Vector2 direction = other.transform.position - transform.position;
-                Quaternion angle = Quaternion.LookRotation(Vector3.forward, direction);
-                Debug.Log(angle);
-                Debug.Log(Mathf.Abs(Quaternion.LookRotation(Vector3.forward, objectId.velocity).eulerAngles.z));
-                if (Mathf.DeltaAngle(Quaternion.LookRotation(Vector3.forward, objectId.velocity).eulerAngles.z,angle.eulerAngles.z) <= 80) {
-                    player.Death();
+                if (!TryGetComponent<SpringJoint2D>(out SpringJoint2D joint) || !joint.enabled) {
+                    Vector2 direction = other.gameObject.transform.position - transform.position;
+                    Quaternion angle = Quaternion.LookRotation(Vector3.forward, direction);
+                    if (Mathf.DeltaAngle(Quaternion.LookRotation(Vector3.forward, objectId.velocity).eulerAngles.z,angle.eulerAngles.z) <= 45f) {
+                        player.Death();
+                    }
                 }
             }
         }
@@ -99,12 +99,13 @@ public class Boulder : MonoBehaviour
             }
         }
         else if (other.CompareTag("Rewind")) {
-            Debug.Log(";)");
             if (velocity > 1){
-                Vector2 direction = other.gameObject.transform.position - transform.position;
-                Quaternion angle = Quaternion.LookRotation(Vector3.forward, direction);
-                if (Mathf.Abs(Quaternion.LookRotation(Vector3.forward, objectId.velocity).eulerAngles.z - angle.eulerAngles.z) <= 45f) {
-                    rewindPlayer.RewindDeath();
+                if (!TryGetComponent<SpringJoint2D>(out SpringJoint2D joint) || !joint.enabled) {
+                    Vector2 direction = other.gameObject.transform.position - transform.position;
+                    Quaternion angle = Quaternion.LookRotation(Vector3.forward, direction);
+                    if (Mathf.DeltaAngle(Quaternion.LookRotation(Vector3.forward, objectId.velocity).eulerAngles.z,angle.eulerAngles.z) <= 45f) {
+                        rewindPlayer.RewindDeath();
+                    }
                 }
             }
         }  

@@ -37,8 +37,6 @@ public class endPlayer : MonoBehaviour
     public SoundManager soundManager;
     Animator anim;
     bool isJumping = false;
-    string previousState = " ";
-    string currentState;
     public bool isSucked;
     Vector2 massCenter;
     Vector2 distance;

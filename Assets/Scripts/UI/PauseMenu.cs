@@ -28,7 +28,7 @@ public class PauseMenu : MonoBehaviour
 
     void Pause()
     {
-        //soundManager.StopTime();
+        soundManager.StopTime();
         pauseMenuUI.SetActive(true);
         prevTimeScale = Time.timeScale;
         Time.timeScale = 0f;
@@ -41,7 +41,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(false);
         Time.timeScale = prevTimeScale;
         isGamePaused = false;
-        //soundManager.ResumeTime();
+        soundManager.ResumeTime();
         player.enabled = true;
     }
 

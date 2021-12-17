@@ -52,7 +52,6 @@ public class Rewind : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("nombre de points en mémoire : " + length);   //j'ai laisé ça provisoirement pour checker si ça risquait pas d'avoir un impact sur les performances
         playerId = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();  
     }
@@ -84,11 +83,9 @@ public class Rewind : MonoBehaviour
     public void RewindDeath()
     {
         StopCoroutine("WaitAndStop");
-        Debug.Log("coroutine canceled");
         rewindPositions = rewindPositions.GetRange(0, counter+1);
         animationList = animationList.GetRange(0,animationCounter+1);
         length = counter + 1;
-        Debug.Log(length);
         ResetRewind();
     }
 
