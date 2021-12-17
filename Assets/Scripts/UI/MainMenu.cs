@@ -13,7 +13,8 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         StartCoroutine("FadeIn");
-        if (SceneManager.GetActiveScene() == SceneManager .GetSceneByName("Main Menu")) {
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Main Menu"))
+        {
             GetComponent<AudioSource>().Play();
         }
     }
@@ -98,7 +99,7 @@ public class MainMenu : MonoBehaviour
             image.color = Color.Lerp(new Color(0, 0, 0, 0), Color.black, 0.01f * i);
             yield return new WaitForSeconds(0.001f);
         }
-        SceneManager.LoadScene("Ending 2");
+        SceneManager.LoadScene("CreditsPt");
     }
 
     public void Yes()
