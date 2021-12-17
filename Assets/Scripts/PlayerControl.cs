@@ -12,7 +12,7 @@ public class PlayerControl : MonoBehaviour
     Rigidbody2D playerId;
     Collider2D playerCollider;
     public ParticleSystem playerExplosion;
-    public float runSpeed;
+    float runSpeed = 1f;
     public ContactFilter2D contactFilter;
     public ContactFilter2D contactWallRight;
     public ContactFilter2D contactWallLeft;
