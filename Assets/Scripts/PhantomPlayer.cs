@@ -38,7 +38,6 @@ public class PhantomPlayer : MonoBehaviour
     }
 
     void OnEnable() {
-        Debug.Log("enabled");
         postProcessing.profile = phantomProfile;
         if (!demonsDefined) {
             demons = FindObjectsOfType<Demon>();

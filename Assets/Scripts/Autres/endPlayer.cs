@@ -37,8 +37,6 @@ public class endPlayer : MonoBehaviour
     public SoundManager soundManager;
     Animator anim;
     bool isJumping = false;
-    string previousState = " ";
-    string currentState;
     public bool isSucked;
     Vector2 massCenter;
     Vector2 distance;
@@ -52,8 +50,6 @@ public class endPlayer : MonoBehaviour
         playerId = GetComponent<Rigidbody2D>();
         playerCollider = GetComponent<Collider2D>();
         anim = GetComponent<Animator>();
-        rewindPlayer.rewindPositions = new List<Rewind.rewindData>();
-        rewindPlayer.animationList = new List<Rewind.animationData>();
         cam.SwitchTarget(this.gameObject);
     }
 
@@ -62,16 +58,6 @@ public class endPlayer : MonoBehaviour
     {
         if (!isSucked) {
             playerPos = playerId.transform.position;
-            if (playerPos != previousPosition)
-            {
-                rewindPlayer.rewindPositions.Add(new Rewind.rewindData(Time.timeSinceLevelLoad - reactivatedTime, playerPos));
-                //en gros on stocke les valeurs de position que lorsqu'elles sont différentes des précédentes et on utilise un time stamp 
-                //pour s'assurer que le rewind a la meme vitesse que le joueur indépendamment du framerate
-                line.positionCount = i + 1;
-                line.SetPosition(i, playerId.transform.position);
-                i++;
-            }
-            previousPosition = playerPos;
 
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {      //Courir
@@ -84,10 +70,6 @@ public class endPlayer : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.UpArrow))
             {      //D'ailleurs j'ai mis provisoirement R comme touche pour reload la scène
                 Jump();
-            }
-            if (Input.GetKeyDown(KeyCode.A))
-            {      //A pour mourir (pratique pour tester le rewind)
-                Death();
             }
 
             movementx = Input.GetAxis("Horizontal");
@@ -256,14 +238,6 @@ public class endPlayer : MonoBehaviour
         rewindPlayer.rewindPositions = new List<Rewind.rewindData>();
     }
 
-    void LateUpdate() {
-        currentState = anim.GetCurrentAnimatorClipInfo(0)[0].clip.name;
-        if (currentState != previousState) {
-            rewindPlayer.animationList.Add(new Rewind.animationData(Time.timeSinceLevelLoad - reactivatedTime, currentState));
-            previousState = currentState;
-        }
-    }
-
     void End()
     {
         Debug.Log("the end");
@@ -283,6 +257,7 @@ public class endPlayer : MonoBehaviour
             image.color = Color.Lerp(Color.white,Color.black, 0.01f*i);
             yield return new WaitForSeconds(0.0025f);
         }
+        DontDestroyOnLoad(soundManager.gameObject);
         SceneManager.LoadScene("Credits");
 
     }

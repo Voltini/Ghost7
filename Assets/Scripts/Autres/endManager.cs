@@ -40,6 +40,7 @@ public class endManager : MonoBehaviour
             image.color = Color.Lerp(new Color(0,0,0, 0), Color.black, 0.005f*i);
             yield return new WaitForSeconds(0.003f);
         }
+        Destroy(GameObject.FindGameObjectWithTag("soundManager"));
         SceneManager.LoadScene("Main Menu");
     }
 }
