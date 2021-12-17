@@ -13,6 +13,9 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         StartCoroutine("FadeIn");
+        if (SceneManager.GetActiveScene() == SceneManager .GetSceneByName("Main Menu")) {
+            GetComponent<AudioSource>().Play();
+        }
     }
 
     public void Play()
