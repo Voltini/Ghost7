@@ -9,7 +9,7 @@ public class Exit : MonoBehaviour
     public GameObject winScreen;
     public GameObject pauseMenu;
     public Image blackscreen;
-    int nbLevels = 5;
+    int nbLevels = 6;
 
     void OnTriggerEnter2D(Collider2D other) 
     {

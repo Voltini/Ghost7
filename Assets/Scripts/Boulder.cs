@@ -59,10 +59,12 @@ public class Boulder : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent<PlayerControl>(out PlayerControl player))
         {   
-            if (velocity > 1){
+            if (velocity > 2){
                 Vector2 direction = other.transform.position - transform.position;
                 Quaternion angle = Quaternion.LookRotation(Vector3.forward, direction);
-                if (Mathf.Abs(Quaternion.LookRotation(Vector3.forward, objectId.velocity).eulerAngles.z - angle.eulerAngles.z) <= 45f) {
+                Debug.Log(angle);
+                Debug.Log(Mathf.Abs(Quaternion.LookRotation(Vector3.forward, objectId.velocity).eulerAngles.z));
+                if (Mathf.DeltaAngle(Quaternion.LookRotation(Vector3.forward, objectId.velocity).eulerAngles.z,angle.eulerAngles.z) <= 80) {
                     player.Death();
                 }
             }
@@ -148,7 +150,7 @@ public class Boulder : MonoBehaviour
     {
         if (!wasHaunted) {
             transform.position = initPos;
-            objectId.velocity = Vector2.zero;
+            objectId.velocity = checkpointVelocity;
         }
     }
     

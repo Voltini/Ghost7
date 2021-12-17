@@ -785,7 +785,7 @@ PrefabInstance:
     - target: {fileID: 7499787960249993988, guid: 27dbd24bd48b2854a881dee69bed4eee, type: 3}
       propertyPath: musics.Array.data[0]
       value: 
-      objectReference: {fileID: 8300000, guid: 8cbf5c3d23ade8246afb2be1af9355a1, type: 3}
+      objectReference: {fileID: 8300000, guid: ee80cf4764d7ab0449018bec680671a5, type: 3}
     - target: {fileID: 7499787960249993989, guid: 27dbd24bd48b2854a881dee69bed4eee, type: 3}
       propertyPath: m_Name
       value: SoundManager
