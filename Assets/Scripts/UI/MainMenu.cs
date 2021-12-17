@@ -9,12 +9,21 @@ public class MainMenu : MonoBehaviour
 {
 
     public Image blackscreen;
+    public GameObject ConfirmWindow;
 
     void Start()
     {
         StartCoroutine("FadeIn");
         if (SceneManager.GetActiveScene() == SceneManager .GetSceneByName("Main Menu")) {
             GetComponent<AudioSource>().Play();
+        }
+    }
+
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (SceneManager.GetActiveScene() == SceneManager .GetSceneByName("Main Menu")) {
+                ConfirmWindow.SetActive(true);
+        }
         }
     }
 
