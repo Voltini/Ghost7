@@ -353,23 +353,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    Thanks for playing !'
+  m_text: Thanks for playing !
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7fbde19df190e424e803b29719d860bb, type: 2}
   m_sharedMaterial: {fileID: -6135187374360672143, guid: 7fbde19df190e424e803b29719d860bb, type: 2}
@@ -462,7 +446,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00000012293, y: -10}
+  m_AnchoredPosition: {x: -4.576e-12, y: -8.33}
   m_SizeDelta: {x: 19.2, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1253919610
@@ -606,19 +590,19 @@ MonoBehaviour:
     Graphic Design, Storyline, Sound Design and the rest by :
 
 
-    Alexendre Rongier
+    Alexandre Rongier
 
     Aymane
     Kssim
 
-    Gabriel Rochaix-Yamamoto
+    Gabriel Rochaix--Yamamoto
 
     Xavier Clavel
 
 
 
     Special Thanks
-    to N7, 7fault, and the SHS department.
+    to N7, 7Fault, and the SHS department.
 
 
 '
