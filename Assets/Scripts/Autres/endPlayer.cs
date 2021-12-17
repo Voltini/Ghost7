@@ -259,6 +259,7 @@ public class endPlayer : MonoBehaviour
             image.color = Color.Lerp(Color.white,Color.black, 0.01f*i);
             yield return new WaitForSeconds(0.0025f);
         }
+        DontDestroyOnLoad(soundManager.gameObject);
         SceneManager.LoadScene("Credits");
 
     }
