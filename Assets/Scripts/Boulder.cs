@@ -60,7 +60,11 @@ public class Boulder : MonoBehaviour
         if (other.gameObject.TryGetComponent<PlayerControl>(out PlayerControl player))
         {   
             if (velocity > 1){
-                player.Death();
+                Vector2 direction = other.transform.position - transform.position;
+                Quaternion angle = Quaternion.LookRotation(Vector3.forward, direction);
+                if (Mathf.Abs(Quaternion.LookRotation(Vector3.forward, objectId.velocity).eulerAngles.z - angle.eulerAngles.z) <= 45f) {
+                    player.Death();
+                }
             }
         }
         else if (other.gameObject.CompareTag("Platform")) {
@@ -95,7 +99,11 @@ public class Boulder : MonoBehaviour
         else if (other.CompareTag("Rewind")) {
             Debug.Log(";)");
             if (velocity > 1){
-                rewindPlayer.RewindDeath();
+                Vector2 direction = other.gameObject.transform.position - transform.position;
+                Quaternion angle = Quaternion.LookRotation(Vector3.forward, direction);
+                if (Mathf.Abs(Quaternion.LookRotation(Vector3.forward, objectId.velocity).eulerAngles.z - angle.eulerAngles.z) <= 45f) {
+                    rewindPlayer.RewindDeath();
+                }
             }
         }  
     }

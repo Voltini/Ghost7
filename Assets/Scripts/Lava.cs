@@ -22,7 +22,6 @@ public class Lava : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        lavaSplash = Instantiate(lavaSplash);
         var shape = lavaSplash.shape;
         if (other.TryGetComponent<CircleCollider2D>(out CircleCollider2D circle)) {
             shape.radius = 7 * circle.radius;
