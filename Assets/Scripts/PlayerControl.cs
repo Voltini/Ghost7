@@ -45,12 +45,14 @@ public class PlayerControl : MonoBehaviour
     public struct arrowData
     {
         public Vector3 position;
-        public Vector3 direction;
+        public Vector3 velocity;
+        public Quaternion rotation;
 
-        public arrowData(Vector3 position, Vector3 direction)
+        public arrowData(Vector3 position, Vector3 velocity, Quaternion rotation)
         {
             this.position = position;
-            this.direction = direction;
+            this.velocity = velocity;
+            this.rotation = rotation;
         }
     }
     public List<arrowData> arrowList;
@@ -69,6 +71,7 @@ public class PlayerControl : MonoBehaviour
     }
 
     private void OnEnable() {
+        phantomPlayer.gameObject.SetActive(false);
         if (!bouldersDefined)  {
             StartCoroutine("WaitAndGet");
         }
@@ -82,7 +85,7 @@ public class PlayerControl : MonoBehaviour
         arrows = GameObject.FindGameObjectsWithTag("Arrow").ToList();
         arrowList = new List<arrowData>();
         foreach(GameObject arrow in arrows) {
-            arrowList.Add(new arrowData(arrow.transform.position, arrow.GetComponent<Rigidbody2D>().velocity));
+            arrowList.Add(new arrowData(arrow.transform.position, arrow.GetComponent<Rigidbody2D>().velocity, arrow.transform.rotation));
         }
         rewindPlayer.arrowList = arrowList;
     }
@@ -103,7 +106,7 @@ public class PlayerControl : MonoBehaviour
         arrows = GameObject.FindGameObjectsWithTag("Arrow").ToList();
         arrowList = new List<arrowData>();
         foreach(GameObject arrow in arrows) {
-            arrowList.Add(new arrowData(arrow.transform.position, arrow.GetComponent<Rigidbody2D>().velocity));
+            arrowList.Add(new arrowData(arrow.transform.position, arrow.GetComponent<Rigidbody2D>().velocity, arrow.transform.rotation));
         }
         rewindPlayer.arrowList = arrowList;
     }
@@ -278,12 +281,7 @@ public class PlayerControl : MonoBehaviour
         rewindPlayer.gameObject.SetActive(true);
         rewindPlayer.line.positionCount = line.positionCount;
         cam.SwitchTarget(phantomPlayer);      //pour que la caméra switch de cible (temporaire mais c'est pratique pour regarder ce qu'il se passe)
-        foreach(Boulder boulder in boulders) {
-            boulder.OnPlayerDeath();
-        }
-        foreach (Dispenser dispenser in dispensers) {
-            dispenser.RestoreState();
-        }
+        rewindPlayer.StartCoroutine("TimelineSetBack");
         gameObject.SetActive(false);    //décès du joueur
     }
 

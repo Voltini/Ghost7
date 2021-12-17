@@ -10,15 +10,18 @@ public class Dispenser : MonoBehaviour
     public bool isHaunted = false;
     public CameraControl cam;
     public PhantomPlayer phantom;
+    public PlayerControl player;
     [HideInInspector] public bool wasHaunted = false;
     float lastFiredTime;
     float timeElapsed;  //time to wait before shooting
     bool hasShot;
+    float time => Time.timeSinceLevelLoad - player.rewindPlayer.deathTime;
     
 
 
     void Start()
     {
+        lastFiredTime = time;
         StartCoroutine("Timer");
     }
 
@@ -35,11 +38,12 @@ public class Dispenser : MonoBehaviour
     }
 
     public void Shoot(){
+        Debug.Log(time);
         GameObject newArrow = Instantiate(inventory, firepoint.position, transform.rotation) as GameObject;
         Rigidbody2D newArrowId = newArrow.GetComponent<Rigidbody2D>();
         newArrowId.velocity = 25f * (firepoint.position - transform.position).normalized;
         newArrow.GetComponent<Arrow>().dispenser = this;
-        lastFiredTime = Time.timeSinceLevelLoad;
+        lastFiredTime = time;
     }
 
     IEnumerator Timer()
@@ -66,8 +70,9 @@ public class Dispenser : MonoBehaviour
 
     public void SaveState()
     {
-        timeElapsed = Time.timeSinceLevelLoad - lastFiredTime; 
+        timeElapsed = time - lastFiredTime; 
         hasShot = Time.timeSinceLevelLoad > periode;
+        Debug.Log("time elapsed : " + timeElapsed);
     }
 
     public void RestoreState()

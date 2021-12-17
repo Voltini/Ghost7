@@ -61,8 +61,6 @@ public class Boulder : MonoBehaviour
         {   
             if (velocity > 1){
                 player.Death();
-                rewindPlayer.killedByBoulder = true;
-                rewindPlayer.culprit = this;
             }
         }
         else if (other.gameObject.CompareTag("Platform")) {
@@ -93,7 +91,13 @@ public class Boulder : MonoBehaviour
                 isHaunted = false;
                 objectId.constraints = freezeConstraints;
             }
-        }        
+        }
+        else if (other.CompareTag("Rewind")) {
+            Debug.Log(";)");
+            if (velocity > 1){
+                rewindPlayer.RewindDeath();
+            }
+        }  
     }
 
     public void Haunt()
@@ -137,7 +141,6 @@ public class Boulder : MonoBehaviour
         if (!wasHaunted) {
             transform.position = initPos;
             objectId.velocity = Vector2.zero;
-            Debug.Log("position reset");
         }
     }
     

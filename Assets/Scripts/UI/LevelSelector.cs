@@ -15,7 +15,7 @@ public class LevelSelector : MonoBehaviour
     
     void Start() {
         if (!PlayerPrefs.HasKey("levelReached")) {
-            PlayerPrefs.SetInt("levelReached", 1);
+            PlayerPrefs.SetInt("levelReached", 0);
         }
         UpdateData();
     }

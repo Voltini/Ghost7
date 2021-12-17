@@ -44,14 +44,7 @@ public class Rewind : MonoBehaviour
     [HideInInspector] public bool shouldLoop = false;
     [HideInInspector] public List<Vector3> listPositions;
     Animator anim;
-    [HideInInspector] public bool killedByBoulder = false;
-    [HideInInspector] public Boulder culprit;
-    [HideInInspector] public bool killedByArrow = false;
-    [HideInInspector] public Dispenser dispenserCulprit;
-    Dispenser[] dispensers;
-    bool dispensersDefined = false;
     GameObject[] arrows;
-    PlayerControl playerControl;
     public GameObject arrowPrefab;
     public List<PlayerControl.arrowData> arrowList;
     [HideInInspector] public bool deathBylava;
@@ -82,11 +75,7 @@ public class Rewind : MonoBehaviour
         }
         if (other.TryGetComponent<Boulder>(out Boulder boulder)) {
             deathBylava = false;
-            if (!boulder.wasHaunted) {
-                other.gameObject.layer = LayerMask.NameToLayer("Haunted");
-                RewindDeath();
-            }
-            else {
+            if (boulder.wasHaunted) {
                 StopRewind();
             }
         }
@@ -96,8 +85,8 @@ public class Rewind : MonoBehaviour
     {
         StopCoroutine("WaitAndStop");
         Debug.Log("coroutine canceled");
-        rewindPositions = rewindPositions.GetRange(0, counter);
-        //animationList = animationList.GetRange(0,animationCounter+1);
+        rewindPositions = rewindPositions.GetRange(0, counter+1);
+        animationList = animationList.GetRange(0,animationCounter+1);
         length = counter + 1;
         Debug.Log(length);
         ResetRewind();
@@ -125,9 +114,9 @@ public class Rewind : MonoBehaviour
                 //listPositions.RemoveAt(0);
                 line.positionCount --;
                 line.SetPositions(listPositions.GetRange(counter, line.positionCount) .ToArray());
+                playerId.DOMove(rewindPositions[counter].playerPosition, Time.deltaTime);
                 counter++;
             }
-            playerId.DOMove(rewindPositions[counter].playerPosition, Time.deltaTime);
             //DOMove c'est une fonction de DoTween qui est un asset (pas inclus de base dans Unity) qui permet d'avoir un déplacement lissé
         }
         else {
@@ -183,13 +172,11 @@ public class Rewind : MonoBehaviour
         foreach (Dispenser dispenser in player.dispensers) {
             dispenser.RestoreState();
         }
-        //if (arrowList.Count > 0) {
         foreach (PlayerControl.arrowData arrowData in arrowList) {
-            GameObject newArrow = Instantiate(arrowPrefab, arrowData.position, Quaternion.LookRotation(Vector3.forward, arrowData.direction)) as GameObject;
+            GameObject newArrow = Instantiate(arrowPrefab, arrowData.position, arrowData.rotation) as GameObject;
             Rigidbody2D newArrowId = newArrow.GetComponent<Rigidbody2D>();
-            newArrowId.velocity = arrowData.direction;
+            newArrowId.velocity = arrowData.velocity;
         }
-        //}
         yield return null;
     }
 

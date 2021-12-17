@@ -52,7 +52,6 @@ public class MainMenu : MonoBehaviour
         {
             SceneManager.LoadScene("Intro Cutscene");
         }
-        SceneManager.LoadScene("Level 1");
     }
 
     IEnumerator QuitC()
@@ -97,6 +96,12 @@ public class MainMenu : MonoBehaviour
             yield return new WaitForSeconds(0.001f);
         }
         SceneManager.LoadScene("Ending 2");
+    }
+
+    public void Yes()
+    {
+        PlayerPrefs.SetInt("levelReached", 1);
+        Play();
     }
 
 }
