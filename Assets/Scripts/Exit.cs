@@ -14,7 +14,7 @@ public class Exit : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other) 
     {
         if (other.tag == "Player") {
-            Debug.Log("win");
+            other.GetComponent<PlayerControl>().levelWon = true;
             pauseMenu.gameObject.SetActive(false);
             Win();
             other.gameObject.SetActive(false);

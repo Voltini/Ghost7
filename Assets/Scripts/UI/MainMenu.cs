@@ -58,6 +58,7 @@ public class MainMenu : MonoBehaviour
             yield return new WaitForSeconds(0.001f);
         }
         int currentLevel = PlayerPrefs.GetInt("levelReached", 0);
+        Debug.Log(currentLevel);
         if (currentLevel != 0)
         {
             SceneManager.LoadScene("Level " + currentLevel);

@@ -868,6 +868,7 @@ GameObject:
   - component: {fileID: 483946338}
   - component: {fileID: 483946337}
   - component: {fileID: 483946336}
+  - component: {fileID: 483946339}
   m_Layer: 5
   m_Name: Yes
   m_TagString: Untagged
@@ -989,6 +990,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 483946334}
   m_CullTransparentMesh: 1
+--- !u!95 &483946339
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 483946334}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bd16e062f0f18aa49938b56069058571, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &487492603
 GameObject:
   m_ObjectHideFlags: 0
@@ -2062,6 +2082,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb524dac1ac722c4c8d8b63d3e0dcf51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelSelector: {fileID: 1955573618}
 --- !u!114 &798211566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4191,8 +4212,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Yes
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7fbde19df190e424e803b29719d860bb, type: 2}
+  m_sharedMaterial: {fileID: -6135187374360672143, guid: 7fbde19df190e424e803b29719d860bb, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4222,7 +4243,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -4700,8 +4721,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: No
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7fbde19df190e424e803b29719d860bb, type: 2}
+  m_sharedMaterial: {fileID: -6135187374360672143, guid: 7fbde19df190e424e803b29719d860bb, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4731,7 +4752,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535

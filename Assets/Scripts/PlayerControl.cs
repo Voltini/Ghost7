@@ -61,6 +61,7 @@ public class PlayerControl : MonoBehaviour
     List<GameObject> arrows;
     Demon[] demons;
     public GameObject ShowOnPhantomMode;
+    public bool levelWon = false;
 
 
     // Start is called before the first frame update
@@ -101,9 +102,11 @@ public class PlayerControl : MonoBehaviour
     }
 
     private void OnDisable() {
-        ShowOnPhantomMode.SetActive(true);
-        foreach(Demon demon in demons) {
-            demon.Show();
+        if (!levelWon) {
+            ShowOnPhantomMode.SetActive(true);
+            foreach(Demon demon in demons) {
+                demon.Show();
+            }
         }
     }
 
