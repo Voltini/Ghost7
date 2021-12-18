@@ -72,12 +72,6 @@ public class Rewind : MonoBehaviour
             deathBylava = false;
             RewindDeath();
         }
-        if (other.TryGetComponent<Boulder>(out Boulder boulder)) {
-            deathBylava = false;
-            if (boulder.wasHaunted) {
-                StopRewind();
-            }
-        }
     }
 
     public void RewindDeath()
@@ -135,7 +129,7 @@ public class Rewind : MonoBehaviour
         }
     }
 
-    void StopRewind()
+    public void StopRewind()
     {
         if (phantom.activeSelf) {
             phantom.GetComponent<PhantomPlayer>().HideAll();

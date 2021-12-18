@@ -59,7 +59,7 @@ public class Boulder : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent<PlayerControl>(out PlayerControl player))
         {   
-            if (velocity > 2){
+            if (velocity > 1){
                 if (!TryGetComponent<SpringJoint2D>(out SpringJoint2D joint) || !joint.enabled) {
                     Vector2 direction = other.gameObject.transform.position - transform.position;
                     Quaternion angle = Quaternion.LookRotation(Vector3.forward, direction);
@@ -99,6 +99,7 @@ public class Boulder : MonoBehaviour
             }
         }
         else if (other.CompareTag("Rewind")) {
+            rewindPlayer.deathBylava = false;
             if (velocity > 1){
                 if (!TryGetComponent<SpringJoint2D>(out SpringJoint2D joint) || !joint.enabled) {
                     Vector2 direction = other.gameObject.transform.position - transform.position;
@@ -107,6 +108,10 @@ public class Boulder : MonoBehaviour
                         rewindPlayer.RewindDeath();
                     }
                 }
+            }
+            else {
+                rewindPlayer.StopRewind();
+                gameObject.layer = LayerMask.NameToLayer("Haunted");
             }
         }  
     }
