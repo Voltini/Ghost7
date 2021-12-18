@@ -132,7 +132,6 @@ public class Rewind : MonoBehaviour
     public void StopRewind()
     {
         if (phantom.activeSelf) {
-            phantom.GetComponent<PhantomPlayer>().HideAll();
             phantom.SetActive(false);
         }
         else {
@@ -154,15 +153,19 @@ public class Rewind : MonoBehaviour
     {
         arrows = GameObject.FindGameObjectsWithTag("Arrow"); 
         foreach(GameObject arrow in arrows) {
-            if (!arrow.GetComponent<Arrow>().dispenser.isHaunted)
-            Destroy(arrow);
+            if (!arrow.GetComponent<Arrow>().dispenser.isHaunted) {
+                Destroy(arrow);
+            }
         }
+        Debug.Log(2);
         foreach (Boulder boulder in player.boulders) {
             boulder.OnPlayerDeath();
         }
+        Debug.Log(3);
         foreach (Dispenser dispenser in player.dispensers) {
             dispenser.RestoreState();
         }
+        Debug.Log(4);
         foreach (PlayerControl.arrowData arrowData in arrowList) {
             GameObject newArrow = Instantiate(arrowPrefab, arrowData.position, arrowData.rotation) as GameObject;
             Rigidbody2D newArrowId = newArrow.GetComponent<Rigidbody2D>();

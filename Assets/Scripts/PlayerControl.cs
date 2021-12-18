@@ -47,16 +47,20 @@ public class PlayerControl : MonoBehaviour
         public Vector3 position;
         public Vector3 velocity;
         public Quaternion rotation;
+        public Dispenser dispenser;
 
-        public arrowData(Vector3 position, Vector3 velocity, Quaternion rotation)
+        public arrowData(Vector3 position, Vector3 velocity, Quaternion rotation, Dispenser dispenser)
         {
             this.position = position;
             this.velocity = velocity;
             this.rotation = rotation;
+            this.dispenser = dispenser;
         }
     }
     public List<arrowData> arrowList;
     List<GameObject> arrows;
+    Demon[] demons;
+    public GameObject ShowOnPhantomMode;
 
 
     // Start is called before the first frame update
@@ -85,10 +89,22 @@ public class PlayerControl : MonoBehaviour
         arrows = GameObject.FindGameObjectsWithTag("Arrow").ToList();
         arrowList = new List<arrowData>();
         foreach(GameObject arrow in arrows) {
-            arrowList.Add(new arrowData(arrow.transform.position, arrow.GetComponent<Rigidbody2D>().velocity, arrow.transform.rotation));
+            arrowList.Add(new arrowData(arrow.transform.position, arrow.GetComponent<Rigidbody2D>().velocity, arrow.transform.rotation, arrow.GetComponent<Arrow>().dispenser));
         }
         rewindPlayer.arrowList = arrowList;
+        
+        ShowOnPhantomMode.SetActive(false);
+        foreach(Demon demon in demons) {
+            demon.Hide();
+        }
     }
+    }
+
+    private void OnDisable() {
+        ShowOnPhantomMode.SetActive(true);
+        foreach(Demon demon in demons) {
+            demon.Show();
+        }
     }
 
     IEnumerator WaitAndGet()
@@ -96,6 +112,7 @@ public class PlayerControl : MonoBehaviour
         yield return new WaitForEndOfFrame();
         boulders = FindObjectsOfType<Boulder>();
         dispensers = FindObjectsOfType<Dispenser>();
+        demons = FindObjectsOfType<Demon>();
         bouldersDefined = true;
         foreach (Boulder boulder in boulders) {
             boulder.SaveState();
@@ -106,7 +123,7 @@ public class PlayerControl : MonoBehaviour
         arrows = GameObject.FindGameObjectsWithTag("Arrow").ToList();
         arrowList = new List<arrowData>();
         foreach(GameObject arrow in arrows) {
-            arrowList.Add(new arrowData(arrow.transform.position, arrow.GetComponent<Rigidbody2D>().velocity, arrow.transform.rotation));
+            arrowList.Add(new arrowData(arrow.transform.position, arrow.GetComponent<Rigidbody2D>().velocity, arrow.transform.rotation, arrow.GetComponent<Arrow>().dispenser));
         }
         rewindPlayer.arrowList = arrowList;
     }
@@ -281,7 +298,7 @@ public class PlayerControl : MonoBehaviour
         rewindPlayer.gameObject.SetActive(true);
         rewindPlayer.line.positionCount = line.positionCount;
         cam.SwitchTarget(phantomPlayer);      //pour que la caméra switch de cible (temporaire mais c'est pratique pour regarder ce qu'il se passe)
-        rewindPlayer.StartCoroutine("TimelineSetBack");
+        rewindPlayer.ResetRewind();
         gameObject.SetActive(false);    //décès du joueur
     }
 

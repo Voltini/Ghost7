@@ -12,8 +12,8 @@ public class LevelSelector : MonoBehaviour
     int LevelReached;
     public Color lockedColor;
     public Image blackscreen;
-    void OnEnable()
-    {
+    
+    void Start() {
         if (!PlayerPrefs.HasKey("levelReached")) {
             PlayerPrefs.SetInt("levelReached", 0);
         }
@@ -26,7 +26,6 @@ public class LevelSelector : MonoBehaviour
     }
     public void UpdateData()
     {
-        Debug.Log(PlayerPrefs.GetInt("levelReached"));
         LevelReached = PlayerPrefs.GetInt("levelReached", 1);
         for (int i = LevelReached; i < levelButtons.Length; i++) {
             levelButtons[i].interactable = false;

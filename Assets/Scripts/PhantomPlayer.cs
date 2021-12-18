@@ -20,10 +20,6 @@ public class PhantomPlayer : MonoBehaviour
     [HideInInspector] public Vector3 startPos;
     public Rewind rewindPlayer;
     public SoundManager soundManager;
-    Demon[] demons;
-    bool demonsDefined = false;
-    bool isHaunting = false;
-    public GameObject ShowOnPhantomMode;
     public Volume postProcessing;
     public VolumeProfile playerProfile;
     public VolumeProfile phantomProfile;
@@ -39,31 +35,12 @@ public class PhantomPlayer : MonoBehaviour
 
     void OnEnable() {
         postProcessing.profile = phantomProfile;
-        if (!demonsDefined) {
-            demons = FindObjectsOfType<Demon>();
-            demonsDefined = true;
-        }
-        ShowOnPhantomMode.SetActive(true);
-        foreach(Demon demon in demons) {
-            demon.Show();
-        }
     }
 
     void OnDisable() {
         postProcessing.profile = playerProfile;
-        if (!isHaunting) {
-            HideAll();
-        }
     }
 
-    public void HideAll()
-    {
-        ShowOnPhantomMode.SetActive(false);
-        foreach(Demon demon in demons) {
-            demon.Hide();
-        }
-
-    }
 
     // Update is called once per frame
     void Update()
@@ -115,7 +92,6 @@ public class PhantomPlayer : MonoBehaviour
                     else {
                         hit.collider.gameObject.GetComponent<Boulder>().Haunt();
                     }
-                    isHaunting = true;
                     gameObject.SetActive(false);
                 }
             }
