@@ -12,8 +12,8 @@ public class LevelSelector : MonoBehaviour
     int LevelReached;
     public Color lockedColor;
     public Image blackscreen;
-    
-    void Start() {
+    void OnEnable()
+    {
         if (!PlayerPrefs.HasKey("levelReached")) {
             PlayerPrefs.SetInt("levelReached", 0);
         }

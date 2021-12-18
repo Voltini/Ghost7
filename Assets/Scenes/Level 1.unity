@@ -5871,7 +5871,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!43 &152886178
+--- !u!43 &192762274
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -22145,8 +22145,8 @@ MonoBehaviour:
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
   m_ShapePathHash: 0
-  m_Mesh: {fileID: 152886178}
-  m_InstanceId: 109112
+  m_Mesh: {fileID: 192762274}
+  m_InstanceId: 37650
 --- !u!95 &2033907694
 Animator:
   serializedVersion: 3
@@ -27757,6 +27757,10 @@ PrefabInstance:
       propertyPath: phantom
       value: 
       objectReference: {fileID: 361333287}
+    - target: {fileID: 8432161193714765875, guid: 779bd8cfeb751824eb9a0b02ed9fc6f0, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8432161193714765875, guid: 779bd8cfeb751824eb9a0b02ed9fc6f0, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
       value: 2
