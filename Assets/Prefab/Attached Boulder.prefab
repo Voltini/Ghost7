@@ -346,6 +346,8 @@ MonoBehaviour:
   constraints: 4
   freezeConstraints: -1
   cam: {fileID: 0}
+  phantom: {fileID: 0}
+  wasHaunted: 0
 --- !u!231 &4366129430308509821
 SpringJoint2D:
   m_ObjectHideFlags: 0
@@ -363,7 +365,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 3.637925
+  m_Distance: 3.6379244
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!210 &4366129430308509819
@@ -376,7 +378,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
 --- !u!1 &4366129431868425843
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,7 +494,7 @@ SortingGroup:
   m_Enabled: 1
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 2
 --- !u!1 &4366129432070602591
 GameObject:
   m_ObjectHideFlags: 0

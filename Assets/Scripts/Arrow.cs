@@ -31,9 +31,7 @@ public class Arrow : MonoBehaviour
         {
             player.Death(); 
         }
-        else {
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
     }
     
 }

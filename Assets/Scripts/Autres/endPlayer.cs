@@ -13,7 +13,7 @@ public class endPlayer : MonoBehaviour
     Rigidbody2D playerId;
     Collider2D playerCollider;
     public ParticleSystem playerExplosion;
-    public float runSpeed;
+    float runSpeed = 1f;
     public ContactFilter2D contactFilter;
     public ContactFilter2D contactWallRight;
     public ContactFilter2D contactWallLeft;
@@ -26,7 +26,6 @@ public class endPlayer : MonoBehaviour
     bool isTouchingWall = false;
     CameraControl cam;
     public bool playerDeath = false;
-
     public Rewind rewindPlayer;
     public LineRenderer line;
     public int i = 0;
@@ -166,13 +165,8 @@ public class endPlayer : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Lava")
-        {
-            rewindPlayer.shouldLoop = true;
-            Death();
-        }
 
-        else if (other.CompareTag("HellGate")) {
+        if (other.CompareTag("HellGate")) {
             playerId.velocity = Vector2.zero;
             isSucked = true;
             massCenter = other.transform.position;

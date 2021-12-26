@@ -16,8 +16,6 @@ public class Dispenser : MonoBehaviour
     float timeElapsed;  //time to wait before shooting
     float time => Time.timeSinceLevelLoad - player.rewindPlayer.deathTime;
     
-
-
     void Start()
     {
         lastFiredTime = time;
@@ -31,7 +29,7 @@ public class Dispenser : MonoBehaviour
                 StopHaunting();
             }
             else {
-                transform.rotation = Quaternion.Euler(0f, 0f, transform.eulerAngles.z - 0.5f * Input.GetAxis("Horizontal"));
+                transform.rotation = Quaternion.Euler(0f, 0f, transform.eulerAngles.z - 0.8f * Input.GetAxis("Horizontal"));
             }
         }
     }
@@ -75,7 +73,7 @@ public class Dispenser : MonoBehaviour
     {
         if (!isHaunted) {
             StopAllCoroutines();
-            StartCoroutine("RestartShooting",periode - timeElapsed);
+            StartCoroutine("RestartShooting", periode - timeElapsed);
         }
     }
 

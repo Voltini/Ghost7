@@ -5,12 +5,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
-public class PlayerControl : MonoBehaviour
+public class startPlayer : MonoBehaviour
 {
     float speed = 1f;
     float movementx = 0f;
     Rigidbody2D playerId;
-    Collider2D playerCollider;
     public ParticleSystem playerExplosion;
     public ContactFilter2D contactFilter;
     public ContactFilter2D contactWallRight;
@@ -23,7 +22,7 @@ public class PlayerControl : MonoBehaviour
     GameObject currentWall;
     bool isTouchingWall = false;
     CameraControl cam;
-    public Rewind rewindPlayer;
+    public startRewind rewindPlayer;
     public LineRenderer line;
     [HideInInspector] public int i = 0;
     Vector3 previousPosition = Vector3.positiveInfinity;
@@ -41,26 +40,13 @@ public class PlayerControl : MonoBehaviour
     bool bouldersDefined = false;
     [HideInInspector] public Dispenser[] dispensers;
     [HideInInspector] public float deathTime;
-    public struct arrowData
-    {
-        public Vector3 position;
-        public Vector3 velocity;
-        public Quaternion rotation;
-        public Dispenser dispenser;
-
-        public arrowData(Vector3 position, Vector3 velocity, Quaternion rotation, Dispenser dispenser)
-        {
-            this.position = position;
-            this.velocity = velocity;
-            this.rotation = rotation;
-            this.dispenser = dispenser;
-        }
-    }
-    public List<arrowData> arrowList;
+    public List<PlayerControl.arrowData> arrowList;
     List<GameObject> arrows;
     Demon[] demons;
     public GameObject ShowOnPhantomMode;
     [HideInInspector] public bool levelWon = false;
+    public GameObject panelOnDeath;
+    bool isFirstDeath = true;
 
 
     // Start is called before the first frame update
@@ -70,17 +56,7 @@ public class PlayerControl : MonoBehaviour
         anim = GetComponent<Animator>();
         rewindPlayer.rewindPositions = new List<Rewind.rewindData>();
         rewindPlayer.animationList = new List<Rewind.animationData>();
-        cam.SwitchTarget(this.gameObject);
-        if (isGrounded) {
-            anim.SetBool("isIdle", true);
-            anim.SetBool("isWalking", false);
-            anim.SetBool("isJumping", false);
-        }
-        else {
-            anim.SetBool("isIdle", false);
-            anim.SetBool("isWalking", false);
-            anim.SetBool("isJumping", true);
-        }
+        //cam.SwitchTarget(this.gameObject);
     }
 
     private void OnEnable() {
@@ -88,7 +64,7 @@ public class PlayerControl : MonoBehaviour
         if (!bouldersDefined)  {
             StartCoroutine("WaitAndGet");
         }
-        else {   
+        else {    
             soundManager.PlayerMode(); 
             foreach (Boulder boulder in boulders) {
                 boulder.SaveState();
@@ -97,9 +73,9 @@ public class PlayerControl : MonoBehaviour
                 dispenser.SaveState();
             }     
         arrows = GameObject.FindGameObjectsWithTag("Arrow").ToList();
-        arrowList = new List<arrowData>();
+        arrowList = new List<PlayerControl.arrowData>();
         foreach(GameObject arrow in arrows) {
-            arrowList.Add(new arrowData(arrow.transform.position, arrow.GetComponent<Rigidbody2D>().velocity, arrow.transform.rotation, arrow.GetComponent<Arrow>().dispenser));
+            arrowList.Add(new PlayerControl.arrowData(arrow.transform.position, arrow.GetComponent<Rigidbody2D>().velocity, arrow.transform.rotation, arrow.GetComponent<Arrow>().dispenser));
         }
         rewindPlayer.arrowList = arrowList;
         
@@ -133,9 +109,9 @@ public class PlayerControl : MonoBehaviour
             dispenser.SaveState();
         }
         arrows = GameObject.FindGameObjectsWithTag("Arrow").ToList();
-        arrowList = new List<arrowData>();
+        arrowList = new List<PlayerControl.arrowData>();
         foreach(GameObject arrow in arrows) {
-            arrowList.Add(new arrowData(arrow.transform.position, arrow.GetComponent<Rigidbody2D>().velocity, arrow.transform.rotation, arrow.GetComponent<Arrow>().dispenser));
+            arrowList.Add(new PlayerControl.arrowData(arrow.transform.position, arrow.GetComponent<Rigidbody2D>().velocity, arrow.transform.rotation, arrow.GetComponent<Arrow>().dispenser));
         }
         rewindPlayer.arrowList = arrowList;
     }
@@ -150,8 +126,12 @@ public class PlayerControl : MonoBehaviour
         }
         previousPosition = playerPos;
 
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            speed = 1f;
+        }
         if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.UpArrow))
-        {      
+        {      //D'ailleurs j'ai mis provisoirement R comme touche pour reload la scène
             Jump();
         }
 
@@ -211,14 +191,7 @@ public class PlayerControl : MonoBehaviour
     void OnCollisionEnter2D(Collision2D other)
     {
         if (other.collider.CompareTag("Platform")) {
-            if (isGrounded) {
-                    isJumping = false;
-                    anim.SetBool("isJumping", false);
-                    anim.SetBool("isWalking", true);
-                    anim.SetBool("isWallSliding", false);
-                    lastWall = null;        // si le joueur touche du sol la capacité de walljump se réinitialise
-                }
-            else if (isStickingToWallLeft || isStickingToWallRight)
+            if (isStickingToWallLeft || isStickingToWallRight)
             {
                 currentWall = other.gameObject;
                 isTouchingWall = true;
@@ -230,6 +203,15 @@ public class PlayerControl : MonoBehaviour
             }
                 else {
                     lastWallRight = false;
+                }
+            }
+            else
+            {
+                lastWall = null;        // si le joueur touche du sol la capacité de walljump se réinitialise
+                if (isGrounded) {
+                    isJumping = false;
+                    anim.SetBool("isJumping", false);
+                    anim.SetBool("isWalking", true);
                 }
             }
         }
@@ -256,7 +238,7 @@ public class PlayerControl : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Platform") && !isGrounded) {
+        if (other.gameObject.CompareTag("Platform")) {
             playerId.gravityScale = 1f;
             isJumping = true;
             anim.SetBool("isWallSliding", false);
@@ -280,13 +262,17 @@ public class PlayerControl : MonoBehaviour
     {
         RegisterPosition();
         RegisterPosition();
+        if (isFirstDeath) {
+            panelOnDeath.SetActive(true);
+            isFirstDeath = false;
+        }    
         soundManager.PlaySfx(transform, "playerDeath");
         playerExplosion.transform.position = playerId.position;
         playerExplosion.Play();
         cam.ActivateShake(0.2f, 2f);
         phantomPlayer.transform.position = transform.position;
         phantomPlayer.SetActive(true);
-        phantomPlayer.GetComponent<PhantomPlayer>().startPos = transform.position;
+        phantomPlayer.GetComponent<startPhantom>().startPos = transform.position;
         rewindPlayer.deathTime = Time.timeSinceLevelLoad;
         rewindPlayer.length = rewindPlayer.rewindPositions.Count;
         rewindPlayer.animationCounter = 0;

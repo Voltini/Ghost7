@@ -3,41 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class Rewind : MonoBehaviour
+public class startRewind : MonoBehaviour
 {
     float time;
-    public struct rewindData
-    {
-        public float playerTime;
-        public Vector3 playerPosition;
-        public rewindData(float playerTime, Vector3 playerPosition)
-        {
-            this.playerTime = playerTime;
-            this.playerPosition = playerPosition;
-        }
-    }
-
-    public struct animationData
-    {
-        public float playerTime;
-        public string animation;
-
-        public animationData(float playerTime, string animation)
-        {
-            this.playerTime = playerTime;
-            this.animation = animation;
-        }
-    }
     [HideInInspector] public float deathTime;
     public LineRenderer line;
-    public List<rewindData> rewindPositions;
-    public List<animationData> animationList;
+    public List<Rewind.rewindData> rewindPositions;
+    public List<Rewind.animationData> animationList;
     [HideInInspector] public int counter = 0;
     [HideInInspector] public int animationCounter = 0;
     [HideInInspector] public int length;
     Rigidbody2D playerId;
     float timeFactor = 1f;
-    public PlayerControl player;
+    public startPlayer player;
     public GameObject phantom;
     public CameraControl cam;
     [HideInInspector] public bool shouldLoop = false;
@@ -48,8 +26,7 @@ public class Rewind : MonoBehaviour
     public List<PlayerControl.arrowData> arrowList;
     [HideInInspector] public bool deathBylava;
     [HideInInspector] public ParticleSystem rewindLavaSplash;
-    [HideInInspector] public bool shouldSplash;
-    int lastCounterValue = 9999;
+    int lastCounterValue = 99999;
 
 
     void Start()
@@ -118,7 +95,7 @@ public class Rewind : MonoBehaviour
         }
         else {
             if (deathBylava) {
-                if (shouldSplash) Instantiate(rewindLavaSplash).Play();
+                Instantiate(rewindLavaSplash).Play();
                 ResetRewind();
             }
             else {
@@ -138,7 +115,6 @@ public class Rewind : MonoBehaviour
 
     public void StopRewind()
     {
-        shouldSplash = false;
         if (phantom.activeSelf) {
             phantom.SetActive(false);
         }
@@ -147,13 +123,13 @@ public class Rewind : MonoBehaviour
         }
         line.positionCount = 0;
         player.transform.position = transform.position;
-        player.GetComponent<PlayerControl>().reactivatedTime = Time.timeSinceLevelLoad;
-        player.GetComponent<PlayerControl>().i = 0;
+        player.GetComponent<startPlayer>().reactivatedTime = Time.timeSinceLevelLoad;
+        player.GetComponent<startPlayer>().i = 0;
         player.gameObject.SetActive(true);
         cam.SwitchTarget(player.gameObject);
         counter = 0;
-        rewindPositions = new List<rewindData>();
-        animationList = new List<animationData>();
+        rewindPositions = new List<Rewind.rewindData>();
+        animationList = new List<Rewind.animationData>();
         lastCounterValue = 9999;
         gameObject.SetActive(false);
     }

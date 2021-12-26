@@ -6,12 +6,6 @@ public class SoundManager : MonoBehaviour
 {
     AudioSource MusicSource;
     public List<AudioClip> musics;
-    AudioClip lastPlayed;
-    List<AudioClip> musicQueue;
-    int queueIndex = 0;
-    int musicQuantity;
-    public static SoundManager Instance = null;
-    private bool isTimeStopped = false;
     float LowPitchRange = 0.9f;
     float HighPitchRange = 1.1f;
     AudioClip sfxClip;
@@ -25,6 +19,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip arrowShot;
     public AudioClip arrowImpact;
     float volume;
+    bool jinglePlaying = false;
 
     struct clip{
         public string type;
@@ -86,14 +81,15 @@ public class SoundManager : MonoBehaviour
 
             case "playerDeath":
             sfxClip = playerDeath;
-            volume = 0.7f;
-            StartCoroutine("VolumeDown", sfxClip.length);
+            volume = 0.9f;
+            StartCoroutine("VolumeDown", 4f);
+            //MusicSource.pitch = 0.8f;
             break;
             
             case "phantomDeath":
             sfxClip = phantomDeath;
             volume = 1f;
-            StartCoroutine("VolumeDown", sfxClip.length);
+            StartCoroutine("VolumeDown", 4f);
             break;
 
             case "haunted":
@@ -111,20 +107,15 @@ public class SoundManager : MonoBehaviour
             volume = 1f;
             break;
         }
-    
-       PlayClipAt(sfxClip, pos.position, randomPitch, type, volume);
 
-    }
-
-    public void StopSfx(string type, float velocity)
-    {
-        foreach (clip audioId in audioIds) {
-            if (audioId.type == type) {
-                if (audioId.audio != null) {
-                    StartCoroutine(SfxFadeOut(audioId, velocity));
-                    break;
-                }
-            } 
+        if (type != "phantomDeath") {
+            PlayClipAt(sfxClip, pos.position, randomPitch, type, volume);
+        }
+        else {
+            if (!jinglePlaying) {
+                jinglePlaying = true;
+                PlayClipAt(sfxClip, pos.position, randomPitch, type, volume);
+            }
         }
     }
 
@@ -149,28 +140,17 @@ public class SoundManager : MonoBehaviour
         Destroy(audioId.audio);
     }
 
-    IEnumerator SfxFadeOut(clip audioId, float velocity)
-    {
-        float time = 1f;
-        float limit = 100;
-        float volumeFactor = - (1 + velocity/10)/limit;
-        AudioSource aSource = audioId.audio.GetComponent<AudioSource>();
-        float inValue = aSource.volume;
-        for (int i = 0; i < limit; i++){
-            if (aSource != null) {
-                aSource.volume = Mathf.Clamp01(Mathf.Exp(volumeFactor * i));
-            }
-            yield return new WaitForSeconds((float)time/limit);
-        }
-        audioIds.Remove(audioId);
-        Destroy(audioId.audio);
-    }
-
     IEnumerator VolumeDown(float time)
     {
-        MusicSource.volume = 0.2f;
+        MusicSource.volume = 0.4f;
         yield return new WaitForSeconds(time);
         MusicSource.volume = 1f;
+        jinglePlaying = false;
+    }
+
+    public void PlayerMode()
+    {
+        MusicSource.pitch = 1f;
     }
 
 }

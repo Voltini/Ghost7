@@ -1,14 +1,15 @@
-using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 using UnityEngine.Rendering;
 
-public class PhantomPlayer : MonoBehaviour
+public class startPhantom : MonoBehaviour
 {
     float speed = 7f;
     Rigidbody2D phantomId;
+    CameraControl cam;
     float movementx = 0f;
     float movementy = 0f;
     int hauntableLayer;
@@ -17,14 +18,12 @@ public class PhantomPlayer : MonoBehaviour
     Vector2 distance;
     public ParticleSystem phantomDeath;
     [HideInInspector] public Vector3 startPos;
-    public Rewind rewindPlayer;
+    public startRewind rewindPlayer;
     public SoundManager soundManager;
     public Volume postProcessing;
     public VolumeProfile playerProfile;
     public VolumeProfile phantomProfile;
     Animator anim;
-    RaycastHit2D[] hits;
-    RaycastHit2D hit;
 
     // Start is called before the first frame update
     void Start()
@@ -84,20 +83,14 @@ public class PhantomPlayer : MonoBehaviour
 
         if (!isSucked) {
             if (Input.GetKeyDown(KeyCode.E)) {
-                hits = Physics2D.CircleCastAll(transform.position, 4f, Vector2.up, 0f,hauntableLayer);
-                if (hits.Length > 0) {
-                    if (hits.Length == 1) {
-                        hit = hits[0];
-                    }
-                    else {
-                        hit = GetClosestObject(hits);
-                    }
+                RaycastHit2D hit = Physics2D.CircleCast(transform.position, 4f, Vector2.up, 0f,hauntableLayer);
+                if (hit) {
                     soundManager.PlaySfx(transform, "haunted");
                     if (hit.collider.CompareTag("Dispenser")) {
                         hit.collider.gameObject.GetComponent<Dispenser>().Haunt();
                     }
                     else {
-                        hit.collider.gameObject.GetComponent<Boulder>().Haunt();
+                        hit.collider.gameObject.GetComponent<startBoulder>().Haunt();
                     }
                     gameObject.SetActive(false);
                 }
@@ -125,24 +118,6 @@ public class PhantomPlayer : MonoBehaviour
             Death();
         }
     }
-
-    RaycastHit2D GetClosestObject(RaycastHit2D[] hits)
-{
-    RaycastHit2D tMin = new RaycastHit2D();
-    float minDist = Mathf.Infinity;
-    Vector3 currentPos = transform.position;
-    foreach (RaycastHit2D t in hits)
-    {
-        float dist = Vector2.Distance(t.transform.position, currentPos);
-        if (dist < minDist)
-        {
-            tMin = t;
-            minDist = dist;
-        }
-    }
-    return tMin;
-}
-
     void Death()
     {
         soundManager.PlaySfx(transform, "phantomDeath");

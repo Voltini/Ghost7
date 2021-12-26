@@ -11,8 +11,10 @@ public class PauseMenu : MonoBehaviour
     public GameObject pauseMenuUI;
     public SoundManager soundManager;
     float prevTimeScale;
-    public PlayerControl player;
+    public GameObject player;
     public Image blackscreen;
+    public mode gameMode;
+    public enum mode {Normal, Tutorial, Ending};
 
     void Update()
     {
@@ -33,7 +35,9 @@ public class PauseMenu : MonoBehaviour
         prevTimeScale = Time.timeScale;
         Time.timeScale = 0f;
         isGamePaused = true;
-        player.enabled = false;
+        if (gameMode is mode.Normal) {player.GetComponent<PlayerControl>().enabled = false;}
+        else if (gameMode is mode.Tutorial) {player.GetComponent<startPlayer>().enabled = false;}
+        else {player.GetComponent<endPlayer>().enabled = false;}
     }
 
     public void Resume()
@@ -42,7 +46,9 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = prevTimeScale;
         isGamePaused = false;
         soundManager.ResumeTime();
-        player.enabled = true;
+        if (gameMode is mode.Normal) {player.GetComponent<PlayerControl>().enabled = true;}
+        else if (gameMode is mode.Tutorial) {player.GetComponent<startPlayer>().enabled = true;}
+        else {player.GetComponent<endPlayer>().enabled = true;}
     }
 
     public void LoadMenu()

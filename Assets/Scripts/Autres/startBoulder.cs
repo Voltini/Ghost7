@@ -1,12 +1,8 @@
-using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
-
-public class Boulder : MonoBehaviour
+public class startBoulder : MonoBehaviour
 {
     Collider boulderCollider;
     bool isHaunted;
@@ -14,17 +10,18 @@ public class Boulder : MonoBehaviour
     float movementy;
     Rigidbody2D objectId;
     float speed = 7;
-    public Rewind rewindPlayer;
+    public startRewind rewindPlayer;
     public RigidbodyConstraints2D constraints;
     public RigidbodyConstraints2D freezeConstraints;
     public CameraControl cam;
     float velocity;
     Vector2 initPos;
-    public PhantomPlayer phantom;
+    public startPhantom phantom;
     [HideInInspector] public bool wasHaunted = false;
     float radiusOpposite;
     bool rolling;
     Vector2 checkpointVelocity;
+    public GameObject onHauntPanel;
 
 
     void Start()
@@ -37,6 +34,7 @@ public class Boulder : MonoBehaviour
         else {
             radiusOpposite = 0f;
         }
+        
     }
 
     void Update()
@@ -117,6 +115,9 @@ public class Boulder : MonoBehaviour
 
     public void Haunt()
     {
+        if (!wasHaunted) {
+            onHauntPanel.SetActive(true);
+        }
         wasHaunted = true;
         isHaunted = true;
         objectId.gravityScale = 0f;
@@ -158,5 +159,4 @@ public class Boulder : MonoBehaviour
             objectId.velocity = checkpointVelocity;
         }
     }
-    
 }

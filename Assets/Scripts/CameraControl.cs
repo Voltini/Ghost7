@@ -14,8 +14,8 @@ public class CameraControl : MonoBehaviour
     Vector3 shake;
     float shakeMagitude;
     float camSize;
-    [SerializeField] float horizontalThreshold;
-    [SerializeField] float verticalThreshold;
+    float horizontalThreshold;
+    float verticalThreshold;
     Vector3 camPos;
     public Rewind rewindPlayer;
     public GameObject phantomPlayer;
@@ -23,19 +23,20 @@ public class CameraControl : MonoBehaviour
     GameObject target;
     public Image blackscreen;
     public mode gameMode;
-    public enum mode {Normal, Ending};
+    public enum mode {Normal, Tutorial, Ending};
 
     void Start()
     {
         cam = GetComponent<Camera>();
         shake = Vector3.zero;
         if (gameMode is mode.Normal) {player.GetComponent<PlayerControl>().GetCamera(cam);}
+        else if (gameMode is mode.Tutorial) {player.GetComponent<startPlayer>().GetCamera(cam);}
         else {player.GetComponent<endPlayer>().GetCamera(cam);}
         camSize = cam.orthographicSize;
         this.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -10);
         camPos = this.transform.position;
-        horizontalThreshold = camSize*0.5f;
-        verticalThreshold = camSize*0.5f;
+        horizontalThreshold = 4;
+        verticalThreshold = 2;
         target = player;
         StartCoroutine("FadeIn");
     }

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(ParticleSystem))]
-public class AttachGameObjectsToParticles : MonoBehaviour
+public class AttachGameObjectsToReusableParticles : MonoBehaviour
 {
     public GameObject m_Prefab;
 

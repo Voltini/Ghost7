@@ -13,7 +13,9 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
-        PlayerPrefs.SetInt("levelReached", 6);
+        if (!PlayerPrefs.HasKey("levelReached")) {
+            PlayerPrefs.SetInt("levelReached", 0);
+        }
         StartCoroutine("FadeIn");
         if (SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Main Menu"))
         {

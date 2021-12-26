@@ -19,6 +19,12 @@ public class Exit : MonoBehaviour
             Win();
             other.gameObject.SetActive(false);
         }
+        else if (other.CompareTag("startPlayer")) {
+            other.GetComponent<startPlayer>().levelWon = true;
+            pauseMenu.gameObject.SetActive(false);
+            Win();
+            other.gameObject.SetActive(false);
+        }
     }
 
     private void Win()
